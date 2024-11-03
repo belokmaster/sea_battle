@@ -9,9 +9,9 @@
 class Ship {
 private:
 enum segment {
-    intact,
-    damaged,
-    destroyed
+        intact,
+        damaged,
+        destroyed
     };
     
     int length;
