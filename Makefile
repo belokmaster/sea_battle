@@ -1,33 +1,37 @@
 CXX = g++
 CPP = g++ -c
 
-EXECUTABLE = sea_battle
-
 all: linking clean
 
-linking: main.o game.o battleField.o shipManager.o ship.o 
-	$(CXX) main.o game.o battleField.o shipManager.o ship.o -o $(EXECUTABLE)
+linking: main.o gameField.o shipManager.o ship.o exception.o abilityManager.o doubleDamage.o scanner.o bombard.o
+	$(CXX) main.o gameField.o shipManager.o ship.o exception.o abilityManager.o doubleDamage.o scanner.o bombard.o -o Battleship
 
-game.o: game.cpp game.h battleField.h shipManager.h
-	$(CPP) game.cpp
+gameField.o: gameField.cpp shipManager.h ship.h
+	$(CPP) gameField.cpp
 
-battleField.o: battleField.cpp battleField.h shipManager.h ship.h
-	$(CPP) battleField.cpp
-
-shipManager.o: shipManager.cpp shipManager.h battleField.h ship.h
+shipManager.o: shipManager.cpp gameField.h ship.h exception.h
 	$(CPP) shipManager.cpp
 
-ship.o: ship.cpp ship.h battleField.h shipManager.h
+ship.o: ship.cpp gameField.h shipManager.h
 	$(CPP) ship.cpp
 
-main.o: main.cpp game.h
+exception.o: exception.cpp exception.h
+	$(CPP) exception.cpp
+
+abilityManager.o: abilityManager.cpp abilityManager.h
+	$(CPP) abilityManager.cpp
+
+doubleDamage.o: doubleDamage.cpp doubleDamage.h ability.h
+	$(CPP) doubleDamage.cpp
+
+scanner.o: scanner.cpp scanner.h ability.h
+	$(CPP) scanner.cpp
+
+bombard.o: bombard.cpp bombard.h ability.h
+	$(CPP) bombard.cpp
+
+main.o: main.cpp
 	$(CPP) main.cpp
 
 clean:
-	rm -f ./*.o
-
-clear: clean
-	rm -f $(EXECUTABLE)
-
-run: $(EXECUTABLE)
-	./$(EXECUTABLE) input_file.txt
+	rm ./*.o
