@@ -5,7 +5,7 @@
 
 class Scanner : public Ability {
 public:
-    void apply(GameField& field, int x, int y, ShipManager& manager) override;
+    void apply(BattleField& field, int x, int y, ShipManager& manager) override;
 };
 
 #endif

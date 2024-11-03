@@ -3,16 +3,16 @@ CPP = g++ -c
 
 all: linking clean
 
-linking: main.o gameField.o shipManager.o ship.o exception.o abilityManager.o doubleDamage.o scanner.o bombard.o
-	$(CXX) main.o gameField.o shipManager.o ship.o exception.o abilityManager.o doubleDamage.o scanner.o bombard.o -o Battleship
+linking: main.o battleField.o shipManager.o ship.o exception.o abilityManager.o doubleDamage.o scanner.o bombard.o
+	$(CXX) main.o battleField.o shipManager.o ship.o exception.o abilityManager.o doubleDamage.o scanner.o bombard.o -o Battleship
 
-gameField.o: gameField.cpp shipManager.h ship.h
-	$(CPP) gameField.cpp
+battleField.o: battleField.cpp shipManager.h ship.h
+	$(CPP) battleField.cpp
 
-shipManager.o: shipManager.cpp gameField.h ship.h exception.h
+shipManager.o: shipManager.cpp battleField.h ship.h exception.h
 	$(CPP) shipManager.cpp
 
-ship.o: ship.cpp gameField.h shipManager.h
+ship.o: ship.cpp battleField.h shipManager.h
 	$(CPP) ship.cpp
 
 exception.o: exception.cpp exception.h

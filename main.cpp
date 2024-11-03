@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <limits>
-#include "gameField.h"
+#include "battleField.h"
 #include "shipManager.h"
 #include "abilityManager.h"
 
@@ -38,7 +38,7 @@ int main() {
         std::cout << "Enter field width and height: ";
         std::cin >> width >> height;
 
-        GameField field(width, height);
+        BattleField field(width, height);
         AbilityManager ability_manager;
 
         ShipManager manager = field.ship_quantity_preset();

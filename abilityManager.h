@@ -12,7 +12,7 @@
 #include "bombard.h"
 #include "scanner.h"
 
-class GameField;
+class BattleField;
 class ShipManager;
 
 class AbilityManager {
@@ -22,7 +22,7 @@ private:
 public:
     AbilityManager();
 
-    void apply_ability(GameField& field, int x, int y, ShipManager& manager);
+    void apply_ability(BattleField& field, int x, int y, ShipManager& manager);
     std::string next_abilities(bool flag = false);
     void gain_random_ability();
 };

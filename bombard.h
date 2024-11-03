@@ -5,7 +5,7 @@
 
 class Bombard : public Ability {
 public:
-    void apply(GameField& filed, int x, int y, ShipManager& manager) override;
+    void apply(BattleField& filed, int x, int y, ShipManager& manager) override;
 };
 
 #endif
