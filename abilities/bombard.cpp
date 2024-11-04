@@ -1,6 +1,6 @@
 #include "bombard.h"
-#include "battleField.h"
-#include "shipManager.h"
+#include "../battleField.h"
+#include "../shipManager.h"
 
 void Bombard::apply(BattleField& filed, int x, int y, ShipManager& manager) {
     srand(time(NULL));

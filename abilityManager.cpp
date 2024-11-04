@@ -1,7 +1,7 @@
 #include "abilityManager.h"
 #include "ship.h"
 #include "shipManager.h"
-#include "ability.h"
+#include "abilities/ability.h"
 #include "exception.h"
 #include <algorithm>
 #include <random>

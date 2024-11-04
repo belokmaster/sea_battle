@@ -3,8 +3,8 @@ CPP = g++ -c
 
 all: linking clean
 
-linking: main.o battleField.o shipManager.o ship.o exception.o abilityManager.o doubleDamage.o scanner.o bombard.o
-	$(CXX) main.o battleField.o shipManager.o ship.o exception.o abilityManager.o doubleDamage.o scanner.o bombard.o -o Battleship
+linking: main.o battleField.o shipManager.o ship.o exception.o abilityManager.o abilities/doubleDamage.o abilities/scanner.o abilities/bombard.o
+	$(CXX) main.o battleField.o shipManager.o ship.o exception.o abilityManager.o abilities/doubleDamage.o abilities/scanner.o abilities/bombard.o -o Battleship
 
 battleField.o: battleField.cpp shipManager.h ship.h
 	$(CPP) battleField.cpp
@@ -18,20 +18,20 @@ ship.o: ship.cpp battleField.h shipManager.h
 exception.o: exception.cpp exception.h
 	$(CPP) exception.cpp
 
-abilityManager.o: abilityManager.cpp abilityManager.h
+abilityManager.o: abilityManager.cpp abilityManager.h abilities/ability.h
 	$(CPP) abilityManager.cpp
 
-doubleDamage.o: doubleDamage.cpp doubleDamage.h ability.h
-	$(CPP) doubleDamage.cpp
+abilities/doubleDamage.o: abilities/doubleDamage.cpp abilities/doubleDamage.h abilities/ability.h
+	$(CPP) abilities/doubleDamage.cpp -o abilities/doubleDamage.o
 
-scanner.o: scanner.cpp scanner.h ability.h
-	$(CPP) scanner.cpp
+abilities/scanner.o: abilities/scanner.cpp abilities/scanner.h abilities/ability.h
+	$(CPP) abilities/scanner.cpp -o abilities/scanner.o
 
-bombard.o: bombard.cpp bombard.h ability.h
-	$(CPP) bombard.cpp
+abilities/bombard.o: abilities/bombard.cpp abilities/bombard.h abilities/ability.h
+	$(CPP) abilities/bombard.cpp -o abilities/bombard.o
 
 main.o: main.cpp
 	$(CPP) main.cpp
 
 clean:
-	rm ./*.o
+	rm ./*.o abilities/*.o

@@ -1,6 +1,6 @@
 #include "scanner.h"
-#include "battleField.h"
-#include "shipManager.h"
+#include "../battleField.h"
+#include "../shipManager.h"
 
 void Scanner::apply(BattleField& field, int x, int y, ShipManager& manager) {
     bool found = false;

@@ -8,9 +8,9 @@
 #include <random>
 #include <vector>
 #include <algorithm>
-#include "doubleDamage.h"
-#include "bombard.h"
-#include "scanner.h"
+#include "abilities/doubleDamage.h"
+#include "abilities/bombard.h"
+#include "abilities/scanner.h"
 
 class BattleField;
 class ShipManager;
