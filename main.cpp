@@ -41,8 +41,8 @@ int main() {
         BattleField field(size);
         AbilityManager ability_manager;
 
-        ShipManager manager = field.ship_quantity_preset();
-        int ships_count = field.ships_count;
+        ShipManager manager = field.normalShipsCount();
+        int ships_count = field.shipsCount;
 
         for (int i = 0; i < ships_count; ++i) {
             Ship& ship = manager.get_ship(i);
@@ -53,7 +53,7 @@ int main() {
             std::cout << "Enter ship coordinates and orientation: ";
             std::cin >> x >> y >> orientation;
 
-            field.place_ship(ship, x, y, orientation);
+            field.placeShip(ship, x, y, orientation);
         }
 
         field.draw_all_field();
@@ -68,7 +68,7 @@ int main() {
                     std::cout << "Enter coordinates to attack: ";
                     int x, y;
                     std::cin >> x >> y;
-                    field.attack(x, y, manager, ability_manager);
+                    field.attackShip(x, y, manager, ability_manager);
                     break;
                 }
                 case STATE_SHIPS:

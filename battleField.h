@@ -13,17 +13,17 @@ class AbilityManager;
 class BattleField {
 private:
     enum cell {
-        unknown_state,
-        empty_state,
-        ship_state
+        UNKNOWN_CELL,
+        EMPTY_CELL,
+        SHIP_CELL
     };
 
     int size;
     cell** field;
-    bool double_damage = false;
+    bool doubleDamage = false;
 
 public:
-    int ships_count;
+    int shipsCount;
 
     BattleField(int size);
     BattleField(const BattleField& other);
@@ -34,18 +34,18 @@ public:
     BattleField& operator=(const BattleField& other);
     BattleField& operator=(BattleField&& other) noexcept;
 
-    int get_size() const;
-    int get_cell_status(int x, int y);
-    ShipManager ship_quantity_preset();
+    int getSize() const;
+    int getCell(int x, int y);
+    ShipManager normalShipsCount();
 
     void draw_all_field();
     void draw_enemy_field(ShipManager& manager);
-    void place_ship(Ship& ship, int x, int y, std::string orientation);
-    void attack(int x, int y, ShipManager& manager, AbilityManager& ability_manager);
+    void placeShip(Ship& ship, int x, int y, std::string orientation);
+    void attackShip(int x, int y, ShipManager& manager, AbilityManager& ability_manager);
     void markAroundDestroyedShip(Ship& ship);
 
-    bool get_double_damage();
-    void set_double_damage(bool value);
+    bool getDoubleDamage();
+    void setDoubleDamage(bool value);
 };
 
 #endif

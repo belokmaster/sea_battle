@@ -16,7 +16,7 @@ BattleField::BattleField(int size) {
             field = new cell * [size];
             for (int i = 0; i < size; ++i) {
                 field[i] = new cell[size];
-                std::fill(field[i], field[i] + size, unknown_state);
+                std::fill(field[i], field[i] + size, UNKNOWN_CELL);
             }
             break;
 
@@ -32,7 +32,7 @@ BattleField::BattleField(int size) {
 }
 
 
-BattleField::BattleField(const BattleField& other) : size(other.size), ships_count(other.ships_count) {
+BattleField::BattleField(const BattleField& other) : size(other.size), shipsCount(other.shipsCount) {
     field = new cell * [size];
 
     for (int i = 0; i < size; ++i) {
@@ -42,7 +42,7 @@ BattleField::BattleField(const BattleField& other) : size(other.size), ships_cou
 }
 
 
-BattleField::BattleField(BattleField&& other) noexcept : size(other.size), field(other.field), ships_count(other.ships_count) {
+BattleField::BattleField(BattleField&& other) noexcept : size(other.size), field(other.field), shipsCount(other.shipsCount) {
     other.field = nullptr;
 }
 
@@ -64,7 +64,7 @@ BattleField& BattleField::operator=(const BattleField& other) {
     delete[] field;
 
     size = other.size;
-    ships_count = other.ships_count;
+    shipsCount = other.shipsCount;
 
     field = new cell * [size];
     for (int i = 0; i < size; ++i) {
@@ -86,7 +86,7 @@ BattleField& BattleField::operator=(BattleField&& other) noexcept {
 
     size = other.size;
     field = other.field;
-    ships_count = other.ships_count;
+    shipsCount = other.shipsCount;
 
     other.field = nullptr;
 
@@ -94,36 +94,36 @@ BattleField& BattleField::operator=(BattleField&& other) noexcept {
 }
 
 
-int BattleField::get_size() const {
+int BattleField::getSize() const {
     return size;
 }
 
 
-int BattleField::get_cell_status(int x, int y) {
+int BattleField::getCell(int x, int y) {
     return field[y][x];
 }
 
 
-ShipManager BattleField::ship_quantity_preset() {
-    int count_ships_cell = (size * size) / 5;
-    std::vector<int> ship_sizes;
+ShipManager BattleField::normalShipsCount() {
+    int countShipsCell = (size * size) / 5;
+    std::vector<int> shipSizes;
 
-    if (count_ships_cell >= 20) {
-        ship_sizes = { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 };
-        ships_count = 10;
+    if (countShipsCell >= 20) {
+        shipSizes = { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 };
+        shipsCount = 10;
 
     }
-    else if (count_ships_cell >= 15) {
-        ship_sizes = { 3, 3, 2, 2, 1, 1, 1 };
-        ships_count = 7;
+    else if (countShipsCell >= 15) {
+        shipSizes = { 3, 3, 2, 2, 1, 1, 1 };
+        shipsCount = 7;
 
     }
     else {
-        ship_sizes = { 2, 2, 1, 1 };
-        ships_count = 4;
+        shipSizes = { 2, 2, 1, 1 };
+        shipsCount = 4;
     }
 
-    return ShipManager(ships_count, ship_sizes);
+    return ShipManager(shipsCount, shipSizes);
 }
 
 
@@ -140,11 +140,11 @@ void BattleField::draw_all_field() {
         std::cout << y << "  ";
 
         for (int x = 0; x < size; x++) {
-            if (field[y][x] == ship_state) {
+            if (field[y][x] == SHIP_CELL) {
                 std::cout << "S ";
 
             }
-            else if (field[y][x] == unknown_state || field[y][x] == empty_state) {
+            else if (field[y][x] == UNKNOWN_CELL || field[y][x] == EMPTY_CELL) {
                 std::cout << "~ ";
             }
         }
@@ -168,7 +168,7 @@ void BattleField::draw_enemy_field(ShipManager& manager) {
         for (int x = 0; x < size; ++x) {
             bool is_hit = false;
 
-            for (int i = 0; i < ships_count; ++i) {
+            for (int i = 0; i < shipsCount; ++i) {
                 Ship& ship = manager.get_ship(i);
                 int ship_length = ship.get_length();
                 bool is_vertical = ship.is_orientation_vertical();
@@ -196,10 +196,10 @@ void BattleField::draw_enemy_field(ShipManager& manager) {
                 if (is_hit) break;
             }
 
-            if (field[y][x] == unknown_state) {
+            if (field[y][x] == UNKNOWN_CELL) {
                 std::cout << ". ";
             }
-            else if (field[y][x] == empty_state) {
+            else if (field[y][x] == EMPTY_CELL) {
                 std::cout << "~ ";
             }
             else if (is_hit) {
@@ -214,7 +214,7 @@ void BattleField::draw_enemy_field(ShipManager& manager) {
 }
 
 
-void BattleField::place_ship(Ship& ship, int x, int y, std::string orientation) {
+void BattleField::placeShip(Ship& ship, int x, int y, std::string orientation) {
     while (true) {
         try {
             if (orientation == "h" || orientation == "default") {
@@ -232,7 +232,7 @@ void BattleField::place_ship(Ship& ship, int x, int y, std::string orientation) 
                 int pos_x = ship.is_orientation_vertical() ? x : x + i;
                 int pos_y = ship.is_orientation_vertical() ? y + i : y;
 
-                if (pos_x >= size || pos_y >= size || pos_x < 0 || pos_y < 0 || field[pos_y][pos_x] == ship_state) {
+                if (pos_x >= size || pos_y >= size || pos_x < 0 || pos_y < 0 || field[pos_y][pos_x] == SHIP_CELL) {
                     throw InvalidShipPlacementException("Invalid ship placement.", x, y);
                 }
             }
@@ -240,7 +240,7 @@ void BattleField::place_ship(Ship& ship, int x, int y, std::string orientation) 
             for (int i = 0; i < ship.get_length(); ++i) {
                 int pos_x = ship.is_orientation_vertical() ? x : x + i;
                 int pos_y = ship.is_orientation_vertical() ? y + i : y;
-                field[pos_y][pos_x] = ship_state;
+                field[pos_y][pos_x] = SHIP_CELL;
             }
 
             break;
@@ -253,7 +253,7 @@ void BattleField::place_ship(Ship& ship, int x, int y, std::string orientation) 
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::cin >> x >> y >> orientation;
-            place_ship(ship, x, y, orientation);
+            placeShip(ship, x, y, orientation);
         }
         catch (InvalidShipPlacementException& e) {
             std::cout << "The ship is already located at coordinates: "
@@ -263,7 +263,7 @@ void BattleField::place_ship(Ship& ship, int x, int y, std::string orientation) 
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::cin >> x >> y >> orientation;
-            place_ship(ship, x, y, orientation);
+            placeShip(ship, x, y, orientation);
         }
         catch (OrientationShipException& e) {
             std::cerr << e.what() << std::endl;
@@ -271,20 +271,20 @@ void BattleField::place_ship(Ship& ship, int x, int y, std::string orientation) 
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::cin >> x >> y >> orientation;
-            place_ship(ship, x, y, orientation);
+            placeShip(ship, x, y, orientation);
         }
     }
 }
 
 
-void BattleField::attack(int x, int y, ShipManager& manager, AbilityManager& ability_manager) {
+void BattleField::attackShip(int x, int y, ShipManager& manager, AbilityManager& ability_manager) {
     while (true) {
         try {
             if (x < 0 || x >= size || y < 0 || y >= size) {
                 throw OutOfBoundsException("Attack coordinates are out of bounds.", size);
             }
 
-            for (int i = 0; i < ships_count; ++i) {
+            for (int i = 0; i < shipsCount; ++i) {
                 Ship& ship = manager.get_ship(i);
                 int ship_length = ship.get_length();
                 bool is_vertical = ship.is_orientation_vertical();
@@ -299,11 +299,11 @@ void BattleField::attack(int x, int y, ShipManager& manager, AbilityManager& abi
                             return;
                         }
                         ship.damage_segment(j);
-                        if (double_damage) {
+                        if (doubleDamage) {
                             ship.damage_segment(j);
                         }
-                        if (get_double_damage()) {
-                            set_double_damage(false);
+                        if (getDoubleDamage()) {
+                            setDoubleDamage(false);
                         }
                         if (ship.is_destroy()) {
                             std::cout << "Ship is sunk!" << std::endl;
@@ -316,9 +316,9 @@ void BattleField::attack(int x, int y, ShipManager& manager, AbilityManager& abi
                 }
             }
 
-            field[y][x] = empty_state;
-            if (get_double_damage()) {
-                set_double_damage(false);
+            field[y][x] = EMPTY_CELL;
+            if (getDoubleDamage()) {
+                setDoubleDamage(false);
             }
             std::cout << "Miss!" << std::endl;
             return;
@@ -355,8 +355,8 @@ void BattleField::markAroundDestroyedShip(Ship& ship) {
             }
 
             if (mark_y >= 0 && mark_y < size && mark_x >= 0 && mark_x < size) {
-                if (field[mark_y][mark_x] == unknown_state) {
-                    field[mark_y][mark_x] = empty_state;
+                if (field[mark_y][mark_x] == UNKNOWN_CELL) {
+                    field[mark_y][mark_x] = EMPTY_CELL;
                 }
             }
         }
@@ -364,11 +364,11 @@ void BattleField::markAroundDestroyedShip(Ship& ship) {
 }
 
 
-bool BattleField::get_double_damage() {
-    return double_damage;
+bool BattleField::getDoubleDamage() {
+    return doubleDamage;
 }
 
 
-void BattleField::set_double_damage(bool value) {
-    double_damage = value;
+void BattleField::setDoubleDamage(bool value) {
+    doubleDamage = value;
 }
