@@ -11,16 +11,22 @@ ShipManager::ShipManager(int count, const std::vector<int>& sizes) : count(count
     }
 }
 
-void ShipManager::print_states() {
+
+int ShipManager::getShipsCount() {
+    return count;
+}
+
+
+void ShipManager::printStates() {
     for(int i = 0; i < ships.size(); i++) {
         Ship& ship = *ships[i];
 
-        int len_ship = ship.get_length();
+        int len_ship = ship.getLength();
         int count_destroy = 0;
 
         std::cout << "Ship " << i + 1 <<": ";
         for(int i = 0; i < len_ship; i++) {
-            int state = ship.get_segment_state(i);
+            int state = ship.getSegmentState(i);
             
             if(state == 0) {
                 std::cout << "i";
@@ -44,10 +50,7 @@ void ShipManager::print_states() {
     }
 }
 
-int ShipManager::get_ships_count() {
-    return count;
-}
 
-Ship& ShipManager::get_ship(int index) const {
+Ship& ShipManager::getShip(int index) const {
     return *ships[index];
 }

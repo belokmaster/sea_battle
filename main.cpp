@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <vector>
 #include <limits>
@@ -45,7 +46,7 @@ int main() {
         int ships_count = field.shipsCount;
 
         for (int i = 0; i < ships_count; ++i) {
-            Ship& ship = manager.get_ship(i);
+            Ship& ship = manager.getShip(i);
             int x, y;
             std::string orientation;
 
@@ -64,65 +65,69 @@ int main() {
             std::cin >> command;
 
             switch (get_command(command)) {
-                case ATTACK: {
-                    std::cout << "Enter coordinates to attack: ";
+            case ATTACK: {
+                std::cout << "Enter coordinates to attack: ";
+                int x, y;
+                std::cin >> x >> y;
+                field.attackShip(x, y, manager, ability_manager);
+                break;
+            }
+            case STATE_SHIPS:
+                manager.printStates();
+                break;
+            case FULL_FIELD:
+                field.draw_all_field();
+                break;
+            case ENEMY_FIELD:
+                field.draw_enemy_field(manager);
+                break;
+            case ABILITIES:
+                ability_manager.next_abilities();
+                break;
+            case APPLY_ABILITY: {
+                std::string ability = ability_manager.next_abilities(1);
+
+                if (ability == "DoubleDamage") {
+                    ability_manager.apply_ability(field, 0, 0, manager);
+
+                }
+                else if (ability == "Scanner") {
                     int x, y;
+                    std::cout << "Coordinate for ability: ";
                     std::cin >> x >> y;
-                    field.attackShip(x, y, manager, ability_manager);
-                    break;
+                    ability_manager.apply_ability(field, x, y, manager);
+
                 }
-                case STATE_SHIPS:
-                    manager.print_states();
-                    break;
-                case FULL_FIELD:
-                    field.draw_all_field();
-                    break;
-                case ENEMY_FIELD:
-                    field.draw_enemy_field(manager);
-                    break;
-                case ABILITIES:
-                    ability_manager.next_abilities();
-                    break;
-                case APPLY_ABILITY: {
-                    std::string ability = ability_manager.next_abilities(1);
-                    
-                    if(ability == "DoubleDamage") {
-                        ability_manager.apply_ability(field, 0, 0, manager);
-                    
-                    } else if (ability == "Scanner") {
-                        int x, y;
-                        std::cout << "Coordinate for ability: ";
-                        std::cin >> x >> y;
-                        ability_manager.apply_ability(field, x, y, manager);
-                    
-                    } else if (ability == "Bombard") {
-                        ability_manager.apply_ability(field, 0, 0, manager);
-                    } else {
-                        std::cout << "No valid ability to apply." << std::endl;
-                    }
-                    break;
+                else if (ability == "Bombard") {
+                    ability_manager.apply_ability(field, 0, 0, manager);
                 }
-                case HELP:
-                    std::cout << "Commands:\n"
-                              << "attack or a - attack a cell\n"
-                              << "state_ships or ss - show ships status\n"
-                              << "quit or q - quit the game\n"
-                              << "full_field or ff - show full field\n"
-                              << "enemy_field or ef - show enemy field\n"
-                              << "abilities or ab - view current ability\n" 
-                              << "apply_ability or aa - cast the next ability in the queue\n"
-                              << std::endl;
-                    break;
-                case QUIT:
-                    std::exit(0);
-                case INVALID:
-                default:
-                    std::cout << "Invalid command. Type \"help\" or \"h\" for a list of commands." << std::endl;
-                    break;
+                else {
+                    std::cout << "No valid ability to apply." << std::endl;
+                }
+                break;
+            }
+            case HELP:
+                std::cout << "Commands:\n"
+                    << "attack or a - attack a cell\n"
+                    << "state_ships or ss - show ships status\n"
+                    << "quit or q - quit the game\n"
+                    << "full_field or ff - show full field\n"
+                    << "enemy_field or ef - show enemy field\n"
+                    << "abilities or ab - view current ability\n"
+                    << "apply_ability or aa - cast the next ability in the queue\n"
+                    << std::endl;
+                break;
+            case QUIT:
+                std::exit(0);
+            case INVALID:
+            default:
+                std::cout << "Invalid command. Type \"help\" or \"h\" for a list of commands." << std::endl;
+                break;
             }
         }
 
-    } catch (const std::exception& e) {
+    }
+    catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
     }
 

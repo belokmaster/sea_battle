@@ -12,14 +12,12 @@ class ShipManager {
 private:
     std::vector<std::unique_ptr<Ship>> ships;
     int count;
+
 public:
     ShipManager(int count, const std::vector<int>& sizes);
-
-    void print_states();
-
-    int get_ships_count();
-
-    Ship& get_ship(int index) const;
+    int getShipsCount();
+    void printStates();
+    Ship& getShip(int index) const;
 };
 
 #endif

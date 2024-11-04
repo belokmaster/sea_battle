@@ -9,31 +9,32 @@
 class Ship {
 private:
 enum segment {
-        intact,
-        damaged,
-        destroyed
+        INTACT,
+        DAMAGED,
+        DESTROYED,
     };
     
     int length;
-    bool is_vertical;
+    bool vertical;
     int x, y;
+
 public:
-    std::vector<segment> segments;
     Ship(int length, bool is_vertical);
 
-    void damage_segment(int index);
-    int get_segment_state(int index) const;
+    int getLength() const;
+    bool isVertical() const;
+    void setVertical(bool trigger);
 
-    int get_length() const;
-    bool is_orientation_vertical() const;
-    void set_orientation(bool trigger);
-    bool is_destroy();
+    int getSegmentState(int index) const;
+    void attackSegment(int index);
+    bool isDestroyed();
      
     int get_x() const;
     void set_x(int new_x);
     int get_y() const;
     void set_y(int new_y);
 
+    std::vector<segment> segments;
 };
 
 #endif

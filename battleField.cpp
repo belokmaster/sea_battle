@@ -14,7 +14,7 @@ BattleField::BattleField(int size) {
 
             this->size = size;
             field = new cell * [size];
-            for (int i = 0; i < size; ++i) {
+            for (int i = 0; i < size; i++) {
                 field[i] = new cell[size];
                 std::fill(field[i], field[i] + size, UNKNOWN_CELL);
             }
@@ -48,7 +48,7 @@ BattleField::BattleField(BattleField&& other) noexcept : size(other.size), field
 
 
 BattleField::~BattleField() {
-    for (int i = 0; i < size; ++i) {
+    for (int i = 0; i < size; i++) {
         delete[] field[i];
     }
     delete[] field;
@@ -58,7 +58,7 @@ BattleField::~BattleField() {
 BattleField& BattleField::operator=(const BattleField& other) {
     if (this == &other) return *this;
 
-    for (int i = 0; i < size; ++i) {
+    for (int i = 0; i < size; i++) {
         delete[] field[i];
     }
     delete[] field;
@@ -67,7 +67,7 @@ BattleField& BattleField::operator=(const BattleField& other) {
     shipsCount = other.shipsCount;
 
     field = new cell * [size];
-    for (int i = 0; i < size; ++i) {
+    for (int i = 0; i < size; i++) {
         field[i] = new cell[size];
         std::copy(other.field[i], other.field[i] + size, field[i]);
     }
@@ -79,7 +79,7 @@ BattleField& BattleField::operator=(const BattleField& other) {
 BattleField& BattleField::operator=(BattleField&& other) noexcept {
     if (this == &other) return *this;
 
-    for (int i = 0; i < size; ++i) {
+    for (int i = 0; i < size; i++) {
         delete[] field[i];
     }
     delete[] field;
@@ -131,7 +131,7 @@ void BattleField::draw_all_field() {
     std::cout << "Ships on the field: " << std::endl;
 
     std::cout << "   ";
-    for (int x = 0; x < size; ++x) {
+    for (int x = 0; x < size; x++) {
         std::cout << x << " ";
     }
     std::cout << std::endl;
@@ -157,26 +157,26 @@ void BattleField::draw_enemy_field(ShipManager& manager) {
     std::cout << "Field: " << std::endl;
 
     std::cout << "   ";
-    for (int x = 0; x < size; ++x) {
+    for (int x = 0; x < size; x++) {
         std::cout << x << " ";
     }
     std::cout << std::endl;
 
-    for (int y = 0; y < size; ++y) {
+    for (int y = 0; y < size; y++) {
         std::cout << y << "  ";
 
-        for (int x = 0; x < size; ++x) {
+        for (int x = 0; x < size; x++) {
             bool is_hit = false;
 
-            for (int i = 0; i < shipsCount; ++i) {
-                Ship& ship = manager.get_ship(i);
-                int ship_length = ship.get_length();
-                bool is_vertical = ship.is_orientation_vertical();
+            for (int i = 0; i < shipsCount; i++) {
+                Ship& ship = manager.getShip(i);
+                int ship_length = ship.getLength();
+                bool is_vertical = ship.isVertical();
 
                 if (is_vertical) {
                     if (x == ship.get_x()) {
-                        for (int j = 0; j < ship_length; ++j) {
-                            if (y == ship.get_y() + j && ship.get_segment_state(j) != 0) {
+                        for (int j = 0; j < ship_length; j++) {
+                            if (y == ship.get_y() + j && ship.getSegmentState(j) != 0) {
                                 is_hit = true;
                                 break;
                             }
@@ -185,8 +185,8 @@ void BattleField::draw_enemy_field(ShipManager& manager) {
                 }
                 else {
                     if (y == ship.get_y()) {
-                        for (int j = 0; j < ship_length; ++j) {
-                            if (x == ship.get_x() + j && ship.get_segment_state(j) != 0) {
+                        for (int j = 0; j < ship_length; j++) {
+                            if (x == ship.get_x() + j && ship.getSegmentState(j) != 0) {
                                 is_hit = true;
                                 break;
                             }
@@ -217,32 +217,49 @@ void BattleField::draw_enemy_field(ShipManager& manager) {
 void BattleField::placeShip(Ship& ship, int x, int y, std::string orientation) {
     while (true) {
         try {
-            if (orientation == "h" || orientation == "default") {
-                ship.set_orientation(0);
+            if (orientation == "h" || orientation == "H" || orientation == "default") {
+                ship.setVertical(0);
 
             }
-            else if (orientation == "v") {
-                ship.set_orientation(1);
+            else if (orientation == "v" || orientation == "V") {
+                ship.setVertical(1);
             }
 
             ship.set_x(x);
             ship.set_y(y);
 
-            for (int i = 0; i < ship.get_length(); ++i) {
-                int pos_x = ship.is_orientation_vertical() ? x : x + i;
-                int pos_y = ship.is_orientation_vertical() ? y + i : y;
+            for (int i = 0; i < ship.getLength(); i++) {
+                int pos_x;
+                int pos_y;
+
+                if (ship.isVertical()) {
+                    pos_x = x;      
+                    pos_y = y + i;  
+                }
+                else {
+                    pos_x = x + i; 
+                    pos_y = y;
+                }
 
                 if (pos_x >= size || pos_y >= size || pos_x < 0 || pos_y < 0 || field[pos_y][pos_x] == SHIP_CELL) {
                     throw InvalidShipPlacementException("Invalid ship placement.", x, y);
                 }
             }
 
-            for (int i = 0; i < ship.get_length(); ++i) {
-                int pos_x = ship.is_orientation_vertical() ? x : x + i;
-                int pos_y = ship.is_orientation_vertical() ? y + i : y;
+            for (int i = 0; i < ship.getLength(); i++) {
+                int pos_x;
+                int pos_y;
+
+                if (ship.isVertical()) {
+                    pos_x = x;   
+                    pos_y = y + i; 
+                }
+                else {
+                    pos_x = x + i;  
+                    pos_y = y;   
+                }
                 field[pos_y][pos_x] = SHIP_CELL;
             }
-
             break;
 
         }
@@ -285,27 +302,36 @@ void BattleField::attackShip(int x, int y, ShipManager& manager, AbilityManager&
             }
 
             for (int i = 0; i < shipsCount; ++i) {
-                Ship& ship = manager.get_ship(i);
-                int ship_length = ship.get_length();
-                bool is_vertical = ship.is_orientation_vertical();
+                Ship& ship = manager.getShip(i);
+                int ship_length = ship.getLength();
+                bool is_vertical = ship.isVertical();
 
                 for (int j = 0; j < ship_length; ++j) {
-                    int ship_x = is_vertical ? ship.get_x() : ship.get_x() + j;
-                    int ship_y = is_vertical ? ship.get_y() + j : ship.get_y();
+                    int ship_x;
+                    int ship_y;
+
+                    if (is_vertical) {
+                        ship_x = ship.get_x();     
+                        ship_y = ship.get_y() + j; 
+                    }
+                    else {
+                        ship_x = ship.get_x() + j; 
+                        ship_y = ship.get_y();  
+                    }
 
                     if (ship_x == x && ship_y == y) {
-                        if (ship.get_segment_state(j) == 2) {
+                        if (ship.getSegmentState(j) == 2) {
                             std::cout << "This segment is already destroyed." << std::endl;
                             return;
                         }
-                        ship.damage_segment(j);
+                        ship.attackSegment(j);
                         if (doubleDamage) {
-                            ship.damage_segment(j);
+                            ship.attackSegment(j);
                         }
                         if (getDoubleDamage()) {
                             setDoubleDamage(false);
                         }
-                        if (ship.is_destroy()) {
+                        if (ship.isDestroyed()) {
                             std::cout << "Ship is sunk!" << std::endl;
                             markAroundDestroyedShip(ship);
                             ability_manager.gain_random_ability();
@@ -339,11 +365,11 @@ void BattleField::attackShip(int x, int y, ShipManager& manager, AbilityManager&
 void BattleField::markAroundDestroyedShip(Ship& ship) {
     int ship_x = ship.get_x();
     int ship_y = ship.get_y();
-    int length = ship.get_length();
-    bool isVertical = ship.is_orientation_vertical();
+    int length = ship.getLength();
+    bool isVertical = ship.isVertical();
 
-    for (int i = -1; i <= length; ++i) {
-        for (int j = -1; j <= 1; ++j) {
+    for (int i = -1; i <= length; i++) {
+        for (int j = -1; j <= 1; j++) {
             int mark_x, mark_y;
             if (isVertical) {
                 mark_x = ship_x + j;
