@@ -12,7 +12,6 @@ enum Command {
     ATTACK,
     STATE_SHIPS,
     FULL_FIELD,
-    ENEMY_FIELD,
     ABILITIES,
     APPLY_ABILITY,
     HELP,
@@ -24,7 +23,6 @@ Command get_command(const std::string& command) {
     if (command == "attack" || command == "a") return ATTACK;
     if (command == "state_ships" || command == "ss") return STATE_SHIPS;
     if (command == "full_field" || command == "ff") return FULL_FIELD;
-    if (command == "enemy_field" || command == "ef") return ENEMY_FIELD;
     if (command == "abilities" || command == "ab") return ABILITIES;
     if (command == "apply_ability" || command == "aa") return APPLY_ABILITY;
     if (command == "help" || command == "h") return HELP;
@@ -75,10 +73,7 @@ int main() {
                 manager.printStates();
                 break;
             case FULL_FIELD:
-                field.drawField(manager, false);
-                break;
-            case ENEMY_FIELD:
-                field.drawField(manager, true);
+                field.drawField(manager, false); // Отображаем только поле игрока
                 break;
             case ABILITIES:
                 ability_manager.next_abilities();
@@ -109,7 +104,6 @@ int main() {
                     << "state_ships or ss - show ships status\n"
                     << "quit or q - quit the game\n"
                     << "full_field or ff - show full field\n"
-                    << "enemy_field or ef - show enemy field\n"
                     << "abilities or ab - view current ability\n"
                     << "apply_ability or aa - cast the next ability in the queue\n"
                     << std::endl;

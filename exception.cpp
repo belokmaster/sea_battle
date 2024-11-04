@@ -16,12 +16,14 @@ OrientationShipException::OrientationShipException(const char* _Message) : GameE
 InvalidShipPlacementException::InvalidShipPlacementException(const char* _Message, int coordinate_occupied_cell_x, int coordinate_occupied_cell_y) :
     GameException(_Message), occupied_cell_x(coordinate_occupied_cell_x), occupied_cell_y(coordinate_occupied_cell_y) {}
 
-int InvalidShipPlacementException::get_y_state() const {
-    return occupied_cell_y;
-}
-
 int InvalidShipPlacementException::get_x_state() const {
     return occupied_cell_x;
 }
 
+int InvalidShipPlacementException::get_y_state() const {
+    return occupied_cell_y;
+}
+
 NoAbilitiesException::NoAbilitiesException(const char* _Message) : GameException(_Message) {}
+
+InvalidShipLengthException::InvalidShipLengthException(const char* _Message) : GameException(_Message) {}

@@ -4,11 +4,14 @@
 #include "exception.h"
 #include "abilityManager.h"
 
+constexpr int MIN_FIELD_SIZE = 5;
+constexpr int MAX_FIELD_SIZE = 20;
+
 
 BattleField::BattleField(int size) {
     while (true) {
         try {
-            if (size < 5 || size > 20) {
+            if (size < MIN_FIELD_SIZE || size > MAX_FIELD_SIZE) {
                 throw InvalidFieldSizeException("Field size must be between 5 and 20.");
             }
 
@@ -153,7 +156,7 @@ void BattleField::drawField(ShipManager& manager, bool isEnemyField) {
             bool segmentHit = false;
             bool shipPresent = false;
 
-            if (field[row][col] == SHIP_CELL || (isEnemyField && field[row][col] == UNKNOWN_CELL)) {
+            if (field[row][col] == SHIP_CELL) {
                 for (int i = 0; i < manager.getShipsCount(); i++) {
                     Ship& ship = manager.getShip(i);
                     int shipLength = ship.getLength();
@@ -180,13 +183,9 @@ void BattleField::drawField(ShipManager& manager, bool isEnemyField) {
                                 std::cout << " X ";
                                 segmentHit = true;
                             }
-                            else if (!isEnemyField) {
+                            else {
                                 std::cout << " S ";
                                 shipPresent = true;
-                            }
-                            else if (isEnemyField && segmentState != 0) {
-                                std::cout << " S ";
-                                segmentHit = true;
                             }
                             break;
                         }
@@ -196,7 +195,7 @@ void BattleField::drawField(ShipManager& manager, bool isEnemyField) {
             }
 
             if (!segmentHit && !shipPresent) {
-                if (field[row][col] == EMPTY_CELL || (!isEnemyField && field[row][col] == UNKNOWN_CELL)) {
+                if (field[row][col] == EMPTY_CELL) {
                     std::cout << " ~ ";
                 }
                 else {

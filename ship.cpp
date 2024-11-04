@@ -1,9 +1,10 @@
 #include "ship.h"
+#include "exception.h"
 
 
 Ship::Ship(int length, bool isVertical) : length(length), vertical(vertical) {
     if (length < 1 || length > 4) {
-        throw std::out_of_range("Ship length must be between 1 and 4.");
+        throw InvalidShipLengthException("Ship length must be between 1 and 4.");
     }
     
     segments.resize(length, INTACT);
@@ -27,7 +28,7 @@ void Ship::setVertical(bool trigger) {
 
 int Ship::getSegmentState(int index) const {
     if (index < 0 || index >= length) {
-        throw std::out_of_range("Segment index out of range.");
+        throw InvalidSegmentIndexException("Segment index out of range.");
     }
 
     return segments[index];
@@ -36,7 +37,7 @@ int Ship::getSegmentState(int index) const {
 
 void Ship::attackSegment(int index) {
     if (index < 0 || index >= length) {
-        throw std::out_of_range("Segment index out of range.");
+        throw InvalidSegmentIndexException("Segment index out of range.");
     }
 
     if (segments[index] == INTACT) {

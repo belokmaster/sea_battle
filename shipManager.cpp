@@ -1,4 +1,5 @@
 #include "shipManager.h"
+#include "ship.h"
 
 
 ShipManager::ShipManager(int count, const std::vector<int>& sizes) : count(count) {
@@ -18,32 +19,38 @@ int ShipManager::getShipsCount() {
 
 
 void ShipManager::printStates() {
-    for(int i = 0; i < ships.size(); i++) {
+    std::cout << std::endl;
+    for (int i = 0; i < ships.size(); i++) {
         Ship& ship = *ships[i];
 
         int len_ship = ship.getLength();
         int count_destroy = 0;
 
-        std::cout << "Ship " << i + 1 <<": ";
-        for(int i = 0; i < len_ship; i++) {
-            int state = ship.getSegmentState(i);
+        int x = ship.get_x();
+        int y = ship.get_y();
+        char orientation = ship.isVertical() ? 'v' : 'h'; 
+
+        std::cout << "Ship " << (i + 1) << (i < 9 ? "  " : " ") << "[" << x << " " << y << " " << orientation << "]: ";
+
+        for (int j = 0; j < len_ship; j++) {
+            int state = ship.getSegmentState(j);
             
-            if(state == 0) {
-                std::cout << "i";
-            
-            } else if (state == 1) {
-                std::cout << "h";
-            
-            } else if (state == 2) {
-                std::cout << "d";
+            if (state == 0) {
+                std::cout << "I";
+            } 
+            else if (state == 1) {
+                std::cout << "X";
+            } 
+            else if (state == 2) {
+                std::cout << "D";
                 count_destroy++;
             }
             
             std::cout << " ";
         }
         
-        if(count_destroy == len_ship) {
-            std::cout << " " << "Ship destroyed";
+        if (count_destroy == len_ship) {
+            std::cout << " " << "This ship is destroyed!";
         }
 
         std::cout << std::endl;
