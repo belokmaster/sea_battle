@@ -1,5 +1,5 @@
-#ifndef GAME_FIELD_H
-#define GAME_FIELD_H
+#ifndef BATTLE_FIELD_H
+#define BATTLE_FIELD_H
 
 #include <iostream>
 #include <vector>
@@ -34,20 +34,14 @@ public:
     BattleField& operator=(const BattleField& other);
     BattleField& operator=(BattleField&& other) noexcept;
 
-    void place_ship(Ship& ship, int x, int y, std::string orientation);
-
+    int get_size() const;
+    int get_cell_status(int x, int y);
     ShipManager ship_quantity_preset();
 
     void draw_all_field();
     void draw_enemy_field(ShipManager& manager);
-    int get_cell_status(int x, int y);
-
+    void place_ship(Ship& ship, int x, int y, std::string orientation);
     void attack(int x, int y, ShipManager& manager, AbilityManager& ability_manager);
-
-    int get_height() const;
-    int get_width() const;
-
-    int get_size() const;
 
     bool get_double_damage();
     void set_double_damage(bool value);
