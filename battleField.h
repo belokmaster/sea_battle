@@ -42,6 +42,7 @@ public:
     void draw_enemy_field(ShipManager& manager);
     void place_ship(Ship& ship, int x, int y, std::string orientation);
     void attack(int x, int y, ShipManager& manager, AbilityManager& ability_manager);
+    void markAroundDestroyedShip(Ship& ship);
 
     bool get_double_damage();
     void set_double_damage(bool value);

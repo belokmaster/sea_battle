@@ -306,6 +306,8 @@ void BattleField::attack(int x, int y, ShipManager& manager, AbilityManager& abi
                             set_double_damage(false);
                         }
                         if (ship.is_destroy()) {
+                            std::cout << "Ship is sunk!" << std::endl;
+                            markAroundDestroyedShip(ship);
                             ability_manager.gain_random_ability();
                         }
                         std::cout << "Hit!" << std::endl;
@@ -329,6 +331,34 @@ void BattleField::attack(int x, int y, ShipManager& manager, AbilityManager& abi
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::cin >> x >> y;
+        }
+    }
+}
+
+
+void BattleField::markAroundDestroyedShip(Ship& ship) {
+    int ship_x = ship.get_x();
+    int ship_y = ship.get_y();
+    int length = ship.get_length();
+    bool isVertical = ship.is_orientation_vertical();
+
+    for (int i = -1; i <= length; ++i) {
+        for (int j = -1; j <= 1; ++j) {
+            int mark_x, mark_y;
+            if (isVertical) {
+                mark_x = ship_x + j;
+                mark_y = ship_y + i;
+            }
+            else {
+                mark_x = ship_x + i;
+                mark_y = ship_y + j;
+            }
+
+            if (mark_y >= 0 && mark_y < size && mark_x >= 0 && mark_x < size) {
+                if (field[mark_y][mark_x] == unknown_state) {
+                    field[mark_y][mark_x] = empty_state;
+                }
+            }
         }
     }
 }
