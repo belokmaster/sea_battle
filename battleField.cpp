@@ -4,56 +4,53 @@
 #include "exception.h"
 #include "abilityManager.h"
 
-
-BattleField::BattleField(int width, int height) {
+BattleField::BattleField(int size) {
     while (true) {
         try {
-            if (width > 20 || height > 20) {
+            if (size > 20) {
                 throw InvalidFieldSizeException("Too big field.");
             }
-            if (width < 5 || height < 5) {
+            if (size < 5) {
                 throw InvalidFieldSizeException("Too small field.");
             }
 
-            this->width = width;
-            this->height = height;
-            field = new cell * [height];
-            for (int i = 0; i < height; ++i) {
-                field[i] = new cell[width];
-                std::fill(field[i], field[i] + width, unknown_state);
+            this->size = size;
+            field = new cell * [size];
+            for (int i = 0; i < size; ++i) {
+                field[i] = new cell[size];
+                std::fill(field[i], field[i] + size, unknown_state);
             }
             break;
 
         }
         catch (InvalidFieldSizeException& e) {
             std::cerr << e.what() << std::endl;
-            std::cout << "Enter field width and height again: ";
+            std::cout << "Enter field size again: ";
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cin >> width >> height;
+            std::cin >> size;
         }
     }
 }
 
+BattleField::BattleField(const BattleField& other) : size(other.size), ships_count(other.ships_count) {
+    field = new cell * [size];
 
-BattleField::BattleField(const BattleField& other) : width(other.width), height(other.height), ships_count(other.ships_count) {
-    field = new cell * [height];
-
-    for (int i = 0; i < height; ++i) {
-        field[i] = new cell[width];
-        std::copy(other.field[i], other.field[i] + width, field[i]);
+    for (int i = 0; i < size; ++i) {
+        field[i] = new cell[size];
+        std::copy(other.field[i], other.field[i] + size, field[i]);
     }
 }
 
-BattleField::BattleField(BattleField&& other) noexcept : width(other.width), height(other.height), field(other.field), ships_count(other.ships_count) {
+BattleField::BattleField(BattleField&& other) noexcept : size(other.size), field(other.field), ships_count(other.ships_count) {
     other.field = nullptr;
 }
 
 void BattleField::attack(int x, int y, ShipManager& manager, AbilityManager& ability_manager) {
     while (true) {
         try {
-            if (x < 0 || x >= width || y < 0 || y >= height) {
-                throw OutOfBoundsException("Attack coordinates are out of bounds.", width, height);
+            if (x < 0 || x >= size || y < 0 || y >= size) {
+                throw OutOfBoundsException("Attack coordinates are out of bounds.", size);
             }
 
             for (int i = 0; i < ships_count; ++i) {
@@ -95,8 +92,7 @@ void BattleField::attack(int x, int y, ShipManager& manager, AbilityManager& abi
 
         }
         catch (OutOfBoundsException& e) {
-            std::cout << "The field has a width of " << e.get_width_state()
-                << " and a height of " << e.get_height_state() << std::endl;
+            std::cout << "The field has a size of " << e.get_field_size() << std::endl;
             std::cerr << e.what() << std::endl;
             std::cout << "Enter attack coordinates again: ";
             std::cin.clear();
@@ -106,13 +102,8 @@ void BattleField::attack(int x, int y, ShipManager& manager, AbilityManager& abi
     }
 }
 
-
-int BattleField::get_height() const {
-    return height;
-}
-
-int BattleField::get_width() const {
-    return width;
+int BattleField::get_size() const {
+    return size;
 }
 
 bool BattleField::get_double_damage() {
@@ -127,15 +118,15 @@ void BattleField::draw_enemy_field(ShipManager& manager) {
     std::cout << "Field: " << std::endl;
 
     std::cout << "   ";
-    for (int x = 0; x < width; ++x) {
+    for (int x = 0; x < size; ++x) {
         std::cout << x << " ";
     }
     std::cout << std::endl;
 
-    for (int y = 0; y < height; ++y) {
+    for (int y = 0; y < size; ++y) {
         std::cout << y << "  ";
 
-        for (int x = 0; x < width; ++x) {
+        for (int x = 0; x < size; ++x) {
             bool is_hit = false;
 
             for (int i = 0; i < ships_count; ++i) {
@@ -183,21 +174,19 @@ void BattleField::draw_enemy_field(ShipManager& manager) {
     }
 }
 
-
-
 void BattleField::draw_all_field() {
     std::cout << "Ships on the field: " << std::endl;
 
     std::cout << "   ";
-    for (int x = 0; x < width; ++x) {
+    for (int x = 0; x < size; ++x) {
         std::cout << x << " ";
     }
     std::cout << std::endl;
 
-    for (int y = 0; y < height; y++) {
+    for (int y = 0; y < size; y++) {
         std::cout << y << "  ";
 
-        for (int x = 0; x < width; x++) {
+        for (int x = 0; x < size; x++) {
             if (field[y][x] == ship_state) {
                 std::cout << "S ";
 
@@ -211,7 +200,7 @@ void BattleField::draw_all_field() {
 }
 
 ShipManager BattleField::ship_quantity_preset() {
-    int count_cell = width * height;
+    int count_cell = size * size;
     int count_ships_cell = count_cell / 5;
     std::vector<int> ship_sizes;
 
@@ -242,71 +231,32 @@ void BattleField::place_ship(Ship& ship, int x, int y, std::string orientation) 
             }
             else if (orientation == "v") {
                 ship.set_orientation(1);
-
-            }
-            else {
-                throw OrientationShipException("The ship must have horizontal (h) or vertical (v).");
-            }
-
-            int length = ship.get_length();
-
-            if (x < 0 || y < 0 ||
-                (ship.is_orientation_vertical() && (y + length - 1 >= height)) || (!ship.is_orientation_vertical() && (x + length - 1 >= width))) {
-                throw OutOfBoundsException("The coordinates are out of the field.", width, height);
-            }
-
-            for (int i = -1; i <= length; ++i) {
-                for (int j = -1; j <= 1; ++j) {
-                    int check_x = ship.is_orientation_vertical() ? x + j : x + i;
-                    int check_y = ship.is_orientation_vertical() ? y + i : y + j;
-
-                    if (check_y >= 0 && check_y < height && check_x >= 0 && check_x < width) {
-                        if (field[check_y][check_x] != unknown_state) {
-                            throw InvalidShipPlacementException("The place is occupied or too close to another ship.", check_x, check_y);
-                        }
-                    }
-                }
-            }
-
-            if (ship.is_orientation_vertical()) {
-                for (int i = 0; i < length; ++i) {
-                    field[y + i][x] = ship_state;
-                }
-            }
-            else {
-                for (int i = 0; i < length; ++i) {
-                    field[y][x + i] = ship_state;
-                }
             }
 
             ship.set_x(x);
             ship.set_y(y);
+
+            for (int i = 0; i < ship.get_length(); ++i) {
+                int pos_x = ship.is_orientation_vertical() ? x : x + i;
+                int pos_y = ship.is_orientation_vertical() ? y + i : y;
+
+                if (pos_x >= size || pos_y >= size || pos_x < 0 || pos_y < 0 || field[pos_y][pos_x] == ship_state) {
+                    throw InvalidShipPlacementException("Invalid ship placement.", x, y);
+                }
+            }
+
+            for (int i = 0; i < ship.get_length(); ++i) {
+                int pos_x = ship.is_orientation_vertical() ? x : x + i;
+                int pos_y = ship.is_orientation_vertical() ? y + i : y;
+                field[pos_y][pos_x] = ship_state;
+            }
+
             break;
 
         }
-        catch (OutOfBoundsException& e) {
-            std::cout << "The field has a width of " << e.get_width_state()
-                << " and a height of " << e.get_height_state() << std::endl;
-            std::cerr << e.what() << std::endl;
-            std::cout << "Enter ship coordinates and orientation again: ";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cin >> x >> y >> orientation;
-        }
-
         catch (InvalidShipPlacementException& e) {
-            std::cout << "The ship is already located at coordinates: "
-                << e.get_x_state() << " " << e.get_y_state() << std::endl;
             std::cerr << e.what() << std::endl;
-            std::cout << "Enter ship coordinates and orientation again: ";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cin >> x >> y >> orientation;
-        }
-
-        catch (OrientationShipException& e) {
-            std::cerr << e.what() << std::endl;
-            std::cout << "Enter ship coordinates and orientation again: ";
+            std::cout << "Enter ship placement coordinates and orientation again: ";
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::cin >> x >> y >> orientation;
@@ -315,50 +265,11 @@ void BattleField::place_ship(Ship& ship, int x, int y, std::string orientation) 
 }
 
 int BattleField::get_cell_status(int x, int y) {
-    return field[x][y];
-}
-
-BattleField& BattleField::operator=(BattleField&& other) noexcept {
-    if (this == &other) return *this;
-
-    for (int i = 0; i < height; ++i) {
-        delete[] field[i];
-    }
-    delete[] field;
-
-    width = other.width;
-    height = other.height;
-    field = other.field;
-    ships_count = other.ships_count;
-
-    other.field = nullptr;
-
-    return *this;
-}
-
-BattleField& BattleField::operator=(const BattleField& other) {
-    if (this == &other) return *this;
-
-    for (int i = 0; i < height; ++i) {
-        delete[] field[i];
-    }
-    delete[] field;
-
-    width = other.width;
-    height = other.height;
-    ships_count = other.ships_count;
-
-    field = new cell * [height];
-    for (int i = 0; i < height; ++i) {
-        field[i] = new cell[width];
-        std::copy(other.field[i], other.field[i] + width, field[i]);
-    }
-
-    return *this;
+    return field[y][x];
 }
 
 BattleField::~BattleField() {
-    for (int i = 0; i < height; ++i) {
+    for (int i = 0; i < size; ++i) {
         delete[] field[i];
     }
     delete[] field;

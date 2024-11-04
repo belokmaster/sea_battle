@@ -18,19 +18,20 @@ private:
         ship_state
     };
 
-    int width, height;
+    int size;
     cell** field;
-
     bool double_damage = false;
+
 public:
     int ships_count;
-    BattleField(int width, int height);
 
+    BattleField(int size);
     BattleField(const BattleField& other);
     BattleField(BattleField&& other) noexcept;
 
-    BattleField& operator=(const BattleField& other);
+    ~BattleField();
 
+    BattleField& operator=(const BattleField& other);
     BattleField& operator=(BattleField&& other) noexcept;
 
     void place_ship(Ship& ship, int x, int y, std::string orientation);
@@ -46,10 +47,10 @@ public:
     int get_height() const;
     int get_width() const;
 
+    int get_size() const;
+
     bool get_double_damage();
     void set_double_damage(bool value);
-
-    ~BattleField();
 };
 
 #endif

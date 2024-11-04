@@ -34,11 +34,11 @@ Command get_command(const std::string& command) {
 
 int main() {
     try {
-        int width, height;
-        std::cout << "Enter field width and height: ";
-        std::cin >> width >> height;
+        int size;
+        std::cout << "Enter field size: ";
+        std::cin >> size;
 
-        BattleField field(width, height);
+        BattleField field(size);
         AbilityManager ability_manager;
 
         ShipManager manager = field.ship_quantity_preset();
