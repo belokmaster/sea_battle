@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <vector>
 #include <limits>
@@ -50,14 +49,14 @@ int main() {
             int x, y;
             std::string orientation;
 
-            field.draw_all_field();
+            field.drawField(manager, false);
             std::cout << "Enter ship coordinates and orientation: ";
             std::cin >> x >> y >> orientation;
 
             field.placeShip(ship, x, y, orientation);
         }
 
-        field.draw_all_field();
+        field.drawField(manager, false);
 
         while (true) {
             std::string command;
@@ -76,10 +75,10 @@ int main() {
                 manager.printStates();
                 break;
             case FULL_FIELD:
-                field.draw_all_field();
+                field.drawField(manager, false);
                 break;
             case ENEMY_FIELD:
-                field.draw_enemy_field(manager);
+                field.drawField(manager, true);
                 break;
             case ABILITIES:
                 ability_manager.next_abilities();
@@ -89,14 +88,12 @@ int main() {
 
                 if (ability == "DoubleDamage") {
                     ability_manager.apply_ability(field, 0, 0, manager);
-
                 }
                 else if (ability == "Scanner") {
                     int x, y;
                     std::cout << "Coordinate for ability: ";
                     std::cin >> x >> y;
                     ability_manager.apply_ability(field, x, y, manager);
-
                 }
                 else if (ability == "Bombard") {
                     ability_manager.apply_ability(field, 0, 0, manager);

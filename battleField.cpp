@@ -127,90 +127,86 @@ ShipManager BattleField::normalShipsCount() {
 }
 
 
-void BattleField::draw_all_field() {
-    std::cout << "Ships on the field: " << std::endl;
+void BattleField::drawField(ShipManager& manager, bool isEnemyField) {
+    std::cout << "\nField looks like this: \n\n";
 
     std::cout << "   ";
-    for (int x = 0; x < size; x++) {
-        std::cout << x << " ";
-    }
-    std::cout << std::endl;
-
-    for (int y = 0; y < size; y++) {
-        std::cout << y << "  ";
-
-        for (int x = 0; x < size; x++) {
-            if (field[y][x] == SHIP_CELL) {
-                std::cout << "S ";
-
-            }
-            else if (field[y][x] == UNKNOWN_CELL || field[y][x] == EMPTY_CELL) {
-                std::cout << "~ ";
-            }
+    for (int col = 0; col < size; col++) {
+        if (col < 10) {
+            std::cout << " " << col << " ";
         }
-        std::cout << std::endl;
-    }
-}
-
-
-void BattleField::draw_enemy_field(ShipManager& manager) {
-    std::cout << "Field: " << std::endl;
-
-    std::cout << "   ";
-    for (int x = 0; x < size; x++) {
-        std::cout << x << " ";
+        else {
+            std::cout << col << " ";
+        }
     }
     std::cout << std::endl;
 
-    for (int y = 0; y < size; y++) {
-        std::cout << y << "  ";
+    for (int row = 0; row < size; row++) {
+        if (row < 10) {
+            std::cout << " " << row << " ";
+        }
+        else {
+            std::cout << row << " ";
+        }
 
-        for (int x = 0; x < size; x++) {
-            bool is_hit = false;
+        for (int col = 0; col < size; col++) {
+            bool segmentHit = false;
+            bool shipPresent = false;
 
-            for (int i = 0; i < shipsCount; i++) {
-                Ship& ship = manager.getShip(i);
-                int ship_length = ship.getLength();
-                bool is_vertical = ship.isVertical();
+            if (field[row][col] == SHIP_CELL || (isEnemyField && field[row][col] == UNKNOWN_CELL)) {
+                for (int i = 0; i < manager.getShipsCount(); i++) {
+                    Ship& ship = manager.getShip(i);
+                    int shipLength = ship.getLength();
+                    bool isVertical = ship.isVertical();
 
-                if (is_vertical) {
-                    if (x == ship.get_x()) {
-                        for (int j = 0; j < ship_length; j++) {
-                            if (y == ship.get_y() + j && ship.getSegmentState(j) != 0) {
-                                is_hit = true;
-                                break;
+                    for (int j = 0; j < shipLength; j++) {
+                        int ship_x, ship_y;
+                        if (isVertical) {
+                            ship_x = ship.get_x();
+                            ship_y = ship.get_y() + j;
+                        }
+                        else {
+                            ship_x = ship.get_x() + j;
+                            ship_y = ship.get_y();
+                        }
+
+                        if (ship_x == col && ship_y == row) {
+                            int segmentState = ship.getSegmentState(j);
+                            if (segmentState == 2) {
+                                std::cout << " D ";
+                                segmentHit = true;
                             }
+                            else if (segmentState == 1) {
+                                std::cout << " X ";
+                                segmentHit = true;
+                            }
+                            else if (!isEnemyField) {
+                                std::cout << " S ";
+                                shipPresent = true;
+                            }
+                            else if (isEnemyField && segmentState != 0) {
+                                std::cout << " S ";
+                                segmentHit = true;
+                            }
+                            break;
                         }
                     }
+                    if (segmentHit || shipPresent) break;
+                }
+            }
+
+            if (!segmentHit && !shipPresent) {
+                if (field[row][col] == EMPTY_CELL || (!isEnemyField && field[row][col] == UNKNOWN_CELL)) {
+                    std::cout << " ~ ";
                 }
                 else {
-                    if (y == ship.get_y()) {
-                        for (int j = 0; j < ship_length; j++) {
-                            if (x == ship.get_x() + j && ship.getSegmentState(j) != 0) {
-                                is_hit = true;
-                                break;
-                            }
-                        }
-                    }
+                    std::cout << " . ";
                 }
-                if (is_hit) break;
-            }
-
-            if (field[y][x] == UNKNOWN_CELL) {
-                std::cout << ". ";
-            }
-            else if (field[y][x] == EMPTY_CELL) {
-                std::cout << "~ ";
-            }
-            else if (is_hit) {
-                std::cout << "S ";
-            }
-            else {
-                std::cout << ". ";
             }
         }
         std::cout << std::endl;
     }
+    std::cout << std::endl;
 }
 
 

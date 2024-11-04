@@ -38,8 +38,7 @@ public:
     int getCell(int x, int y);
     ShipManager normalShipsCount();
 
-    void draw_all_field();
-    void draw_enemy_field(ShipManager& manager);
+    void drawField(ShipManager& manager, bool isEnemyField);
     void placeShip(Ship& ship, int x, int y, std::string orientation);
     void attackShip(int x, int y, ShipManager& manager, AbilityManager& ability_manager);
     void markAroundDestroyedShip(Ship& ship);
