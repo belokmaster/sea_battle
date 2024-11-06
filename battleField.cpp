@@ -324,7 +324,7 @@ void BattleField::attackShip(int x, int y, ShipManager& manager, AbilityManager&
                     }
                 }
             }
-
+            
             field[y][x] = EMPTY_CELL;
             if (getDoubleDamage()) {
                 setDoubleDamage(false);
