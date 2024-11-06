@@ -3,8 +3,8 @@ CPP = g++ -c
 
 all: linking clean
 
-linking: main.o battleField.o shipManager.o ship.o exception.o abilityManager.o abilities/doubleDamage.o abilities/scanner.o abilities/bombard.o
-	$(CXX) main.o battleField.o shipManager.o ship.o exception.o abilityManager.o abilities/doubleDamage.o abilities/scanner.o abilities/bombard.o -o Battleship
+linking: main.o game.o battleField.o shipManager.o ship.o exception.o abilityManager.o abilities/doubleDamage.o abilities/scanner.o abilities/bombard.o
+	$(CXX) main.o game.o battleField.o shipManager.o ship.o exception.o abilityManager.o abilities/doubleDamage.o abilities/scanner.o abilities/bombard.o -o Battleship
 
 battleField.o: battleField.cpp shipManager.h ship.h
 	$(CPP) battleField.cpp
@@ -30,8 +30,11 @@ abilities/scanner.o: abilities/scanner.cpp abilities/scanner.h abilities/ability
 abilities/bombard.o: abilities/bombard.cpp abilities/bombard.h abilities/ability.h
 	$(CPP) abilities/bombard.cpp -o abilities/bombard.o
 
-main.o: main.cpp
+main.o: main.cpp game.h
 	$(CPP) main.cpp
+
+game.o: game.cpp game.h battleField.h shipManager.h abilityManager.h
+	$(CPP) game.cpp
 
 clean:
 	rm ./*.o abilities/*.o
