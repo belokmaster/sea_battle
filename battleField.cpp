@@ -317,7 +317,7 @@ void BattleField::attackShip(int x, int y, ShipManager& manager, AbilityManager&
                         if (ship.isDestroyed()) {
                             std::cout << "Ship is sunk!" << std::endl;
                             markAroundDestroyedShip(ship);
-                            ability_manager.gain_random_ability();
+                            ability_manager.getRandomAbility();
                         }
                         std::cout << "Hit!" << std::endl;
                         return;

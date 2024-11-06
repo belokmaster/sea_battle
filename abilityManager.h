@@ -24,7 +24,7 @@ public:
 
     void applyAbility(BattleField& field, int x, int y, ShipManager& manager);
     std::string nextAbility(bool flag = false);
-    void gain_random_ability();
+    void getRandomAbility();
 };
 
 #endif
