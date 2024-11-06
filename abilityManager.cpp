@@ -17,7 +17,7 @@ AbilityManager::AbilityManager() {
     std::mt19937 gen(rd());
     std::shuffle(available_abilities.begin(), available_abilities.end(), gen);
 
-    for (auto &ability : available_abilities) {
+    for (auto& ability : available_abilities) {
         abilities.push(std::move(ability));
     }
 }
@@ -27,10 +27,12 @@ void AbilityManager::apply_ability(BattleField& field, int x, int y, ShipManager
         if (!abilities.empty()) {
             abilities.front()->apply(field, x, y, manager);
             abilities.pop();
-        } else {
+        }
+        else {
             throw NoAbilitiesException("No abilities available.");
         }
-    } catch (NoAbilitiesException& e) {
+    }
+    catch (NoAbilitiesException& e) {
         std::cerr << e.what() << std::endl;
     }
 }
@@ -47,19 +49,22 @@ std::string AbilityManager::next_abilities(bool flag) {
 
         if (dynamic_cast<DoubleDamage*>(next_ability)) {
             ability = "DoubleDamage";
-        } else if (dynamic_cast<Scanner*>(next_ability)) {
+        }
+        else if (dynamic_cast<Scanner*>(next_ability)) {
             ability = "Scanner";
-        } else if (dynamic_cast<Bombard*>(next_ability)) {
+        }
+        else if (dynamic_cast<Bombard*>(next_ability)) {
             ability = "Bombard";
         }
 
-    } else {
+    }
+    else {
         std::cout << "No abilities available." << std::endl;
     }
 
     return ability;
 }
- 
+
 void AbilityManager::gain_random_ability() {
     static std::random_device rd;
     static std::mt19937 gen(rd());
@@ -69,15 +74,15 @@ void AbilityManager::gain_random_ability() {
     std::unique_ptr<Ability> new_ability;
 
     switch (random) {
-        case 0:
-            new_ability = std::make_unique<DoubleDamage>();
-            break;
-        case 1:
-            new_ability = std::make_unique<Scanner>();
-            break;
-        case 2:
-            new_ability = std::make_unique<Bombard>();
-            break;
+    case 0:
+        new_ability = std::make_unique<DoubleDamage>();
+        break;
+    case 1:
+        new_ability = std::make_unique<Scanner>();
+        break;
+    case 2:
+        new_ability = std::make_unique<Bombard>();
+        break;
     }
 
     abilities.push(std::move(new_ability));

@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <vector>
 #include <limits>
 #include "battleField.h"
@@ -73,7 +73,7 @@ int main() {
                 manager.printStates();
                 break;
             case FULL_FIELD:
-                field.drawField(manager, false); // Отображаем только поле игрока
+                field.drawField(manager, false); // ГЋГІГ®ГЎГ°Г Г¦Г ГҐГ¬ ГІГ®Г«ГјГЄГ® ГЇГ®Г«ГҐ ГЁГЈГ°Г®ГЄГ 
                 break;
             case ABILITIES:
                 ability_manager.next_abilities();
