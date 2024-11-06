@@ -76,10 +76,10 @@ int main() {
                 field.drawField(manager, false); 
                 break;
             case ABILITIES:
-                ability_manager.next_abilities();
+                ability_manager.nextAbility();
                 break;
             case applyAbility: {
-                std::string ability = ability_manager.next_abilities(1);
+                std::string ability = ability_manager.nextAbility(1);
 
                 if (ability == "DoubleDamage") {
                     ability_manager.applyAbility(field, 0, 0, manager);

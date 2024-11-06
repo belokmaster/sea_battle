@@ -4,14 +4,11 @@
 #include "exception.h"
 #include "abilityManager.h"
 
-constexpr int MIN_FIELD_SIZE = 5;
-constexpr int MAX_FIELD_SIZE = 20;
-
 
 BattleField::BattleField(int size) {
     while (true) {
         try {
-            if (size < MIN_FIELD_SIZE || size > MAX_FIELD_SIZE) {
+            if (size < 5 || size > 20) {
                 throw InvalidFieldSizeException("Field size must be between 5 and 20.");
             }
 
@@ -114,12 +111,10 @@ ShipManager BattleField::normalShipsCount() {
     if (countShipsCell >= 20) {
         shipSizes = { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 };
         shipsCount = 10;
-
     }
     else if (countShipsCell >= 15) {
         shipSizes = { 3, 3, 2, 2, 1, 1, 1 };
         shipsCount = 7;
-
     }
     else {
         shipSizes = { 2, 2, 1, 1 };
@@ -134,29 +129,29 @@ void BattleField::drawField(ShipManager& manager, bool isEnemyField) {
     std::cout << "\nField looks like this: \n\n";
 
     std::cout << "   ";
-    for (int col = 0; col < size; col++) {
-        if (col < 10) {
-            std::cout << " " << col << " ";
+    for (int x = 0; x < size; x++) {
+        if (x < 10) {
+            std::cout << " " << x << " ";
         }
         else {
-            std::cout << col << " ";
+            std::cout << x << " ";
         }
     }
     std::cout << std::endl;
 
-    for (int row = 0; row < size; row++) {
-        if (row < 10) {
-            std::cout << " " << row << " ";
+    for (int y = 0; y < size; y++) {
+        if (y < 10) {
+            std::cout << " " << y << " ";
         }
         else {
-            std::cout << row << " ";
+            std::cout << y << " ";
         }
 
-        for (int col = 0; col < size; col++) {
+        for (int x = 0; x < size; x++) {
             bool segmentHit = false;
             bool shipPresent = false;
 
-            if (field[row][col] == SHIP_CELL) {
+            if (field[y][x] == SHIP_CELL) {
                 for (int i = 0; i < manager.getShipsCount(); i++) {
                     Ship& ship = manager.getShip(i);
                     int shipLength = ship.getLength();
@@ -173,7 +168,7 @@ void BattleField::drawField(ShipManager& manager, bool isEnemyField) {
                             ship_y = ship.get_y();
                         }
 
-                        if (ship_x == col && ship_y == row) {
+                        if (ship_x == x && ship_y == y) {
                             int segmentState = ship.getSegmentState(j);
                             if (segmentState == 2) {
                                 std::cout << " D ";
@@ -195,7 +190,7 @@ void BattleField::drawField(ShipManager& manager, bool isEnemyField) {
             }
 
             if (!segmentHit && !shipPresent) {
-                if (field[row][col] == EMPTY_CELL) {
+                if (field[y][x] == EMPTY_CELL) {
                     std::cout << " ~ ";
                 }
                 else {
@@ -212,52 +207,49 @@ void BattleField::drawField(ShipManager& manager, bool isEnemyField) {
 void BattleField::placeShip(Ship& ship, int x, int y, std::string orientation) {
     while (true) {
         try {
-            if (orientation == "h" || orientation == "H" || orientation == "default") {
+            if (orientation == "h" || orientation == "H") {
                 ship.setVertical(0);
-
-            }
+            } 
             else if (orientation == "v" || orientation == "V") {
-                ship.setVertical(1);
+                ship.setVertical(1);     
+            } 
+            else {
+                throw OrientationShipException("The ship must have horizontal (h / H) or vertical (v / V).");
+            }
+
+            int length = ship.getLength();
+            if (x < 0 || y < 0 || (ship.isVertical() && (y + length - 1 >= size)) || (ship.isVertical() && (x >= size)) || (!ship.isVertical() && (x + length - 1 >= size))) {
+                throw OutOfBoundsException("The coordinates are out of the field.", size);
+            }
+
+            for (int i = -1; i <= length; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    int check_x = ship.isVertical() ? x + j : x + i;
+                    int check_y = ship.isVertical() ? y + i : y + j;
+
+                    if (check_y >= 0 && check_y < size && check_x >= 0 && check_x < size) {
+                        if (field[check_y][check_x] != UNKNOWN_CELL) {
+                            throw InvalidShipPlacementException("The place is occupied or too close to another ship.", check_x, check_y);
+                        }
+                    }
+                }
+            }
+
+            if (ship.isVertical()) {
+                for (int i = 0; i < length; ++i) {
+                    field[y + i][x] = SHIP_CELL;
+                }
+            } 
+            else {
+                for (int i = 0; i < length; ++i) {
+                    field[y][x + i] = SHIP_CELL;
+                }
             }
 
             ship.set_x(x);
             ship.set_y(y);
-
-            for (int i = 0; i < ship.getLength(); i++) {
-                int pos_x;
-                int pos_y;
-
-                if (ship.isVertical()) {
-                    pos_x = x;      
-                    pos_y = y + i;  
-                }
-                else {
-                    pos_x = x + i; 
-                    pos_y = y;
-                }
-
-                if (pos_x >= size || pos_y >= size || pos_x < 0 || pos_y < 0 || field[pos_y][pos_x] == SHIP_CELL) {
-                    throw InvalidShipPlacementException("Invalid ship placement.", x, y);
-                }
-            }
-
-            for (int i = 0; i < ship.getLength(); i++) {
-                int pos_x;
-                int pos_y;
-
-                if (ship.isVertical()) {
-                    pos_x = x;   
-                    pos_y = y + i; 
-                }
-                else {
-                    pos_x = x + i;  
-                    pos_y = y;   
-                }
-                field[pos_y][pos_x] = SHIP_CELL;
-            }
             break;
-
-        }
+        } 
         catch (OutOfBoundsException& e) {
             std::cout << "The field has a size of " << e.get_field_size() << std::endl;
             std::cerr << e.what() << std::endl;
@@ -265,17 +257,14 @@ void BattleField::placeShip(Ship& ship, int x, int y, std::string orientation) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::cin >> x >> y >> orientation;
-            placeShip(ship, x, y, orientation);
         }
         catch (InvalidShipPlacementException& e) {
-            std::cout << "The ship is already located at coordinates: "
-                << e.get_x_state() << " " << e.get_y_state() << std::endl;
+            std::cout << "The ship is already located at coordinates: " << e.get_x_state() << " " << e.get_y_state() << std::endl;
             std::cerr << e.what() << std::endl;
             std::cout << "Enter ship coordinates and orientation again: ";
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::cin >> x >> y >> orientation;
-            placeShip(ship, x, y, orientation);
         }
         catch (OrientationShipException& e) {
             std::cerr << e.what() << std::endl;
@@ -283,7 +272,6 @@ void BattleField::placeShip(Ship& ship, int x, int y, std::string orientation) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::cin >> x >> y >> orientation;
-            placeShip(ship, x, y, orientation);
         }
     }
 }
