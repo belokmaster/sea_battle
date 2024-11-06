@@ -21,8 +21,8 @@ void Scanner::apply(BattleField& field, int x, int y, ShipManager& manager) {
 
     if (found) {
         std::cout << "Ship detected in the area" << std::endl;
-    
-    } else {
+    } 
+    else {
         std::cout << "No ships in the area" << std::endl;
     }
 }

@@ -22,7 +22,7 @@ private:
 public:
     AbilityManager();
 
-    void apply_ability(BattleField& field, int x, int y, ShipManager& manager);
+    void applyAbility(BattleField& field, int x, int y, ShipManager& manager);
     std::string next_abilities(bool flag = false);
     void gain_random_ability();
 };

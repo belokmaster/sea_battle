@@ -13,7 +13,7 @@ enum Command {
     STATE_SHIPS,
     FULL_FIELD,
     ABILITIES,
-    APPLY_ABILITY,
+    applyAbility,
     HELP,
     QUIT,
     INVALID
@@ -24,7 +24,7 @@ Command get_command(const std::string& command) {
     if (command == "state_ships" || command == "ss") return STATE_SHIPS;
     if (command == "full_field" || command == "ff") return FULL_FIELD;
     if (command == "abilities" || command == "ab") return ABILITIES;
-    if (command == "apply_ability" || command == "aa") return APPLY_ABILITY;
+    if (command == "applyAbility" || command == "aa") return applyAbility;
     if (command == "help" || command == "h") return HELP;
     if (command == "quit" || command == "q") return QUIT;
     return INVALID;
@@ -73,25 +73,25 @@ int main() {
                 manager.printStates();
                 break;
             case FULL_FIELD:
-                field.drawField(manager, false); // Îòîáðàæàåì òîëüêî ïîëå èãðîêà
+                field.drawField(manager, false); 
                 break;
             case ABILITIES:
                 ability_manager.next_abilities();
                 break;
-            case APPLY_ABILITY: {
+            case applyAbility: {
                 std::string ability = ability_manager.next_abilities(1);
 
                 if (ability == "DoubleDamage") {
-                    ability_manager.apply_ability(field, 0, 0, manager);
+                    ability_manager.applyAbility(field, 0, 0, manager);
                 }
                 else if (ability == "Scanner") {
                     int x, y;
                     std::cout << "Coordinate for ability: ";
                     std::cin >> x >> y;
-                    ability_manager.apply_ability(field, x, y, manager);
+                    ability_manager.applyAbility(field, x, y, manager);
                 }
                 else if (ability == "Bombard") {
-                    ability_manager.apply_ability(field, 0, 0, manager);
+                    ability_manager.applyAbility(field, 0, 0, manager);
                 }
                 else {
                     std::cout << "No valid ability to apply." << std::endl;
@@ -105,7 +105,7 @@ int main() {
                     << "quit or q - quit the game\n"
                     << "full_field or ff - show full field\n"
                     << "abilities or ab - view current ability\n"
-                    << "apply_ability or aa - cast the next ability in the queue\n"
+                    << "applyAbility or aa - cast the next ability in the queue\n"
                     << std::endl;
                 break;
             case QUIT:

@@ -22,7 +22,7 @@ AbilityManager::AbilityManager() {
     }
 }
 
-void AbilityManager::apply_ability(BattleField& field, int x, int y, ShipManager& manager) {
+void AbilityManager::applyAbility(BattleField& field, int x, int y, ShipManager& manager) {
     try {
         if (!abilities.empty()) {
             abilities.front()->apply(field, x, y, manager);
@@ -37,14 +37,10 @@ void AbilityManager::apply_ability(BattleField& field, int x, int y, ShipManager
     }
 }
 
-std::string AbilityManager::next_abilities(bool flag) {
+std::string AbilityManager::nextAbility(bool flag) {
     std::string ability;
 
     if (!abilities.empty()) {
-        if (!flag) {
-            std::cout << "Next ability: ";
-        }
-
         Ability* next_ability = abilities.front().get();
 
         if (dynamic_cast<DoubleDamage*>(next_ability)) {
@@ -57,6 +53,9 @@ std::string AbilityManager::next_abilities(bool flag) {
             ability = "Bombard";
         }
 
+        if (!flag) {
+            std::cout << "Next ability: " << ability << std::endl;
+        }
     }
     else {
         std::cout << "No abilities available." << std::endl;
