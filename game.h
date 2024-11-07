@@ -16,8 +16,8 @@ enum Command {
     INVALID
 };
 
+void runGame();
 Command getCommand(const std::string& command);
-
 void placeShips(BattleField& field, ShipManager& manager);
 void processCommand(Command command, BattleField& field, ShipManager& manager, AbilityManager& ability_manager);
 void gameLoop(BattleField& field, ShipManager& manager, AbilityManager& ability_manager);

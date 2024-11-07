@@ -2,13 +2,27 @@
 #include <iostream>
 #include <string>
 
+void runGame() {
+    int size;
+    std::cout << "Enter field size: ";
+    std::cin >> size;
+
+    BattleField field(size);
+    AbilityManager ability_manager;
+    ShipManager manager = field.normalShipsCount();
+
+    placeShips(field, manager);
+    gameLoop(field, manager, ability_manager);
+}
+
+
 Command getCommand(const std::string& command) {
+    if (command == "help" || command == "h") return HELP;
+    if (command == "printField" || command == "pf") return PRINT_FIELD;
     if (command == "attack" || command == "a") return ATTACK;
     if (command == "stateShips" || command == "ss") return STATE_SHIPS;
-    if (command == "printField" || command == "pf") return FULL_FIELD;
     if (command == "abilities" || command == "ab") return ABILITIES;
-    if (command == "applyAbility" || command == "aa") return applyAbility;
-    if (command == "help" || command == "h") return HELP;
+    if (command == "applyAbility" || command == "aa") return APPLY_ABILITY;
     if (command == "quit" || command == "q") return QUIT;
     return INVALID;
 }
@@ -35,18 +49,28 @@ void placeShips(BattleField& field, ShipManager& manager) {
 
 void processCommand(Command command, BattleField& field, ShipManager& manager, AbilityManager& ability_manager) {
     switch (command) {
+    case HELP:
+        std::cout << "Commands:\n"
+            << "[    attack / a     ] - attack a cell\n" 
+            << "[  stateShips / ss  ] - show ships status\n" 
+            << "[     quit / q      ] - quit the game\n"
+            << "[  printField / pf  ] - show game field\n"
+            << "[   abilities / ab  ] - view current ability\n"
+            << "[ applyAbility / aa ] - cast the next ability in the queue" 
+            << std::endl;
+        break;
+    case PRINT_FIELD:
+        field.drawField(manager, false); 
+        break;
     case ATTACK: {
-        std::cout << "Enter coordinates to attack: ";
         int x, y;
+        std::cout << "Enter coordinates to attack: ";
         std::cin >> x >> y;
         field.attackShip(x, y, manager, ability_manager);
         break;
     }
     case STATE_SHIPS:
         manager.printStates();
-        break;
-    case PRINT_FIELD:
-        field.drawField(manager, false); 
         break;
     case ABILITIES:
         ability_manager.nextAbility();
@@ -71,16 +95,6 @@ void processCommand(Command command, BattleField& field, ShipManager& manager, A
         }
         break;
     }
-    case HELP:
-        std::cout << "Commands:\n"
-            << "[    attack / a     ] - attack a cell\n" 
-            << "[  stateShips / ss  ] - show ships status\n" 
-            << "[     quit / q      ] - quit the game\n"
-            << "[  printField / pf  ] - show game field\n"
-            << "[   abilities / ab  ] - view current ability\n"
-            << "[ applyAbility / aa ] - cast the next ability in the queue" 
-            << std::endl;
-        break;
     case QUIT:
         std::exit(0);
     case INVALID:
