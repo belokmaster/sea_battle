@@ -39,12 +39,12 @@ int Field::is_field(int x, int y){
 int Field::is_ship(int x, int y, int lenght, int orientation){
     for(int i = 0; i < lenght; i++){
         if(orientation == 0){
-            if(this->fields[y][x + i] == alive){
+            if(this->fields[y][x + i] == ALIVE){
                 return 0;
             }
         }
         else{
-            if(this->fields[y + i][x] == alive){
+            if(this->fields[y + i][x] == ALIVE){
                 return 0;
             }
         }
@@ -68,7 +68,7 @@ int Field::is_closely(int x, int y, int lenght, int orientation, bool first){
             if((i == 0 && j == 1 && orientation == 1 && first == 1 && lenght != 1) || (i == 0 && j == -1 && orientation == 1 && first == 0 && lenght != 1)){
                 continue;
             }
-            if(this->fields[checky][checkx] == alive){
+            if(this->fields[checky][checkx] == ALIVE){
                 return 0;
             }
         }
@@ -79,7 +79,7 @@ int Field::is_closely(int x, int y, int lenght, int orientation, bool first){
 void Field::create_field(){
     for(int i = 0; i < this -> size; i++){
         for(int j = 0; j < this -> size; j++){
-            this->fields[i][j] = unknown;
+            this->fields[i][j] = UNKNOWN;
         }
     }
 }
@@ -119,16 +119,16 @@ void Field::put_ship(){
     }
     for(int l = 0; l < lenght; l++){
         if(orientation == 0){
-            this ->fields[coordinates[1]] [coordinates[0] + l] = alive;
+            this ->fields[coordinates[1]] [coordinates[0] + l] = ALIVE;
         }
         else{
-            this ->fields[coordinates[1] + l][coordinates[0]] = alive;
+            this ->fields[coordinates[1] + l][coordinates[0]] = ALIVE;
         }
     }
 }
 void Field::end_game(){
     if(managerfield->getNumberShip() == 0){
-        output.print_string("the end.\n");
+        output.printString("the end.\n");
         exit(0);
     }
 }
@@ -137,20 +137,20 @@ void Field::attack_segment(int x, int y, bool flag_bot){
         throw IncorrectCoordinatesException("Координата за пределами поля.");
     }
     else{
-        if(this->fields[y][x] == alive || this->fields[y][x] == shot || this->fields[y][x] == fogwar){
-            if(this->fields[y][x] == alive){
+        if(this->fields[y][x] == ALIVE || this->fields[y][x] == SHOT || this->fields[y][x] == FOGWAR){
+            if(this->fields[y][x] == ALIVE){
                 if(double_attack == true){
-                    this->fields[y][x] = dead;
+                    this->fields[y][x] = DEAD;
                 }
                 else{
-                    this->fields[y][x] = shot;
+                    this->fields[y][x] = SHOT;
                     if(flag_bot){
-                        output.print_string("Корабль ранен.\n");
+                        output.printString("Корабль ранен.\n");
                     }
                 }
             }
-            else if(this->fields[y][x] == shot || this->fields[y][x] == fogwar){
-                this->fields[y][x] = dead;
+            else if(this->fields[y][x] == SHOT || this->fields[y][x] == FOGWAR){
+                this->fields[y][x] = DEAD;
             }
             vector<Ship>& array_ship = managerfield->getShips();
             int quantity = managerfield->getNumberShip();
@@ -168,7 +168,7 @@ void Field::attack_segment(int x, int y, bool flag_bot){
                             if(array_ship[i].destroyedShip() == 1){
                                 managerfield ->removeShip(i);
                                 if(flag_bot){
-                                    output.print_string("Корабль убит.\n");
+                                    output.printString("Корабль убит.\n");
                                 }
                             }
                             double_attack = 0;
@@ -184,7 +184,7 @@ void Field::attack_segment(int x, int y, bool flag_bot){
                             if(array_ship[i].destroyedShip() == 1){
                                 managerfield ->removeShip(i);
                                 if(flag_bot){
-                                    output.print_string("Корабль убит.\n");
+                                    output.printString("Корабль убит.\n");
                                 }
                             }
                             double_attack = 0;
@@ -194,10 +194,10 @@ void Field::attack_segment(int x, int y, bool flag_bot){
                 }
             }
         }
-        else if(this->fields[y][x] == unknown || this->fields[y][x] == dead){
-            this->fields[y][x] = dead;
+        else if(this->fields[y][x] == UNKNOWN || this->fields[y][x] == DEAD){
+            this->fields[y][x] = DEAD;
             if(flag_bot){
-                output.print_string("Промах.\n");
+                output.printString("Промах.\n");
             }
         }
     }
@@ -206,15 +206,15 @@ void Field::attack_segment(int x, int y, bool flag_bot){
 
 void Field::bombing(int x, int y) {
     if(is_field(x, y)){
-        if(this->fields[y][x] == alive){
-            this->fields[y][x] = fogwar;
+        if(this->fields[y][x] == ALIVE){
+            this->fields[y][x] = FOGWAR;
         }
-        else if(this->fields[y][x] == shot || this->fields[y][x] == fogwar){
-            this->fields[y][x] = dead;
+        else if(this->fields[y][x] == SHOT || this->fields[y][x] == FOGWAR){
+            this->fields[y][x] = DEAD;
         }
     }
     else{
-        output.print_string("Координаты за предалами поля.\n");
+        output.printString("Координаты за предалами поля.\n");
     }
 }
 
@@ -224,14 +224,14 @@ void Field::set_double_attack_flag(){
 
 bool Field::check_cell(int x, int y){
     if(is_field(x, y)){
-        if(this -> fields[y][x] == alive || this -> fields[y][x] == shot || this -> fields[y][x] == fogwar){
+        if(this -> fields[y][x] == ALIVE || this -> fields[y][x] == SHOT || this -> fields[y][x] == FOGWAR){
             return true;
         }
     }
     return false;
 }
 
-Field::Condition Field::get_cell(int x, int y){
+Field::Condition Field::getCell(int x, int y){
     return this->fields[y][x];
 }
 

@@ -5,6 +5,6 @@ DoubleDamage::DoubleDamage(Field* field){
 }
 
 void DoubleDamage::useAbility(){
-    output.print_string("Next hit deals double damage.\n");
+    output.printString("Next hit deals double damage.\n");
     field->set_double_attack_flag();
 }

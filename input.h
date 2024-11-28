@@ -18,13 +18,10 @@ private:
 public:
     Input() = default;
 
-    int input_single_number();
-
-    vector<int> input_ship_place();
-
-    string input_flag();
-
-    pair<int, int> input_coordinates();
+    int inputSingleNumber();
+    vector<int> inputShipPlace();
+    string inputFlag();
+    pair<int, int> inputCoordinates();
 
 };
 

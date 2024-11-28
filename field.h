@@ -14,7 +14,14 @@ using json = nlohmann::json;
 
 class Field {
 public:
-    enum Condition {dead, shot, alive, unknown, fogwar};
+    enum Condition {
+            DEAD, 
+            SHOT, 
+            ALIVE, 
+            UNKNOWN, 
+            FOGWAR
+        };
+
 private:
     int size;
     shipManager* managerfield; 
@@ -24,11 +31,8 @@ private:
 
 public:
     Field(int size, shipManager* managerfield);
-
     Field(const Field& other);
-
     Field(Field&& other);
-
     Field() = default;
 
     int is_field(int x, int y);
@@ -51,7 +55,7 @@ public:
 
     bool check_cell(int x, int y);
 
-    Condition get_cell(int x, int y);
+    Condition getCell(int x, int y);
 
     Field& operator=(const Field& other);
 

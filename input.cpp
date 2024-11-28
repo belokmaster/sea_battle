@@ -1,78 +1,81 @@
 #include "input.h"
 
-int Input::input_single_number(){
+// Функция для ввода одного числа
+int Input::inputSingleNumber() {
     int one;
-    string input_s;
-    while(true){
-        try{
-            getline(cin, input_s);
-            stringstream ss(input_s);
-            if(!(ss >> one) || !ss.eof()){
-                throw IncorrectFieldSize("Некорректные данныe, введите ещё раз!");
+    std::string inputString;
+    while (true) {
+        try {
+            getline(std::cin, inputString); // Считываем строку из входного потока
+            std::stringstream ss(inputString);
+            // Проверяем, можно ли преобразовать строку в одно число
+            if (!(ss >> one) || !ss.eof()) {
+                throw IncorrectFieldSize("Некорректные данные, введите ещё раз!"); // Бросаем исключение при ошибке
             }
-            break;
-        } catch(IncorrectFieldSize& e){
-            output.print_error_string(e.what());
-            //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            break; // Выход из цикла при успешном вводе
+        } catch (IncorrectFieldSize& e) {
+            output.printErrorString(e.what()); // Выводим сообщение об ошибке
         }
     }
-    return one;
+    return one; // Возвращаем введённое число
 }
 
-vector<int> Input::input_ship_place(){
+// Функция для ввода координат корабля и ориентации
+std::vector<int> Input::inputShipPlace() {
     int x, y, orientation;
-    string input_s;
-    while(true){
-        try{
-            getline(cin, input_s);
-            stringstream ss(input_s);
-            if(!(ss >> x >> y >> orientation) || !ss.eof()){
-                throw IncorrectCoordinatesException("Некорректные данныe, введите ещё раз!");
+    std::string inputString;
+    while (true) {
+        try {
+            getline(std::cin, inputString); // Считываем строку из входного потока
+            std::stringstream ss(inputString);
+            // Проверяем, можно ли преобразовать строку в три числа (координаты и ориентация)
+            if (!(ss >> x >> y >> orientation) || !ss.eof()) {
+                throw IncorrectCoordinatesException("Некорректные данные, введите ещё раз!"); // Бросаем исключение при ошибке
             }
-            break;
-        } catch(IncorrectCoordinatesException& e){
-            output.print_error_string(e.what());
-            //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            break; // Выход из цикла при успешном вводе
+        } catch (IncorrectCoordinatesException& e) {
+            output.printErrorString(e.what()); // Выводим сообщение об ошибке
         }
     }
-    vector<int> coordinates = {x, y, orientation};
-    return coordinates;
+    return {x, y, orientation}; // Возвращаем координаты и ориентацию
 }
 
-
-string Input::input_flag(){
-    string flag;
-    string input_s;
-    while(true){
-        try{
-            getline(cin, input_s);
-            stringstream ss(input_s);
-            if(!(ss >> flag) || ss.fail() || !ss.eof()){
-                throw IncorrectFieldSize("Некорректные данныe, введите ещё раз!");
+// Функция для ввода флага
+std::string Input::inputFlag() {
+    std::string flag;
+    std::string inputString;
+    while (true) {
+        try {
+            getline(std::cin, inputString); // Считываем строку из входного потока
+            std::stringstream ss(inputString);
+            // Проверяем, можно ли преобразовать строку в одно слово
+            if (!(ss >> flag) || ss.fail() || !ss.eof()) {
+                throw IncorrectFieldSize("Некорректные данные, введите ещё раз!"); // Бросаем исключение при ошибке
             }
-            break;
-        } catch(IncorrectFieldSize& e){
-            output.print_error_string(e.what());
+            break; // Выход из цикла при успешном вводе
+        } catch (IncorrectFieldSize& e) {
+            output.printErrorString(e.what()); // Выводим сообщение об ошибке
         }
     }
-    return flag;
+    return flag; // Возвращаем введённый флаг
 }
 
-
-pair<int, int> Input::input_coordinates(){
+// Функция для ввода координат
+std::pair<int, int> Input::inputCoordinates() {
     int x, y;
-    string input_s;
-    while(true){
-        try{
-            getline(cin, input_s);
-            stringstream ss(input_s);
-            if(!(ss >> x >> y) || ss.fail() || !ss.eof()){
-                throw IncorrectFieldSize("Некорректные данныe, введите ещё раз!");
+    std::string inputString;
+    while (true) {
+        try {
+            getline(std::cin, inputString); // Считываем строку из входного потока
+            std::stringstream ss(inputString);
+            // Проверяем, можно ли преобразовать строку в два числа (координаты)
+            if (!(ss >> x >> y) || ss.fail() || !ss.eof()) {
+                throw IncorrectFieldSize("Некорректные данные, введите ещё раз!"); // Бросаем исключение при ошибке
             }
-            break;
-        } catch(IncorrectFieldSize& e){
-            output.print_error_string(e.what());
+            break; // Выход из цикла при успешном вводе
+        } catch (IncorrectFieldSize& e) {
+            output.printErrorString(e.what()); // Выводим сообщение об ошибке
         }
     }
-    return make_pair(x, y);
+    return std::make_pair(x, y); // Возвращаем координаты
 }

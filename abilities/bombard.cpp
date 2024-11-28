@@ -14,7 +14,7 @@ void Bombard::useAbility() {
         randomSeedInitialized = true;
     }
 
-    output.print_string("Use a Bombard ability!\n");
+    output.printString("Use a Bombard ability!\n");
 
     // Выбор случайного корабля и сегмента
     int randomShipIndex = getRandomShipIndex();

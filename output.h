@@ -6,7 +6,6 @@
 #include <sstream>
 #include <string>
 #include <utility>
-using namespace std;
 
 class Field;
 
@@ -14,19 +13,15 @@ class Output{
 public:
     Output() = default;
 
-    void print_string(string msg);
+    void printString(std::string message);
+    void printCountShips(int i);
+    void printErrorString(std::string message);
 
-    void print_for_scanner(int x, int y, bool flag);
+    void printScanner(int x, int y, bool flag);
+    void printErrorWithXy(std::string message, int x, int y);
 
-    void print_quantity_ships(int i);
-
-    void print_error_string(string msg);
-
-    void print_error_with_xy(string msg, int x, int y);
-
-    void print_field_user(Field* field, int size);
-
-    void print_field_opponent(Field* field, int size);
+    void printFieldUser(Field* field, int size);
+    void printFieldEnemy(Field* field, int size);
 };
 
 #endif

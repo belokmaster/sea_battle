@@ -4,8 +4,8 @@
 GameSession::GameSession(){}
 
 void GameSession::downloading_previous_game(){
-    output.print_string("Если хотите загрузить предыдущую игру, введите Y\n");
-    string flag_load = input.input_flag();
+    output.printString("Если хотите загрузить предыдущую игру, введите Y\n");
+    string flag_load = input.inputFlag();
     if(flag_load == "Y"){
         game_state = new GameState("state.json", &user_field, &opponent_field, &user_manager, &opponent_manager, &abilitymanager);
         load();
@@ -29,29 +29,29 @@ void GameSession::downloading_previous_game(){
 void GameSession::start_game(){
     while(1){
         try{
-            output.print_string("Введите размер поля: ");
-            size = input.input_single_number();
+            output.printString("Введите размер поля: ");
+            size = input.inputSingleNumber();
             if (size < 2 || size > 20) {
                 throw IncorrectFieldSize("Ошибка ввода! Размер поля - это число от 2 до 20.");
             }
             break;
         } catch(IncorrectFieldSize& e){
-            output.print_error_string(e.what());
+            output.printErrorString(e.what());
         }
     }
-    output.print_string("Игра морской бой начинается.\n");
+    output.printString("Игра морской бой начинается.\n");
     ships.resize(4);
     for(int i = 0; i < 4; i++){
         while(1){
             try{
-                output.print_quantity_ships(i+1);
-                ships[i] = input.input_single_number();
+                output.printCountShips(i+1);
+                ships[i] = input.inputSingleNumber();
                 if (ships[i] < 0 || ships[i] > 10) {
                     throw IncorrectQuantity("Ошибка ввода! Количество кораблей число от 0 до 10.");
                 }
                 break;
             } catch(IncorrectQuantity& e){
-                output.print_error_string(e.what());
+                output.printErrorString(e.what());
             }
         }
     }
@@ -72,12 +72,12 @@ void GameSession::coordinates_ship(){
     int flag_error;
     for(int j = 0; j < 4; j++){
         if(ships[j] > 0){
-            output.print_string("Введите координаты и ориентацию кораблей в формате x y 0, где 0 обозначет горизатльное расположение, а 1 вертикальное.\n");
+            output.printString("Введите координаты и ориентацию кораблей в формате x y 0, где 0 обозначет горизатльное расположение, а 1 вертикальное.\n");
         }
         for(int i = 0; i < ships[j]; i++){
             flag_error = 0;
-            output.print_string("x y orientation: ");
-            vector<int> coordinates = input.input_ship_place();
+            output.printString("x y orientation: ");
+            vector<int> coordinates = input.inputShipPlace();
             x = coordinates[0];
             y = coordinates[1];
             orientation = coordinates[2];
@@ -95,19 +95,19 @@ void GameSession::coordinates_ship(){
                     }
                     break;
                 } catch(IncorrectCoordinatesException& e){
-                    output.print_error_string(e.what());
+                    output.printErrorString(e.what());
                     flag_error = 1;
-                    output.print_string("x y orientation: ");
-                    vector<int> coordinates = input.input_ship_place();
+                    output.printString("x y orientation: ");
+                    vector<int> coordinates = input.inputShipPlace();
                     x = coordinates[0];
                     y = coordinates[1];
                     orientation = coordinates[2];
                 }
                 catch(PlaceShipException& e){
-                    output.print_error_with_xy(e.what(), e.getxerror(), e.getyerror());
+                    output.printErrorWithXy(e.what(), e.getxerror(), e.getyerror());
                     flag_error = 1;
-                    output.print_string("x y orientation: ");
-                    vector<int> coordinates = input.input_ship_place();
+                    output.printString("x y orientation: ");
+                    vector<int> coordinates = input.inputShipPlace();
                     x = coordinates[0];
                     y = coordinates[1];
                     orientation = coordinates[2];
@@ -164,7 +164,7 @@ void GameSession::attack_enemy(){
     int y = dist(gen);
     while(1){
         try{
-            if(user_field -> get_cell(x, y) == Field::dead){
+            if(user_field -> getCell(x, y) == Field::DEAD) {
                 throw IncorrectCoordinatesException("Бот уже стрялял сюда.");
             }
             user_field -> attack_segment(x, y);
@@ -182,24 +182,24 @@ void GameSession::make_move(){
     string flag_ability;
     int number_ships = opponent_manager->getNumberShip();
     int x, y, orientation;
-    while(opponent_manager -> getNumberShip() != 0 && user_manager -> getNumberShip() != 0){
-        output.print_field_user(user_field, size);
-        output.print_string("\n");
-        output.print_field_user(opponent_field, size);
+    while(opponent_manager -> getNumberShip() != 0 && user_manager -> getNumberShip() != 0) {
+        output.printFieldUser(user_field, size);
+        output.printString("\n");
+        output.printFieldUser(opponent_field, size); // поменять на enemy field для тумана 
         if (abilitymanager->isEmpty() == false){
-            output.print_string( "Чтобы активировать спобность введите Y\n");
-            flag_ability = input.input_flag();
+            output.printString( "Чтобы активировать спобность введите Y\n");
+            flag_ability = input.inputFlag();
             if(flag_ability == "Y"){
-                output.print_string("Активирована способность.\n");
+                output.printString("Активирована способность.\n");
                 abilitymanager->applyAbility();
                 if(opponent_manager->getNumberShip() == 0){
                     reload_game();
                 }
             }
         }
-        output.print_string("Введите координаты для атаки.\n");
-        output.print_string("x y: ");
-        pair<int, int> coordinates = input.input_coordinates();
+        output.printString("Введите координаты для атаки.\n");
+        output.printString("x y: ");
+        pair<int, int> coordinates = input.inputCoordinates();
         x = get<0>(coordinates);
         y = get<1>(coordinates);
         while(1){
@@ -207,9 +207,9 @@ void GameSession::make_move(){
                 opponent_field->attack_segment(x, y);
                 break;
             } catch(IncorrectCoordinatesException& e){
-                output.print_error_string(e.what());
-                output.print_string("x y: ");
-                pair<int, int> coordinates = input.input_coordinates();
+                output.printErrorString(e.what());
+                output.printString("x y: ");
+                pair<int, int> coordinates = input.inputCoordinates();
                 x = get<0>(coordinates);
                 y = get<1>(coordinates);
             }
@@ -222,8 +222,8 @@ void GameSession::make_move(){
             abilitymanager->addAbility();
             number_ships = opponent_manager->getNumberShip();
         }
-        output.print_string("Если хотите сохранить игру на данном моменте введите Y\n");
-        flag_save = input.input_flag();
+        output.printString("Если хотите сохранить игру на данном моменте введите Y\n");
+        flag_save = input.inputFlag();
         if (flag_save == "Y") {
             save();
         }
@@ -236,22 +236,22 @@ void GameSession::make_move(){
 void GameSession::reload_game(){
     string flag_reload;
     if(opponent_manager -> getNumberShip() == 0){
-        output.print_string("Вы выиграли, хотите продолжить игру с новым соперником? Y - Да, Other - Нет\n");
-        flag_reload = input.input_flag();
+        output.printString("Вы выиграли, хотите продолжить игру с новым соперником? Y - Да, Other - Нет\n");
+        flag_reload = input.inputFlag();
         if(flag_reload == "Y"){
             opponent_manager->getShips().resize(qantity_ship+1);
             alignment_of_enemy_ships();
             make_move();
         }
         else{
-            output.print_string("Игра окончена!");
+            output.printString("Игра окончена!");
             exit(0);
         }
 
     }
     else if (user_manager -> getNumberShip() == 0){
-        output.print_string("Вы проиграли, хотите начать сначала? Y - Да, Other - Нет\n");
-        flag_reload = input.input_flag();
+        output.printString("Вы проиграли, хотите начать сначала? Y - Да, Other - Нет\n");
+        flag_reload = input.inputFlag();
         if(flag_reload == "Y"){
             start_game();
             coordinates_ship();
@@ -259,7 +259,7 @@ void GameSession::reload_game(){
             make_move();
         }
         else{
-            output.print_string("Игра окончена!");
+            output.printString("Игра окончена!");
             exit(0);
         }
     }

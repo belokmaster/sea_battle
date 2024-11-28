@@ -18,11 +18,11 @@ bool Scanner::checkArea(int x, int y) {
 }
 
 void Scanner::useAbility() {
-    output.print_string("Use a Scanner ability.\n");
-    output.print_string("Enter coordinates (x y): ");
+    output.printString("Use a Scanner ability.\n");
+    output.printString("Enter coordinates (x y): ");
     
     // Считываем координаты
-    pair<int, int> coordinates = input.input_coordinates();
+    pair<int, int> coordinates = input.inputCoordinates();
     x = get<0>(coordinates);
     y = get<1>(coordinates);
     
@@ -30,7 +30,7 @@ void Scanner::useAbility() {
     bool isOccupied = checkArea(x, y);
     
     // Выводим результат
-    output.print_for_scanner(x, y, isOccupied);
+    output.printScanner(x, y, isOccupied);
 }
 
 void Scanner::setCoordinates(int x, int y){
