@@ -9,7 +9,7 @@ bool Scanner::checkArea(int x, int y) {
     // Проверяем клетки на позиции (x, y), (x + 1, y), (x, y + 1) и (x + 1, y + 1)
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
-            if (field->check_cell(x + i, y + j)) {
+            if (field->checkCell(x + i, y + j)) {
                 return true;  // Если хотя бы одна клетка занята
             }
         }

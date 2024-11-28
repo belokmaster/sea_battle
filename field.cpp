@@ -1,12 +1,12 @@
 #include "field.h"
 
 
-Field::Field(int size, shipManager* managerfield){
+Field::Field(int size, shipManager* managerfield) {
     this->size = size;
     this -> managerfield = managerfield;
     this -> double_attack = 0;
     this -> fields = new Condition*[size];
-    for(int i = 0; i < size; i++){
+    for (int i = 0; i < size; i++) {
         this -> fields[i] = new Condition[size];
     }
 }
@@ -29,22 +29,22 @@ Field::Field(Field&& other) {
     other.fields = nullptr;
 }
 
-int Field::is_field(int x, int y){
-    if(x < 0 || y < 0 || x >= this->size || y >= this->size){
+int Field::isField(int x, int y) {
+    if (x < 0 || y < 0 || x >= this->size || y >= this->size) {
         return 0;
     }
     return 1;
 }
 
-int Field::is_ship(int x, int y, int lenght, int orientation){
-    for(int i = 0; i < lenght; i++){
-        if(orientation == 0){
-            if(this->fields[y][x + i] == ALIVE){
+int Field::isShip(int x, int y, int lenght, int orientation) {
+    for (int i = 0; i < lenght; i++) {
+        if (orientation == 0) {
+            if (this->fields[y][x + i] == ALIVE) {
                 return 0;
             }
         }
-        else{
-            if(this->fields[y + i][x] == ALIVE){
+        else {
+            if (this->fields[y + i][x] == ALIVE) {
                 return 0;
             }
         }
@@ -52,23 +52,23 @@ int Field::is_ship(int x, int y, int lenght, int orientation){
     return 1;
 }
 
-int Field::is_closely(int x, int y, int lenght, int orientation, bool first){
+int Field::isClosely(int x, int y, int lenght, int orientation, bool first) {
     int checkx;
     int checky;
-    for(int i = -1; i < 2; i++){
-        for(int j = -1; j < 2; j++){
-            if((i == 0 && j == 0)){
+    for (int i = -1; i < 2; i++) {
+        for (int j = -1; j < 2; j++) {
+            if ((i == 0 && j == 0)) {
                 continue;
             }
             checkx = x + i;
             checky  = y + j;
-            if((is_field(checkx, checky) == 0) || (i == 1 && j == 0 && orientation == 0 && first == 1 && lenght != 1) || (i == -1 && j == 0 && orientation == 0 && first == 0 && lenght != 1)){
+            if ((isField(checkx, checky) == 0) || (i == 1 && j == 0 && orientation == 0 && first == 1 && lenght != 1) || (i == -1 && j == 0 && orientation == 0 && first == 0 && lenght != 1)) {
                 continue;
             }
-            if((i == 0 && j == 1 && orientation == 1 && first == 1 && lenght != 1) || (i == 0 && j == -1 && orientation == 1 && first == 0 && lenght != 1)){
+            if ((i == 0 && j == 1 && orientation == 1 && first == 1 && lenght != 1) || (i == 0 && j == -1 && orientation == 1 && first == 0 && lenght != 1)) {
                 continue;
             }
-            if(this->fields[checky][checkx] == ALIVE){
+            if (this->fields[checky][checkx] == ALIVE) {
                 return 0;
             }
         }
@@ -76,98 +76,103 @@ int Field::is_closely(int x, int y, int lenght, int orientation, bool first){
     return 1;
 }
 
-void Field::create_field(){
-    for(int i = 0; i < this -> size; i++){
-        for(int j = 0; j < this -> size; j++){
+void Field::createField() {
+    for (int i = 0; i < this -> size; i++) {
+        for (int j = 0; j < this -> size; j++) {
             this->fields[i][j] = UNKNOWN;
         }
     }
 }
 
-void Field::put_ship(){
+void Field::putShip() {
     Ship& current_ship = managerfield->getShip();
     vector<int> coordinates = current_ship.getCoordinates();
-    if(is_field(coordinates[0], coordinates[1]) == 0){
+    
+    if (isField(coordinates[0], coordinates[1]) == 0) {
         throw IncorrectCoordinatesException("Координата находится за пределами поля!");
     }
+
     int orientation = current_ship.getOrientation();
-    if(orientation != 0 && orientation != 1){
+    if (orientation != 0 && orientation != 1) {
         throw IncorrectCoordinatesException("Ошибка ввода! Неправильная ориентация.");
     }
+
     int lenght = current_ship.getLenght();
-    if(is_closely(coordinates[0], coordinates[1], lenght, orientation, 1) == 0){
+    if (isClosely(coordinates[0], coordinates[1], lenght, orientation, 1) == 0) {
         throw PlaceShipException("На этих координатх или близко к ним уже стоит корабль: ", coordinates[0], coordinates[1]);
     }
-    if(orientation == 0){
-        if(is_closely(coordinates[0] + lenght - 1, coordinates[1], lenght, orientation, 0) == 0){
+
+    if (orientation == 0) {
+        if (isClosely(coordinates[0] + lenght - 1, coordinates[1], lenght, orientation, 0) == 0) {
             throw PlaceShipException("На этих координатх или близко к ним уже стоит корабль: ", coordinates[0] + lenght - 1, coordinates[1]);
         }
-        if(is_field(coordinates[0] + lenght - 1, coordinates[1]) == 0){
+        if (isField(coordinates[0] + lenght - 1, coordinates[1]) == 0) {
             throw IncorrectCoordinatesException("Координата находится за пределами поля!");
         }   
     }
-    else{
-        if(is_closely(coordinates[0], coordinates[1] + lenght - 1, lenght, orientation, 0) == 0){
+    else {
+        if (isClosely(coordinates[0], coordinates[1] + lenght - 1, lenght, orientation, 0) == 0) {
             throw PlaceShipException("На этих координатх или близко к ним уже стоит корабль: ", coordinates[0], coordinates[1] + lenght - 1);
         }
-        if(is_field(coordinates[0], coordinates[1] + lenght - 1) == 0){
+        if (isField(coordinates[0], coordinates[1] + lenght - 1) == 0) {
             throw IncorrectCoordinatesException("Координата находится за пределами поля!");
         }
     }
-    if(is_ship(coordinates[0], coordinates[1], lenght, orientation) == 0){
+
+    if (isShip(coordinates[0], coordinates[1], lenght, orientation) == 0) {
         throw PlaceShipException("На этих координатх или близко к ним уже стоит корабль: ", coordinates[0], coordinates[1]);
     }
-    for(int l = 0; l < lenght; l++){
-        if(orientation == 0){
+
+    for (int l = 0; l < lenght; l++) {
+        if (orientation == 0) {
             this ->fields[coordinates[1]] [coordinates[0] + l] = ALIVE;
         }
-        else{
+        else {
             this ->fields[coordinates[1] + l][coordinates[0]] = ALIVE;
         }
     }
 }
-void Field::end_game(){
-    if(managerfield->getNumberShip() == 0){
-        output.printString("the end.\n");
-        exit(0);
-    }
+
+int Field::getSize() {
+    return this->size;
 }
-void Field::attack_segment(int x, int y, bool flag_bot){
-    if(is_field(x, y) == 0){
+
+void Field::attackSegment(int x, int y, bool flag_bot) {
+    if (isField(x, y) == 0) {
         throw IncorrectCoordinatesException("Координата за пределами поля.");
     }
-    else{
-        if(this->fields[y][x] == ALIVE || this->fields[y][x] == SHOT || this->fields[y][x] == FOGWAR){
-            if(this->fields[y][x] == ALIVE){
-                if(double_attack == true){
+    else {
+        if (this->fields[y][x] == ALIVE || this->fields[y][x] == SHOT || this->fields[y][x] == FOGWAR) {
+            if (this->fields[y][x] == ALIVE) {
+                if (double_attack == true) {
                     this->fields[y][x] = DEAD;
                 }
-                else{
+                else {
                     this->fields[y][x] = SHOT;
-                    if(flag_bot){
+                    if (flag_bot) {
                         output.printString("Корабль ранен.\n");
                     }
                 }
             }
-            else if(this->fields[y][x] == SHOT || this->fields[y][x] == FOGWAR){
+            else if (this->fields[y][x] == SHOT || this->fields[y][x] == FOGWAR) {
                 this->fields[y][x] = DEAD;
             }
             vector<Ship>& array_ship = managerfield->getShips();
             int quantity = managerfield->getNumberShip();
-            for(int i = 0; i < quantity; i++){
+            for (int i = 0; i < quantity; i++) {
                 vector<int> coordinates = array_ship[i].getCoordinates();;
                 int orientation = array_ship[i].getOrientation();
                 int lenght = array_ship[i].getLenght();
-                for(int l = 0; l < lenght; l++){
-                    if(orientation == 0){
-                        if(coordinates[0] + l == x && coordinates[1] == y){
+                for (int l = 0; l < lenght; l++) {
+                    if (orientation == 0) {
+                        if (coordinates[0] + l == x && coordinates[1] == y) {
                             array_ship[i].attack(l);
-                            if(double_attack == true){
+                            if (double_attack == true) {
                                 array_ship[i].attack(l);
                             }
-                            if(array_ship[i].destroyedShip() == 1){
+                            if (array_ship[i].destroyedShip() == 1) {
                                 managerfield ->removeShip(i);
-                                if(flag_bot){
+                                if (flag_bot) {
                                     output.printString("Корабль убит.\n");
                                 }
                             }
@@ -175,15 +180,15 @@ void Field::attack_segment(int x, int y, bool flag_bot){
                             return;
                         }
                     }
-                    else{
-                        if(coordinates[0] == x && coordinates[1] + l == y){
+                    else {
+                        if (coordinates[0] == x && coordinates[1] + l == y) {
                             array_ship[i].attack(l);
-                            if(double_attack == true){
+                            if (double_attack == true) {
                                 array_ship[i].attack(l);
                             }
-                            if(array_ship[i].destroyedShip() == 1){
+                            if (array_ship[i].destroyedShip() == 1) {
                                 managerfield ->removeShip(i);
-                                if(flag_bot){
+                                if (flag_bot) {
                                     output.printString("Корабль убит.\n");
                                 }
                             }
@@ -194,9 +199,9 @@ void Field::attack_segment(int x, int y, bool flag_bot){
                 }
             }
         }
-        else if(this->fields[y][x] == UNKNOWN || this->fields[y][x] == DEAD){
+        else if (this->fields[y][x] == UNKNOWN || this->fields[y][x] == DEAD) {
             this->fields[y][x] = DEAD;
-            if(flag_bot){
+            if (flag_bot) {
                 output.printString("Промах.\n");
             }
         }
@@ -204,34 +209,34 @@ void Field::attack_segment(int x, int y, bool flag_bot){
     double_attack = 0;
 }
 
+void Field::setDoubleAttackFlag() {
+    this->double_attack = 1;
+}
+
 void Field::bombing(int x, int y) {
-    if(is_field(x, y)){
-        if(this->fields[y][x] == ALIVE){
+    if (isField(x, y)) {
+        if (this->fields[y][x] == ALIVE) {
             this->fields[y][x] = FOGWAR;
         }
-        else if(this->fields[y][x] == SHOT || this->fields[y][x] == FOGWAR){
+        else if (this->fields[y][x] == SHOT || this->fields[y][x] == FOGWAR) {
             this->fields[y][x] = DEAD;
         }
     }
-    else{
+    else {
         output.printString("Координаты за предалами поля.\n");
     }
 }
 
-void Field::set_double_attack_flag(){
-    this->double_attack = 1;
-}
-
-bool Field::check_cell(int x, int y){
-    if(is_field(x, y)){
-        if(this -> fields[y][x] == ALIVE || this -> fields[y][x] == SHOT || this -> fields[y][x] == FOGWAR){
+bool Field::checkCell(int x, int y) {
+    if (isField(x, y)) {
+        if (this -> fields[y][x] == ALIVE || this -> fields[y][x] == SHOT || this -> fields[y][x] == FOGWAR) {
             return true;
         }
     }
     return false;
 }
 
-Field::Condition Field::getCell(int x, int y){
+Field::Condition Field::getCell(int x, int y) {
     return this->fields[y][x];
 }
 
@@ -253,7 +258,7 @@ Field& Field::operator=(const Field& other) {
     return *this;
 }
 
-Field& Field::operator=(Field&& other){
+Field& Field::operator=(Field&& other) {
     if (this != &other) {
         for (int i = 0; i < size; ++i) {
             delete[] fields[i];
@@ -267,12 +272,12 @@ Field& Field::operator=(Field&& other){
     return *this;
 }
 
-json Field::write_json(){
+json Field::write_json() {
     json j;
     j["size"] = this -> size;
-    for(int i = 0; i < this -> size; i++){
+    for (int i = 0; i < this -> size; i++) {
         vector<int> column;
-        for(int k = 0; k < this -> size; k++){
+        for (int k = 0; k < this -> size; k++) {
             column.push_back(static_cast<int>(fields[k][i]));
         }
         j["field"].push_back(column);
@@ -285,21 +290,22 @@ int Field::load_json_size(json j) {
     return size;
 }
 
-void Field::load_json_field(json j){
-    for(int i = 0; i < size; i++){
-        for(int k = 0; k < size; k ++){
+void Field::load_json_field(json j) {
+    for (int i = 0; i < size; i++) {
+        for (int k = 0; k < size; k ++) {
             fields[k][i] = static_cast<Condition>(j["field"][i][k]);
         }
     }
 }
 
-int Field::getsize(){
-    return this->size;
+void Field::endGame() {
+    if (managerfield->getNumberShip() == 0) {
+        output.printString("the end.\n");
+        exit(0);
+    }
 }
 
-
-
-Field::~Field(){
+Field::~Field() {
     for (int i = 0; i < size; i++) {
         delete[] fields[i];
     }

@@ -9,7 +9,7 @@ void GameSession::downloading_previous_game(){
     if(flag_load == "Y"){
         game_state = new GameState("state.json", &user_field, &opponent_field, &user_manager, &opponent_manager, &abilitymanager);
         load();
-        size = user_field ->getsize();
+        size = user_field ->getSize();
         ships.resize(4);
         qantity_ship = 0;
         for(int i = 0; i < 4; i++){
@@ -65,7 +65,7 @@ void GameSession::coordinates_ship(){
     opponent_field = new Field(size, opponent_manager);
     abilitymanager = new AbilityManager(opponent_field, opponent_manager);
     game_state = new GameState("state.json", &user_field, &opponent_field, &user_manager, &opponent_manager, &abilitymanager);
-    user_field->create_field();
+    user_field->createField();
     int x;
     int y;
     int orientation;
@@ -85,13 +85,13 @@ void GameSession::coordinates_ship(){
                 try{
                     if(flag_error == 0){
                         user_manager->createShip(j+1, orientation, x, y);
-                        user_field->put_ship();
+                        user_field->putShip();
                     }
                     else{
                         Ship& current_ship = user_manager->getShip();
                         current_ship.setOrientation(orientation);
                         current_ship.inputCoordinates(x, y);
-                        user_field->put_ship();
+                        user_field->putShip();
                     }
                     break;
                 } catch(IncorrectCoordinatesException& e){
@@ -118,7 +118,7 @@ void GameSession::coordinates_ship(){
 }
 
 void GameSession::alignment_of_enemy_ships(){
-    opponent_field -> create_field();
+    opponent_field -> createField();
     random_device rd;
     mt19937 gen(rd());
     uniform_int_distribution<int> dist(0, size - 1);
@@ -136,13 +136,13 @@ void GameSession::alignment_of_enemy_ships(){
                     orientation = dist(gen) % 2;
                     if(flag_error == 0){
                         opponent_manager->createShip(i+1, orientation, x, y);
-                        opponent_field->put_ship();
+                        opponent_field->putShip();
                     }
                     else{
                         Ship& current_ship = opponent_manager->getShip();
                         current_ship.setOrientation(orientation);
                         current_ship.inputCoordinates(x, y);
-                        opponent_field->put_ship();
+                        opponent_field->putShip();
                     }
                     break;
                 } catch(IncorrectCoordinatesException& e){
@@ -167,7 +167,7 @@ void GameSession::attack_enemy(){
             if(user_field -> getCell(x, y) == Field::DEAD) {
                 throw IncorrectCoordinatesException("Бот уже стрялял сюда.");
             }
-            user_field -> attack_segment(x, y);
+            user_field -> attackSegment(x, y);
             break;
         } catch(IncorrectCoordinatesException& e){
             x = dist(gen);
@@ -204,7 +204,7 @@ void GameSession::make_move(){
         y = get<1>(coordinates);
         while(1){
             try{
-                opponent_field->attack_segment(x, y);
+                opponent_field->attackSegment(x, y);
                 break;
             } catch(IncorrectCoordinatesException& e){
                 output.printErrorString(e.what());
