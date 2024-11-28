@@ -6,8 +6,7 @@
 #include <random>
 #include <algorithm>
 #include "../field.h"
-#include "../manager.h"
-using namespace std;
+#include "../shipManager.h"
 
 
 class Ability {

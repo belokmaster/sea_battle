@@ -9,7 +9,7 @@ using namespace std;
 using json = nlohmann::json;
 
 
-class Manager {
+class shipManager {
 private:
     int qantity_ship;
     vector<int> len_ships;
@@ -17,9 +17,9 @@ private:
     int number_ships;
 
 public:
-    Manager(int qantity_ship, vector<int> len_ships);
+    shipManager(int qantity_ship, vector<int> len_ships);
 
-    Manager() = default;
+    shipManager() = default;
 
     void create_ship(int length, int orientation, int x, int y);
 
@@ -37,10 +37,10 @@ public:
 
     json write_json();
 
-    Manager* load_json(json j);
+    shipManager* load_json(json j);
     
     void load_from_json_ship(json j);
 
-    ~Manager();
+    ~shipManager();
 };
 #endif

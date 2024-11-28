@@ -15,14 +15,14 @@ private:
     json saved_game;
     Field** user_field;
     Field** opponent_field;
-    Manager** user_manager;
-    Manager** opponent_manager;
+    shipManager** user_manager;
+    shipManager** opponent_manager;
     AbilityManager** ability_manager;
 
 public:
     GameState() = default;
 
-    GameState(string filename, Field** user_field, Field** opponent_field, Manager** user_manager, Manager** opponent_manager, AbilityManager** ability_manager);
+    GameState(string filename, Field** user_field, Field** opponent_field, shipManager** user_manager, shipManager** opponent_manager, AbilityManager** ability_manager);
 
     json save();
 

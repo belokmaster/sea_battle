@@ -1,6 +1,7 @@
 #include "game_state.h"
 
-GameState::GameState(string filename, Field** user_field, Field** opponent_field, Manager** user_manager, Manager** opponent_manager, AbilityManager** ability_manager){
+
+GameState::GameState(string filename, Field** user_field, Field** opponent_field, shipManager** user_manager, shipManager** opponent_manager, AbilityManager** ability_manager){
     this -> filename = filename;
     this -> user_field = user_field;
     this->opponent_field = opponent_field;

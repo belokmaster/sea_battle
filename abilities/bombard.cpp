@@ -1,6 +1,6 @@
 #include "bombard.h"
 
-Bombard::Bombard(Manager* managerfield, Field* field) {
+Bombard::Bombard(shipManager* managerfield, Field* field) {
     this->managerfield = managerfield;
     this->field = field;
 }

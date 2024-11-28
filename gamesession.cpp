@@ -59,9 +59,9 @@ void GameSession::start_game(){
 }
 
 void GameSession::coordinates_ship(){
-    user_manager = new Manager(qantity_ship, ships);
+    user_manager = new shipManager(qantity_ship, ships);
     user_field = new Field(size, user_manager);
-    opponent_manager = new Manager(qantity_ship, ships);
+    opponent_manager = new shipManager(qantity_ship, ships);
     opponent_field = new Field(size, opponent_manager);
     abilitymanager = new AbilityManager(opponent_field, opponent_manager);
     game_state = new GameState("state.json", &user_field, &opponent_field, &user_manager, &opponent_manager, &abilitymanager);
@@ -249,7 +249,7 @@ void GameSession::reload_game(){
         }
 
     }
-    else if(user_manager -> getnumbership() == 0){
+    else if (user_manager -> getnumbership() == 0){
         output.print_string("Вы проиграли, хотите начать сначала? Y - Да, Other - Нет\n");
         flag_reload = input.input_flag();
         if(flag_reload == "Y"){

@@ -7,14 +7,14 @@
 using namespace std;
 #include "field.h"
 #include "ship.h"
-#include "manager.h"
+#include "shipManager.h"
 #include "game_state.h"
 
 
 class GameSession{
 private:
-    Manager* user_manager;
-    Manager* opponent_manager;
+    shipManager* user_manager;
+    shipManager* opponent_manager;
     Field* user_field;
     Field* opponent_field;
     AbilityManager* abilitymanager;

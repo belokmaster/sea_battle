@@ -1,6 +1,6 @@
 #include "field.h"
 
-Field::Field(int size, Manager* managerfield){
+Field::Field(int size, shipManager* managerfield){
     this->size = size;
     this -> managerfield = managerfield;
     this -> double_attack = 0;

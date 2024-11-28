@@ -1,12 +1,14 @@
 #include "ability_manager.h"
 
 
-AbilityManager::AbilityManager(Field* field, Manager* manager){
+AbilityManager::AbilityManager(Field* field, shipManager* manager){
     this -> field = field;
     this -> manager = manager;
+    
     queue_abilities.push_back(new Bombard(this->manager, this->field));
     queue_abilities.push_back(new DoubleDamage(this->field));
     queue_abilities.push_back(new Scanner(this->field));
+
     mt19937 g(static_cast<unsigned int>(time(0)));
     shuffle(queue_abilities.begin(), queue_abilities.end(), g);
 }
@@ -16,17 +18,23 @@ void AbilityManager::applyAbility(){
     queue_abilities.erase(queue_abilities.begin());
 }
 
-void AbilityManager::addAbility(){
+void AbilityManager::addAbility() {
     srand(time(0));
     int random = rand() % 3;
-    if (random == 0) {
-        queue_abilities.push_back(new Scanner(this->field));
-    }
-    else if(random == 1){
-        queue_abilities.push_back(new DoubleDamage(this->field));
-    }
-    else if(random == 2){
-        queue_abilities.push_back(new Bombard(this->manager, this->field));
+
+    switch (random) {
+        case 0:
+            queue_abilities.push_back(new Scanner(this->field));
+            break;
+        case 1:
+            queue_abilities.push_back(new DoubleDamage(this->field));
+            break;
+        case 2:
+            queue_abilities.push_back(new Bombard(this->manager, this->field));
+            break;
+        default:
+            // Этот блок не должен срабатывать, так как random всегда будет в пределах [0, 2]
+            break;
     }
 }
 

@@ -1,43 +1,43 @@
-#include "manager.h"
+#include "shipManager.h"
 
 
-Manager::Manager(int qantity_ship, vector<int> len_ships){
+shipManager::shipManager(int qantity_ship, vector<int> len_ships){
     this -> qantity_ship = qantity_ship;
     this -> len_ships = len_ships;
     ships.resize(qantity_ship);
     this -> number_ships = 0;
 }
-void Manager::create_ship(int lenght, int orientation, int x , int y){
+void shipManager::create_ship(int lenght, int orientation, int x , int y){
     ships[this->number_ships] = Ship(lenght, orientation);
     ships[this->number_ships].input_coordinates(x, y);
     this->number_ships += 1;
 }
-vector<Ship>& Manager::getships(){
+vector<Ship>& shipManager::getships(){
     return this->ships;
 }
 
-Ship& Manager::getship(){
+Ship& shipManager::getship(){
     return this->ships[this->number_ships - 1];
 }
 
-vector<int> Manager::getlenships(){
+vector<int> shipManager::getlenships(){
     return this->len_ships;
 }
 
-int Manager::getnumbership(){
+int shipManager::getnumbership(){
     return this->number_ships;
 }
-void Manager::remove_ship(int i){
+void shipManager::remove_ship(int i){
     if(i < this->number_ships && i >= 0){
         ships.erase(ships.begin() + i);
         this -> number_ships -= 1;
     }
 }
-int Manager::getqantityship(){
+int shipManager::getqantityship(){
     return this -> qantity_ship;
 }
 
-json Manager::write_json(){
+json shipManager::write_json(){
     json j;
     json array_ship = json::array();
     int x_ship, y_ship, length_ship, oreintation_ship;
@@ -64,7 +64,7 @@ json Manager::write_json(){
     return j;
 }
 
-Manager* Manager::load_json(json j) {
+shipManager* shipManager::load_json(json j) {
     int number_ship = j["number_ship"];
     vector<int> len_ships;
     len_ships.resize(4);
@@ -72,11 +72,11 @@ Manager* Manager::load_json(json j) {
     for(int i = 0; i < 4; i++){
         len_ships[i] = len_ships_json[i];
     }
-    Manager* manager = new Manager(number_ship, len_ships);
+    shipManager* manager = new shipManager(number_ship, len_ships);
     return manager;
 }
 
-void Manager::load_from_json_ship(json j){
+void shipManager::load_from_json_ship(json j){
     for(int i = 0; i < qantity_ship; i++){
         int length = j[i]["lenght"];
         int x = j[i]["x"];
@@ -94,5 +94,5 @@ void Manager::load_from_json_ship(json j){
     }
 }
 
-Manager::~Manager(){}
+shipManager::~shipManager(){}
 

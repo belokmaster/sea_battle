@@ -2,7 +2,7 @@
 #define FIELD_H
 
 #include <iostream>
-#include "manager.h"
+#include "shipManager.h"
 #include "exception.h"
 #include <vector>
 #include "output.h"
@@ -17,13 +17,13 @@ public:
     enum Condition {dead, shot, alive, unknown, fogwar};
 private:
     int size;
-    Manager* managerfield; 
+    shipManager* managerfield; 
     Condition** fields;
     bool double_attack;
     Output output;
 
 public:
-    Field(int size, Manager* managerfield);
+    Field(int size, shipManager* managerfield);
 
     Field(const Field& other);
 
