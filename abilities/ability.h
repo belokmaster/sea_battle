@@ -12,7 +12,7 @@ using namespace std;
 
 class Ability {
 public:
-    virtual void use_ability() = 0;
+    virtual void useAbility() = 0;
     virtual ~Ability() = 0;
 };
 #endif

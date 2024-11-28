@@ -186,12 +186,12 @@ void GameSession::make_move(){
         output.print_field_user(user_field, size);
         output.print_string("\n");
         output.print_field_user(opponent_field, size);
-        if (abilitymanager->is_empty() == false){
+        if (abilitymanager->isEmpty() == false){
             output.print_string( "Чтобы активировать спобность введите Y\n");
             flag_ability = input.input_flag();
             if(flag_ability == "Y"){
                 output.print_string("Активирована способность.\n");
-                abilitymanager->apply_ability();
+                abilitymanager->applyAbility();
                 if(opponent_manager->getnumbership() == 0){
                     reload_game();
                 }
@@ -219,7 +219,7 @@ void GameSession::make_move(){
         }
         attack_enemy();
         if(number_ships - opponent_manager->getnumbership() >= 1){
-            abilitymanager->add_ability();
+            abilitymanager->addAbility();
             number_ships = opponent_manager->getnumbership();
         }
         output.print_string("Если хотите сохранить игру на данном моменте введите Y\n");

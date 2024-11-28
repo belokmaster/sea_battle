@@ -4,7 +4,7 @@ DoubleDamage::DoubleDamage(Field* field){
     this->field = field;
 }
 
-void DoubleDamage::use_ability(){
+void DoubleDamage::useAbility(){
     output.print_string("Next hit deals double damage.\n");
     field->set_double_attack_flag();
 }

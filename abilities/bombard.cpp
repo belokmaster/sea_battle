@@ -5,7 +5,7 @@ Bombard::Bombard(Manager* managerfield, Field* field) {
     this->field = field;
 }
 
-void Bombard::use_ability() {
+void Bombard::useAbility() {
     // Используем один раз srand для инициализации
     static bool randomSeedInitialized = false;
     if (!randomSeedInitialized) {

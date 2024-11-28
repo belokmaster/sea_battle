@@ -15,7 +15,7 @@ private:
 
 public:
     Scanner(Field* field);
-    void use_ability();
+    void useAbility();
     void setcoordinates(int x, int y);
     virtual ~Scanner() = default;
 };

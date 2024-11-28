@@ -9,12 +9,15 @@ private:
     Field* field;
     Manager* manager;
     vector <Ability*> queue_abilities;
+
 public:
     AbilityManager(Field* field, Manager* manager);
     AbilityManager() = default;
-    void add_ability();
-    bool is_empty();
-    void apply_ability();
+
+    void applyAbility();
+    void addAbility();
+    bool isEmpty();
+    
     json write_json();
     void load_json_ability(json j);
     ~AbilityManager();  

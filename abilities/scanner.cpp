@@ -5,7 +5,7 @@ Scanner::Scanner(Field* field) {
     this->field = field;
 }
 
-void Scanner::use_ability() {
+void Scanner::useAbility() {
     output.print_string("Используется способность Scanner.\n");
     output.print_string("x y: ");
     pair<int, int> coordinates = input.input_coordinates();

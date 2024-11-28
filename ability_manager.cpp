@@ -11,10 +11,15 @@ AbilityManager::AbilityManager(Field* field, Manager* manager){
     shuffle(queue_abilities.begin(), queue_abilities.end(), g);
 }
 
-void AbilityManager::add_ability(){
+void AbilityManager::applyAbility(){
+    queue_abilities[0] -> useAbility();
+    queue_abilities.erase(queue_abilities.begin());
+}
+
+void AbilityManager::addAbility(){
     srand(time(0));
     int random = rand() % 3;
-    if(random == 0){
+    if (random == 0) {
         queue_abilities.push_back(new Scanner(this->field));
     }
     else if(random == 1){
@@ -25,13 +30,8 @@ void AbilityManager::add_ability(){
     }
 }
 
-bool AbilityManager::is_empty(){
+bool AbilityManager::isEmpty(){
     return this->queue_abilities.empty();
-}
-
-void AbilityManager::apply_ability(){
-    queue_abilities[0] -> use_ability();
-    queue_abilities.erase(queue_abilities.begin());
 }
 
 json AbilityManager::write_json() {

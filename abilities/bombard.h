@@ -17,7 +17,7 @@ public:
     Bombard(Manager* managerfield, Field* field);
     
     // Метод использования способности
-    void use_ability() override;  // Переопределяем метод из iAbility
+    void useAbility() override;  // Переопределяем метод из iAbility
     
     // Деструктор по умолчанию
     virtual ~Bombard() = default;

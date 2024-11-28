@@ -12,7 +12,7 @@ private:
 
 public:
     DoubleDamage(Field* field);
-    void use_ability();
+    void useAbility();
     virtual ~DoubleDamage() = default;
 };
 #endif
