@@ -16,10 +16,21 @@ enum Command {
     INVALID
 };
 
-void runGame();
-Command getCommand(const std::string& command);
-void placeShips(BattleField& field, ShipManager& manager);
-void processCommand(Command command, BattleField& field, ShipManager& manager, AbilityManager& ability_manager);
-void gameLoop(BattleField& field, ShipManager& manager, AbilityManager& ability_manager);
+class Game {
+public:
+    Game(int size);
+    void run();
+    
+private:
+    int fieldSize;
+    BattleField field;
+    ShipManager manager;
+    AbilityManager abilityManager;
+
+    void placeShips();
+    void processCommand(Command command);
+    void gameLoop();
+    Command getCommand(const std::string& command);  // Добавлено объявление
+};
 
 #endif // GAME_H

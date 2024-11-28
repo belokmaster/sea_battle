@@ -1,34 +1,18 @@
 #include "game.h"
 #include <iostream>
 #include <string>
+#include <cstdlib>
 
-void runGame() {
-    int size;
-    std::cout << "Enter field size: ";
-    std::cin >> size;
+Game::Game(int size) 
+    : field(size), 
+      manager(field.normalShipsCount()) {}
 
-    BattleField field(size);
-    AbilityManager ability_manager;
-    ShipManager manager = field.normalShipsCount();
-
-    placeShips(field, manager);
-    gameLoop(field, manager, ability_manager);
+void Game::run() {
+    placeShips();
+    gameLoop();
 }
 
-
-Command getCommand(const std::string& command) {
-    if (command == "help" || command == "h") return HELP;
-    if (command == "printField" || command == "pf") return PRINT_FIELD;
-    if (command == "attack" || command == "a") return ATTACK;
-    if (command == "stateShips" || command == "ss") return STATE_SHIPS;
-    if (command == "abilities" || command == "ab") return ABILITIES;
-    if (command == "applyAbility" || command == "aa") return APPLY_ABILITY;
-    if (command == "quit" || command == "q") return QUIT;
-    return INVALID;
-}
-
-
-void placeShips(BattleField& field, ShipManager& manager) {
+void Game::placeShips() {
     int shipsCount = field.shipsCount;
 
     for (int i = 0; i < shipsCount; ++i) {
@@ -46,8 +30,7 @@ void placeShips(BattleField& field, ShipManager& manager) {
     field.drawField(manager, false);
 }
 
-
-void processCommand(Command command, BattleField& field, ShipManager& manager, AbilityManager& ability_manager) {
+void Game::processCommand(Command command) {
     switch (command) {
     case HELP:
         std::cout << "Commands:\n"
@@ -66,29 +49,29 @@ void processCommand(Command command, BattleField& field, ShipManager& manager, A
         int x, y;
         std::cout << "Enter coordinates to attack: ";
         std::cin >> x >> y;
-        field.attackShip(x, y, manager, ability_manager);
+        field.attackShip(x, y, manager, abilityManager);
         break;
     }
     case STATE_SHIPS:
         manager.printStates();
         break;
     case ABILITIES:
-        ability_manager.nextAbility();
+        abilityManager.nextAbility();
         break;
     case APPLY_ABILITY: {
-        std::string ability = ability_manager.nextAbility(1);
+        std::string ability = abilityManager.nextAbility(1);
 
         if (ability == "DoubleDamage") {
-            ability_manager.applyAbility(field, 0, 0, manager);
+            abilityManager.applyAbility(field, 0, 0, manager);
         }
         else if (ability == "Scanner") {
             int x, y;
             std::cout << "Coordinate for ability Scanner: ";
             std::cin >> x >> y;
-            ability_manager.applyAbility(field, x, y, manager);
+            abilityManager.applyAbility(field, x, y, manager);
         }
         else if (ability == "Bombard") {
-            ability_manager.applyAbility(field, 0, 0, manager);
+            abilityManager.applyAbility(field, 0, 0, manager);
         }
         else {
             std::cout << "No valid ability to apply." << std::endl;
@@ -104,12 +87,22 @@ void processCommand(Command command, BattleField& field, ShipManager& manager, A
     }
 }
 
+Command Game::getCommand(const std::string& command) {
+    if (command == "help" || command == "h") return HELP;
+    if (command == "printField" || command == "pf") return PRINT_FIELD;
+    if (command == "attack" || command == "a") return ATTACK;
+    if (command == "stateShips" || command == "ss") return STATE_SHIPS;
+    if (command == "abilities" || command == "ab") return ABILITIES;
+    if (command == "applyAbility" || command == "aa") return APPLY_ABILITY;
+    if (command == "quit" || command == "q") return QUIT;
+    return INVALID;
+}
 
-void gameLoop(BattleField& field, ShipManager& manager, AbilityManager& ability_manager) {
+void Game::gameLoop() {
     while (true) {
         std::string command;
         std::cout << "Enter command: ";
         std::cin >> command;
-        processCommand(getCommand(command), field, manager, ability_manager);
+        processCommand(getCommand(command));
     }
 }
