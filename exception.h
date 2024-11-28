@@ -1,56 +1,53 @@
 #ifndef EXCEPTION_H
 #define EXCEPTION_H
 
-#include <stdexcept>
 
-class GameException : public std::invalid_argument {
+#include <iostream>
+using namespace std;
+
+
+
+class Exception: public invalid_argument{
 public:
-    explicit GameException(const char* _Message);
+    Exception(const char* msg): invalid_argument(msg) {}
 };
 
-class InvalidFieldSizeException : public GameException {
+
+class IncorrectCoordinatesException: public Exception{
 public:
-    explicit InvalidFieldSizeException(const char* _Message);
+    explicit IncorrectCoordinatesException(const char* msg): Exception(msg){}
 };
 
-class OutOfBoundsException : public GameException {
-public:
-    OutOfBoundsException(const char* _Message, int field_size);
-    int get_field_size() const;
 
+class PlaceShipException: public Exception{
 private:
-    int field_size_state;
-};
-
-class OrientationShipException : public GameException {
+    int x_error;
+    int y_error;
 public:
-    explicit OrientationShipException(const char* _Message);
+    explicit PlaceShipException(const char* msg, int x, int y): Exception(msg), x_error(x), y_error(y) {}
+    int getxerror(){
+        return x_error;
+    }
+    int getyerror(){
+        return y_error;
+    }
 };
 
-class InvalidShipPlacementException : public GameException {
+
+class IncorrectFieldSize: public Exception{
 public:
-    InvalidShipPlacementException(const char* _Message, int coordinate_occupied_cell_x, int coordinate_occupied_cell_y);
-    int get_x_state() const;
-    int get_y_state() const;
-
-private:
-    int occupied_cell_x;
-    int occupied_cell_y;
+    explicit IncorrectFieldSize(const char* msg): Exception(msg){}
 };
 
-class NoAbilitiesException : public GameException {
+
+class IncorrectQuantity: public Exception{
 public:
-    explicit NoAbilitiesException(const char* _Message);
+    explicit IncorrectQuantity(const char* msg): Exception(msg){}
 };
 
-class InvalidShipLengthException : public GameException {
+class WorkFileError: public Exception{
 public:
-    explicit InvalidShipLengthException(const char* _Message);
+    explicit WorkFileError(const char* msg): Exception(msg){}
 };
 
-class InvalidSegmentIndexException : public std::out_of_range {
-public:
-    explicit InvalidSegmentIndexException(const char* message) : std::out_of_range(message) {}
-};
-
-#endif // EXCEPTION_H
+#endif

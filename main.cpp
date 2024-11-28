@@ -1,12 +1,10 @@
-﻿#include <iostream>
-#include "game.h"
+#include <iostream>
+#include <vector>
+using namespace std;
+#include "gamesession.h"
 
-int main() {
-    try {
-        runGame();
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-    }
 
-    return 0;
+int main(){
+    GameSession gamesession;
+    gamesession.downloading_previous_game();
 }

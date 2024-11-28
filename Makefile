@@ -1,40 +1,12 @@
-CXX = g++
-CPP = g++ -c
+CXX = /usr/bin/g++
+CXXFLAGS = -I/opt/homebrew/Cellar/nlohmann-json/3.11.3/include -std=c++17 -c
+OBJ = main.o field.o manager.o ship.o ability_manager.o i_ability.o bombardment.o double_damage.o scanner.o gamesession.o output.o input.o game_state.o work_with_file.o
 
-all: linking clean
+all: $(OBJ)
+	$(CXX) -o all $(OBJ)
 
-linking: main.o game.o battleField.o shipManager.o ship.o exception.o abilityManager.o abilities/doubleDamage.o abilities/scanner.o abilities/bombard.o
-	$(CXX) main.o game.o battleField.o shipManager.o ship.o exception.o abilityManager.o abilities/doubleDamage.o abilities/scanner.o abilities/bombard.o -o Battleship
-
-battleField.o: battleField.cpp shipManager.h ship.h
-	$(CPP) battleField.cpp
-
-shipManager.o: shipManager.cpp battleField.h ship.h exception.h
-	$(CPP) shipManager.cpp
-
-ship.o: ship.cpp battleField.h shipManager.h
-	$(CPP) ship.cpp
-
-exception.o: exception.cpp exception.h
-	$(CPP) exception.cpp
-
-abilityManager.o: abilityManager.cpp abilityManager.h abilities/ability.h
-	$(CPP) abilityManager.cpp
-
-abilities/doubleDamage.o: abilities/doubleDamage.cpp abilities/doubleDamage.h abilities/ability.h
-	$(CPP) abilities/doubleDamage.cpp -o abilities/doubleDamage.o
-
-abilities/scanner.o: abilities/scanner.cpp abilities/scanner.h abilities/ability.h
-	$(CPP) abilities/scanner.cpp -o abilities/scanner.o
-
-abilities/bombard.o: abilities/bombard.cpp abilities/bombard.h abilities/ability.h
-	$(CPP) abilities/bombard.cpp -o abilities/bombard.o
-
-main.o: main.cpp game.h
-	$(CPP) main.cpp
-
-game.o: game.cpp game.h battleField.h shipManager.h abilityManager.h
-	$(CPP) game.cpp
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) $< -o $@
 
 clean:
-	rm ./*.o abilities/*.o
+	rm -f *.o all

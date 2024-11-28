@@ -1,85 +1,53 @@
 #include "ship.h"
-#include "exception.h"
 
 
-Ship::Ship(int length, bool isVertical) : length(length), vertical(vertical) {
-    if (length < 1 || length > 4) {
-        throw InvalidShipLengthException("Ship length must be between 1 and 4.");
-    }
-    
-    segments.resize(length, INTACT);
+
+Ship::Ship() : lenght(0), orientation(0){}
+Ship::Ship(int lenght, int orientation){
+    this -> lenght = lenght;
+    this -> orientation = orientation;
+    boat.resize(lenght, alive);
+    coordinates.resize(2, 0);
+}
+int Ship::getlenght(){
+    return this -> lenght;
+}
+int Ship::getorientation(){
+    return this -> orientation;
+}
+vector<int> Ship::current_condition() {
+    return this->boat;
 }
 
-
-int Ship::getLength() const{
-     return length; 
+void Ship::setsegment(vector<int> segment){
+    this->boat = segment;
 }
-
-
-bool Ship::isVertical() const {
-    return vertical;
-}
-
-
-void Ship::setVertical(bool trigger) {
-    vertical = trigger;
-}
-
-
-int Ship::getSegmentState(int index) const {
-    if (index < 0 || index >= length) {
-        throw InvalidSegmentIndexException("Segment index out of range.");
-    }
-
-    return segments[index];
-}
-
-
-void Ship::attackSegment(int index) {
-    if (index < 0 || index >= length) {
-        throw InvalidSegmentIndexException("Segment index out of range.");
-    }
-
-    if (segments[index] == INTACT) {
-        segments[index] = DAMAGED;
-
-    }
-    else if (segments[index] == DAMAGED) {
-        segments[index] = DESTROYED;
+void Ship::attack(int i){
+    if(boat[i] > 0){
+        this -> boat[i] -= 1;
     }
 }
-
-
-bool Ship::isDestroyed() {
-    int destroy_segments = 0;
-    for (int i = 0; i < length; i++) {
-        int state = getSegmentState(i);
-        if (state == DESTROYED) {
-            destroy_segments++;
-        }
+void Ship::setorientation(int oreintation){
+    this->orientation = oreintation;
+}
+void Ship::input_coordinates(int x, int y){
+    this -> coordinates[0] = x;
+    this -> coordinates[1] = y;
+}
+vector<int> Ship::getcoordinates() {
+    return this->coordinates;
+}
+int Ship::dead_ship(){
+    int summ = 0;
+    for(int i = 0; i < this -> lenght; i++){
+        summ += this -> boat[i];
     }
-
-    if (destroy_segments == length) {
-        return true;
-
+    if(summ == 0){
+        return 1; 
     }
-    return false;
+    else{
+        return 0;
+    }
 }
 
-
-int Ship::get_x() const {
-    return x;
-}
-
-void Ship::set_x(int new_x) {
-    x = new_x;
-}
-
-int Ship::get_y() const {
-    return y;
-}
-
-void Ship::set_y(int new_y) {
-    y = new_y;
-}
 
