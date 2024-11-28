@@ -5,6 +5,7 @@
 
 Game::Game(int size) 
     : field(size), 
+      enemyField(size),        // Инициализация поля врага
       manager(field.normalShipsCount()) {}
 
 void Game::run() {
@@ -21,13 +22,19 @@ void Game::placeShips() {
         std::string orientation;
 
         field.drawField(manager, false);
+        enemyField.drawField(manager, false);  // Отображаем поле врага
         std::cout << "Enter ship coordinates and orientation: ";
         std::cin >> x >> y >> orientation;
 
+        // Размещаем корабль на поле игрока
         field.placeShip(ship, x, y, orientation);
+        
+        // Также размещаем корабль на поле врага
+        enemyField.placeShip(ship, x, y, orientation);
     }
 
     field.drawField(manager, false);
+    enemyField.drawField(manager, false);  // Отображаем поле врага после расставления кораблей
 }
 
 void Game::processCommand(Command command) {
@@ -43,13 +50,15 @@ void Game::processCommand(Command command) {
             << std::endl;
         break;
     case PRINT_FIELD:
-        field.drawField(manager, false); 
+        field.drawField(manager, false);  // Игровое поле игрока
+        enemyField.drawField(manager, false);  // Игровое поле врага
         break;
     case ATTACK: {
         int x, y;
         std::cout << "Enter coordinates to attack: ";
         std::cin >> x >> y;
-        field.attackShip(x, y, manager, abilityManager);
+        // Здесь поле для атаки будет выбором между полем врага и игрока
+        enemyField.attackShip(x, y, manager, abilityManager);  // Атакуем поле игрока или врага
         break;
     }
     case STATE_SHIPS:

@@ -20,17 +20,18 @@ class Game {
 public:
     Game(int size);
     void run();
-    
+
 private:
     int fieldSize;
-    BattleField field;
+    BattleField field;          // Игровое поле игрока
+    BattleField enemyField;     // Игровое поле врага
     ShipManager manager;
     AbilityManager abilityManager;
 
     void placeShips();
     void processCommand(Command command);
     void gameLoop();
-    Command getCommand(const std::string& command);  // Добавлено объявление
+    Command getCommand(const std::string& command);  // Объявление метода для получения команды
 };
 
 #endif // GAME_H
