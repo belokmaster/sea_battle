@@ -2,52 +2,61 @@
 
 
 
-Ship::Ship() : lenght(0), orientation(0){}
-Ship::Ship(int lenght, int orientation){
+Ship::Ship() : lenght(0), orientation(0) {}
+
+Ship::Ship(int lenght, int orientation) {
     this -> lenght = lenght;
     this -> orientation = orientation;
-    boat.resize(lenght, alive);
+    boat.resize(lenght, ALIVE);
     coordinates.resize(2, 0);
 }
-int Ship::getlenght(){
+
+int Ship::getLenght() {
     return this -> lenght;
 }
-int Ship::getorientation(){
+
+int Ship::getOrientation() {
     return this -> orientation;
 }
-vector<int> Ship::current_condition() {
+
+void Ship::setOrientation(int oreintation) {
+    this->orientation = oreintation;
+}
+
+std::vector<int> Ship::currentCondition() {
     return this->boat;
 }
 
-void Ship::setsegment(vector<int> segment){
+void Ship::getSegment(std::vector<int> segment) {
     this->boat = segment;
 }
-void Ship::attack(int i){
-    if(boat[i] > 0){
+
+void Ship::attack(int i) {
+    if (boat[i] > 0) {
         this -> boat[i] -= 1;
     }
 }
-void Ship::setorientation(int oreintation){
-    this->orientation = oreintation;
+
+int Ship::destroyedShip() {
+    int segments  = 0;
+    for (int i = 0; i < this -> lenght; i++) {
+        segments  += this -> boat[i];
+    }
+    if (segments  == 0){
+        return 1; 
+    }
+    else {
+        return 0;
+    }
 }
-void Ship::input_coordinates(int x, int y){
+
+void Ship::inputCoordinates(int x, int y) {
     this -> coordinates[0] = x;
     this -> coordinates[1] = y;
 }
-vector<int> Ship::getcoordinates() {
+
+std::vector<int> Ship::getCoordinates() {
     return this->coordinates;
-}
-int Ship::dead_ship(){
-    int summ = 0;
-    for(int i = 0; i < this -> lenght; i++){
-        summ += this -> boat[i];
-    }
-    if(summ == 0){
-        return 1; 
-    }
-    else{
-        return 0;
-    }
 }
 
 

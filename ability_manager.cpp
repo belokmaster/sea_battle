@@ -79,7 +79,6 @@ void AbilityManager::load_json_ability(json j){
     }
 }
 
-
 AbilityManager::~AbilityManager(){
     int size_queue = this->queue_abilities.size();
     for(int i = 0; i < size_queue; i++){

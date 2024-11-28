@@ -89,8 +89,8 @@ void GameSession::coordinates_ship(){
                     }
                     else{
                         Ship& current_ship = user_manager->getShip();
-                        current_ship.setorientation(orientation);
-                        current_ship.input_coordinates(x, y);
+                        current_ship.setOrientation(orientation);
+                        current_ship.inputCoordinates(x, y);
                         user_field->put_ship();
                     }
                     break;
@@ -140,8 +140,8 @@ void GameSession::alignment_of_enemy_ships(){
                     }
                     else{
                         Ship& current_ship = opponent_manager->getShip();
-                        current_ship.setorientation(orientation);
-                        current_ship.input_coordinates(x, y);
+                        current_ship.setOrientation(orientation);
+                        current_ship.inputCoordinates(x, y);
                         opponent_field->put_ship();
                     }
                     break;

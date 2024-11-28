@@ -26,9 +26,9 @@ void Bombard::useAbility() {
     selectedShip.attack(randomSegmentIndex);
     
     // Определение координат для бомбардировки
-    int x = selectedShip.getcoordinates()[0];
-    int y = selectedShip.getcoordinates()[1];
-    if (selectedShip.getorientation() == 0) {  // горизонтально
+    int x = selectedShip.getCoordinates()[0];
+    int y = selectedShip.getCoordinates()[1];
+    if (selectedShip.getOrientation() == 0) {  // горизонтально
         x += randomSegmentIndex;
     } else {  // вертикально
         y += randomSegmentIndex;
@@ -37,7 +37,7 @@ void Bombard::useAbility() {
     field->bombing(x, y);
 
     // Проверка уничтожен ли корабль после бомбардировки
-    if (selectedShip.dead_ship() == 1) {
+    if (selectedShip.destroyedShip() == 1) {
         managerfield->removeShip(randomShipIndex);
         cout << "Ship is destroyed." << '\n';
     }
@@ -49,5 +49,5 @@ int Bombard::getRandomShipIndex() const {
 }
 
 int Bombard::getRandomSegmentIndex(int shipIndex) const {
-    return rand() % managerfield->getShips()[shipIndex].getlenght();
+    return rand() % managerfield->getShips()[shipIndex].getLenght();
 }

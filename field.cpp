@@ -1,5 +1,6 @@
 #include "field.h"
 
+
 Field::Field(int size, shipManager* managerfield){
     this->size = size;
     this -> managerfield = managerfield;
@@ -28,7 +29,6 @@ Field::Field(Field&& other) {
     other.fields = nullptr;
 }
 
-
 int Field::is_field(int x, int y){
     if(x < 0 || y < 0 || x >= this->size || y >= this->size){
         return 0;
@@ -51,6 +51,7 @@ int Field::is_ship(int x, int y, int lenght, int orientation){
     }
     return 1;
 }
+
 int Field::is_closely(int x, int y, int lenght, int orientation, bool first){
     int checkx;
     int checky;
@@ -82,17 +83,18 @@ void Field::create_field(){
         }
     }
 }
+
 void Field::put_ship(){
     Ship& current_ship = managerfield->getShip();
-    vector<int> coordinates = current_ship.getcoordinates();
+    vector<int> coordinates = current_ship.getCoordinates();
     if(is_field(coordinates[0], coordinates[1]) == 0){
         throw IncorrectCoordinatesException("Координата находится за пределами поля!");
     }
-    int orientation = current_ship.getorientation();
+    int orientation = current_ship.getOrientation();
     if(orientation != 0 && orientation != 1){
         throw IncorrectCoordinatesException("Ошибка ввода! Неправильная ориентация.");
     }
-    int lenght = current_ship.getlenght();
+    int lenght = current_ship.getLenght();
     if(is_closely(coordinates[0], coordinates[1], lenght, orientation, 1) == 0){
         throw PlaceShipException("На этих координатх или близко к ним уже стоит корабль: ", coordinates[0], coordinates[1]);
     }
@@ -153,9 +155,9 @@ void Field::attack_segment(int x, int y, bool flag_bot){
             vector<Ship>& array_ship = managerfield->getShips();
             int quantity = managerfield->getNumberShip();
             for(int i = 0; i < quantity; i++){
-                vector<int> coordinates = array_ship[i].getcoordinates();;
-                int orientation = array_ship[i].getorientation();
-                int lenght = array_ship[i].getlenght();
+                vector<int> coordinates = array_ship[i].getCoordinates();;
+                int orientation = array_ship[i].getOrientation();
+                int lenght = array_ship[i].getLenght();
                 for(int l = 0; l < lenght; l++){
                     if(orientation == 0){
                         if(coordinates[0] + l == x && coordinates[1] == y){
@@ -163,7 +165,7 @@ void Field::attack_segment(int x, int y, bool flag_bot){
                             if(double_attack == true){
                                 array_ship[i].attack(l);
                             }
-                            if(array_ship[i].dead_ship() == 1){
+                            if(array_ship[i].destroyedShip() == 1){
                                 managerfield ->removeShip(i);
                                 if(flag_bot){
                                     output.print_string("Корабль убит.\n");
@@ -179,7 +181,7 @@ void Field::attack_segment(int x, int y, bool flag_bot){
                             if(double_attack == true){
                                 array_ship[i].attack(l);
                             }
-                            if(array_ship[i].dead_ship() == 1){
+                            if(array_ship[i].destroyedShip() == 1){
                                 managerfield ->removeShip(i);
                                 if(flag_bot){
                                     output.print_string("Корабль убит.\n");
@@ -202,7 +204,7 @@ void Field::attack_segment(int x, int y, bool flag_bot){
     double_attack = 0;
 }
 
-void Field::bombing(int x, int y){
+void Field::bombing(int x, int y) {
     if(is_field(x, y)){
         if(this->fields[y][x] == alive){
             this->fields[y][x] = fogwar;

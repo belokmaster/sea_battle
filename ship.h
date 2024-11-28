@@ -3,29 +3,35 @@
 
 #include <iostream>
 #include <vector>
-using namespace std;
 
 
 class Ship {
-enum Condition {dead, shot, alive};
+enum Condition {
+        DESTROYED, 
+        SHOT, 
+        ALIVE
+    };
+
 private:
     int lenght;
     int orientation;
-    vector<int> boat;
-    vector<int> coordinates;
+    std::vector<int> boat;
+    std::vector<int> coordinates;
 
 public:
     Ship();
     Ship(int lenght, int orientation);
-    int getlenght();
-    int getorientation();
-    vector<int> current_condition();
-    void setsegment(vector<int> segment);
+
+    int getLenght();
+    int getOrientation();
+    void setOrientation(int oreintation);
+    std::vector<int> currentCondition();
+    void getSegment(std::vector<int> segment);
+
     void attack(int i);
-    void setorientation(int oreintation);
-    void input_coordinates(int x, int y);
-    vector<int> getcoordinates();
-    int dead_ship();
+    int destroyedShip();
+    void inputCoordinates(int x, int y);
+    std::vector<int> getCoordinates();
 };
 
 #endif

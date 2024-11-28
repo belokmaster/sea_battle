@@ -1,7 +1,7 @@
 #include "shipManager.h"
 
 
-shipManager::shipManager(int countShips, vector<int> lenShips) {
+shipManager::shipManager(int countShips, std::vector<int> lenShips) {
     this -> countShips = countShips;
     this -> lenShips = lenShips;
     ships.resize(countShips);
@@ -10,11 +10,11 @@ shipManager::shipManager(int countShips, vector<int> lenShips) {
 
 void shipManager::createShip(int lenght, int orientation, int x , int y) {
     ships[this->number_ships] = Ship(lenght, orientation);
-    ships[this->number_ships].input_coordinates(x, y);
+    ships[this->number_ships].inputCoordinates(x, y);
     this->number_ships += 1;
 }
 
-vector<Ship>& shipManager::getShips() {
+std::vector<Ship>& shipManager::getShips() {
     return this->ships;
 }
 
@@ -22,7 +22,7 @@ Ship& shipManager::getShip() {
     return this->ships[this->number_ships - 1];
 }
 
-vector<int> shipManager::getLenShips() {
+std::vector<int> shipManager::getLenShips() {
     return this->lenShips;
 }
 
@@ -50,18 +50,18 @@ json shipManager::write_json() {
     int lengthShip; 
     int oreintationShip;
 
-    vector<int> segmentShip;
+    std::vector<int> segmentShip;
     Ship currentShip;
     j["number_ship"] = this -> number_ships;
     j["lenShips"] = this -> lenShips;
 
     for (int i = 0; i < this -> number_ships; i++) {
         currentShip = ships[i];
-        lengthShip = currentShip.getlenght();
-        segmentShip = currentShip.current_condition();
-        x_ship = currentShip.getcoordinates()[0];
-        y_ship = currentShip.getcoordinates()[1];
-        oreintationShip = currentShip.getorientation();
+        lengthShip = currentShip.getLenght();
+        segmentShip = currentShip.currentCondition();
+        x_ship = currentShip.getCoordinates()[0];
+        y_ship = currentShip.getCoordinates()[1];
+        oreintationShip = currentShip.getOrientation();
 
         json length = {"lenght", lengthShip};
         json x = {"x", x_ship};
@@ -77,7 +77,7 @@ json shipManager::write_json() {
 
 shipManager* shipManager::load_json(json j) {
     int number_ship = j["number_ship"];
-    vector<int> lenShips;
+    std::vector<int> lenShips;
     lenShips.resize(4);
     auto lenShips_json = j["lenShips"];
     for (int i = 0; i < 4; i++) {
@@ -94,14 +94,14 @@ void shipManager::load_from_json_ship(json j) {
         int y = j[i]["y"];
         int oreintation = j[i]["oreintation"];
         auto segment_json = j[i]["segments"];
-        vector<int> segment;
+        std::vector<int> segment;
         segment.resize(length);
         for (int j = 0; j < length; j++) {
             segment[j] = segment_json[j];
         }
         createShip(length, oreintation, x, y);
         Ship& current_ship = getShip();
-        current_ship.setsegment(segment);
+        current_ship.getSegment(segment);
     }
 }
 

@@ -23,6 +23,7 @@ class PlaceShipException: public Exception{
 private:
     int x_error;
     int y_error;
+    
 public:
     explicit PlaceShipException(const char* msg, int x, int y): Exception(msg), x_error(x), y_error(y) {}
     int getxerror(){
