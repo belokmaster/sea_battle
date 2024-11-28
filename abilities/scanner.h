@@ -15,8 +15,11 @@ private:
 
 public:
     Scanner(Field* field);
+
+    bool checkArea(int x, int y);
     void useAbility();
-    void setcoordinates(int x, int y);
+    void setCoordinates(int x, int y);
+
     virtual ~Scanner() = default;
 };
 #endif

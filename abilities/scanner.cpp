@@ -5,24 +5,35 @@ Scanner::Scanner(Field* field) {
     this->field = field;
 }
 
-void Scanner::useAbility() {
-    output.print_string("Используется способность Scanner.\n");
-    output.print_string("x y: ");
-    pair<int, int> coordinates = input.input_coordinates();
-    x = get<0>(coordinates);
-    y = get<1>(coordinates);
-    for(int i = 0; i < 2; i++){
-        for(int j = 0; j < 2; j++){
-            if(field->check_cell(x + i, y + j)){
-                output.print_for_scanner(x, y, true);
-                return;
+bool Scanner::checkArea(int x, int y) {
+    // Проверяем клетки на позиции (x, y), (x + 1, y), (x, y + 1) и (x + 1, y + 1)
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 2; j++) {
+            if (field->check_cell(x + i, y + j)) {
+                return true;  // Если хотя бы одна клетка занята
             }
         }
     }
-    output.print_for_scanner(x, y, false);
+    return false;  // Если ни одна клетка не занята
 }
 
-void Scanner::setcoordinates(int x, int y){
+void Scanner::useAbility() {
+    output.print_string("Use a Scanner ability.\n");
+    output.print_string("Enter coordinates (x y): ");
+    
+    // Считываем координаты
+    pair<int, int> coordinates = input.input_coordinates();
+    x = get<0>(coordinates);
+    y = get<1>(coordinates);
+    
+    // Используем метод для проверки области
+    bool isOccupied = checkArea(x, y);
+    
+    // Выводим результат
+    output.print_for_scanner(x, y, isOccupied);
+}
+
+void Scanner::setCoordinates(int x, int y){
     this -> x = x;
     this -> y = y;
 }
