@@ -4,7 +4,7 @@
 AbilityManager::AbilityManager(Field* field, Manager* manager){
     this -> field = field;
     this -> manager = manager;
-    queue_abilities.push_back(new Bombardment(this->manager, this->field));
+    queue_abilities.push_back(new Bombard(this->manager, this->field));
     queue_abilities.push_back(new DoubleDamage(this->field));
     queue_abilities.push_back(new Scanner(this->field));
     mt19937 g(static_cast<unsigned int>(time(0)));
@@ -21,7 +21,7 @@ void AbilityManager::add_ability(){
         queue_abilities.push_back(new DoubleDamage(this->field));
     }
     else if(random == 2){
-        queue_abilities.push_back(new Bombardment(this->manager, this->field));
+        queue_abilities.push_back(new Bombard(this->manager, this->field));
     }
 }
 
@@ -44,8 +44,8 @@ json AbilityManager::write_json() {
             type = "DoubleDamage";
         } else if (dynamic_cast<Scanner*>(ability)) {
             type = "Scanner";
-        } else if (dynamic_cast<Bombardment*>(ability)) {
-            type = "Bombardment";
+        } else if (dynamic_cast<Bombard*>(ability)) {
+            type = "Bombard";
         }
         json type_ability = {{"type", type}};
         ability_json.push_back(type_ability); 
@@ -65,8 +65,8 @@ void AbilityManager::load_json_ability(json j){
         else if(type == "Scanner"){
             queue_abilities.push_back(new Scanner(this->field));
         }
-        else if(type == "Bombardment"){
-            queue_abilities.push_back(new Bombardment(this->manager, this->field));
+        else if(type == "Bombard"){
+            queue_abilities.push_back(new Bombard(this->manager, this->field));
         }
     }
 }

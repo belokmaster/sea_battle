@@ -1,18 +1,18 @@
-#ifndef I_ABILITY_H
-#define I_ABILITY_H
+#ifndef ABILITY_H
+#define ABILITY_H
 
 #include <iostream>
 #include <vector>
 #include <random>
 #include <algorithm>
-#include "field.h"
-#include "manager.h"
+#include "../field.h"
+#include "../manager.h"
 using namespace std;
 
 
-class iAbility {
+class Ability {
 public:
     virtual void use_ability() = 0;
-    virtual ~iAbility() = 0;
+    virtual ~Ability() = 0;
 };
 #endif

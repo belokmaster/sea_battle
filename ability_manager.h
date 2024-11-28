@@ -1,14 +1,14 @@
-#include "i_ability.h"
-#include "bombardment.h"
-#include "scanner.h"
-#include "double_damage.h"
+#include "abilities/ability.h"
+#include "abilities/bombard.h"
+#include "abilities/scanner.h"
+#include "abilities/doubleDamage.h"
 
 
 class AbilityManager{
 private:
     Field* field;
     Manager* manager;
-    vector <iAbility*> queue_abilities;
+    vector <Ability*> queue_abilities;
 public:
     AbilityManager(Field* field, Manager* manager);
     AbilityManager() = default;
