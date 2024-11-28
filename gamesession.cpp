@@ -13,12 +13,12 @@ void GameSession::downloading_previous_game(){
         ships.resize(4);
         qantity_ship = 0;
         for(int i = 0; i < 4; i++){
-            ships[i] = user_manager ->getlenships()[i];
+            ships[i] = user_manager ->getLenShips()[i];
             qantity_ship += ships[i];
         }
         make_move();
     }
-    else{
+    else {
         start_game();
         coordinates_ship();
         alignment_of_enemy_ships();
@@ -84,11 +84,11 @@ void GameSession::coordinates_ship(){
             while(1){
                 try{
                     if(flag_error == 0){
-                        user_manager->create_ship(j+1, orientation, x, y);
+                        user_manager->createShip(j+1, orientation, x, y);
                         user_field->put_ship();
                     }
                     else{
-                        Ship& current_ship = user_manager->getship();
+                        Ship& current_ship = user_manager->getShip();
                         current_ship.setorientation(orientation);
                         current_ship.input_coordinates(x, y);
                         user_field->put_ship();
@@ -135,11 +135,11 @@ void GameSession::alignment_of_enemy_ships(){
                     y = dist(gen);
                     orientation = dist(gen) % 2;
                     if(flag_error == 0){
-                        opponent_manager->create_ship(i+1, orientation, x, y);
+                        opponent_manager->createShip(i+1, orientation, x, y);
                         opponent_field->put_ship();
                     }
                     else{
-                        Ship& current_ship = opponent_manager->getship();
+                        Ship& current_ship = opponent_manager->getShip();
                         current_ship.setorientation(orientation);
                         current_ship.input_coordinates(x, y);
                         opponent_field->put_ship();
@@ -180,9 +180,9 @@ void GameSession::attack_enemy(){
 void GameSession::make_move(){
     string flag_save;
     string flag_ability;
-    int number_ships = opponent_manager->getnumbership();
+    int number_ships = opponent_manager->getNumberShip();
     int x, y, orientation;
-    while(opponent_manager -> getnumbership() != 0 && user_manager -> getnumbership() != 0){
+    while(opponent_manager -> getNumberShip() != 0 && user_manager -> getNumberShip() != 0){
         output.print_field_user(user_field, size);
         output.print_string("\n");
         output.print_field_user(opponent_field, size);
@@ -192,7 +192,7 @@ void GameSession::make_move(){
             if(flag_ability == "Y"){
                 output.print_string("Активирована способность.\n");
                 abilitymanager->applyAbility();
-                if(opponent_manager->getnumbership() == 0){
+                if(opponent_manager->getNumberShip() == 0){
                     reload_game();
                 }
             }
@@ -214,13 +214,13 @@ void GameSession::make_move(){
                 y = get<1>(coordinates);
             }
         }
-        if(opponent_manager->getnumbership() == 0){
+        if(opponent_manager->getNumberShip() == 0){
             reload_game();
         }
         attack_enemy();
-        if(number_ships - opponent_manager->getnumbership() >= 1){
+        if(number_ships - opponent_manager->getNumberShip() >= 1){
             abilitymanager->addAbility();
-            number_ships = opponent_manager->getnumbership();
+            number_ships = opponent_manager->getNumberShip();
         }
         output.print_string("Если хотите сохранить игру на данном моменте введите Y\n");
         flag_save = input.input_flag();
@@ -235,11 +235,11 @@ void GameSession::make_move(){
 
 void GameSession::reload_game(){
     string flag_reload;
-    if(opponent_manager -> getnumbership() == 0){
+    if(opponent_manager -> getNumberShip() == 0){
         output.print_string("Вы выиграли, хотите продолжить игру с новым соперником? Y - Да, Other - Нет\n");
         flag_reload = input.input_flag();
         if(flag_reload == "Y"){
-            opponent_manager->getships().resize(qantity_ship+1);
+            opponent_manager->getShips().resize(qantity_ship+1);
             alignment_of_enemy_ships();
             make_move();
         }
@@ -249,7 +249,7 @@ void GameSession::reload_game(){
         }
 
     }
-    else if (user_manager -> getnumbership() == 0){
+    else if (user_manager -> getNumberShip() == 0){
         output.print_string("Вы проиграли, хотите начать сначала? Y - Да, Other - Нет\n");
         flag_reload = input.input_flag();
         if(flag_reload == "Y"){

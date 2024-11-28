@@ -1,5 +1,6 @@
 #include "bombard.h"
 
+
 Bombard::Bombard(shipManager* managerfield, Field* field) {
     this->managerfield = managerfield;
     this->field = field;
@@ -13,14 +14,14 @@ void Bombard::useAbility() {
         randomSeedInitialized = true;
     }
 
-    output.print_string("Use a bombard ability!\n");
+    output.print_string("Use a Bombard ability!\n");
 
     // Выбор случайного корабля и сегмента
     int randomShipIndex = getRandomShipIndex();
     int randomSegmentIndex = getRandomSegmentIndex(randomShipIndex);
     
     // Доступ к выбранному кораблю и его сегменту
-    vector<Ship>& ships = managerfield->getships();
+    vector<Ship>& ships = managerfield->getShips();
     Ship& selectedShip = ships[randomShipIndex];
     selectedShip.attack(randomSegmentIndex);
     
@@ -37,16 +38,16 @@ void Bombard::useAbility() {
 
     // Проверка уничтожен ли корабль после бомбардировки
     if (selectedShip.dead_ship() == 1) {
-        managerfield->remove_ship(randomShipIndex);
+        managerfield->removeShip(randomShipIndex);
         cout << "Ship is destroyed." << '\n';
     }
 }
 
 int Bombard::getRandomShipIndex() const {
-    int numShips = managerfield->getnumbership();
+    int numShips = managerfield->getNumberShip();
     return rand() % numShips;
 }
 
 int Bombard::getRandomSegmentIndex(int shipIndex) const {
-    return rand() % managerfield->getships()[shipIndex].getlenght();
+    return rand() % managerfield->getShips()[shipIndex].getlenght();
 }

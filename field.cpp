@@ -83,7 +83,7 @@ void Field::create_field(){
     }
 }
 void Field::put_ship(){
-    Ship& current_ship = managerfield->getship();
+    Ship& current_ship = managerfield->getShip();
     vector<int> coordinates = current_ship.getcoordinates();
     if(is_field(coordinates[0], coordinates[1]) == 0){
         throw IncorrectCoordinatesException("Координата находится за пределами поля!");
@@ -125,7 +125,7 @@ void Field::put_ship(){
     }
 }
 void Field::end_game(){
-    if(managerfield->getnumbership() == 0){
+    if(managerfield->getNumberShip() == 0){
         output.print_string("the end.\n");
         exit(0);
     }
@@ -150,8 +150,8 @@ void Field::attack_segment(int x, int y, bool flag_bot){
             else if(this->fields[y][x] == shot || this->fields[y][x] == fogwar){
                 this->fields[y][x] = dead;
             }
-            vector<Ship>& array_ship = managerfield->getships();
-            int quantity = managerfield->getnumbership();
+            vector<Ship>& array_ship = managerfield->getShips();
+            int quantity = managerfield->getNumberShip();
             for(int i = 0; i < quantity; i++){
                 vector<int> coordinates = array_ship[i].getcoordinates();;
                 int orientation = array_ship[i].getorientation();
@@ -164,7 +164,7 @@ void Field::attack_segment(int x, int y, bool flag_bot){
                                 array_ship[i].attack(l);
                             }
                             if(array_ship[i].dead_ship() == 1){
-                                managerfield ->remove_ship(i);
+                                managerfield ->removeShip(i);
                                 if(flag_bot){
                                     output.print_string("Корабль убит.\n");
                                 }
@@ -180,7 +180,7 @@ void Field::attack_segment(int x, int y, bool flag_bot){
                                 array_ship[i].attack(l);
                             }
                             if(array_ship[i].dead_ship() == 1){
-                                managerfield ->remove_ship(i);
+                                managerfield ->removeShip(i);
                                 if(flag_bot){
                                     output.print_string("Корабль убит.\n");
                                 }
