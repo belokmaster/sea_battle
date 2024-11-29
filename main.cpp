@@ -1,10 +1,10 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-#include "gamesession.h"
+#include "game.h"
 
 
 int main(){
-    GameSession gamesession;
+    Game gamesession;
     gamesession.downloading_previous_game();
 }

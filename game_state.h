@@ -13,32 +13,26 @@ class GameState{
 private:
     string filename;
     json saved_game;
-    Field** user_field;
-    Field** opponent_field;
-    shipManager** user_manager;
-    shipManager** opponent_manager;
-    AbilityManager** ability_manager;
+    Field** userField;
+    Field** enemyField;
+    shipManager** userManager;
+    shipManager** enemyManager;
+    AbilityManager** abilityManager;
 
 public:
     GameState() = default;
-
-    GameState(string filename, Field** user_field, Field** opponent_field, shipManager** user_manager, shipManager** opponent_manager, AbilityManager** ability_manager);
+    GameState(string filename, Field** userField, Field** enemyField, shipManager** userManager, shipManager** enemyManager, AbilityManager** abilityManager);
 
     json save();
-
+    void load(json& j);
     void save_to_file();
-
     void load_from_file();
 
     friend ofstream& operator<<(ofstream& os, GameState& state);
-
-    void load(json& j);
-
     friend ifstream& operator>>(ifstream& is, GameState& state);
 };
 
 ofstream& operator<<(ofstream& os, GameState& state);
-
 ifstream& operator>>(ifstream& os, GameState& state);
 
 #endif

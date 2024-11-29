@@ -1,64 +1,58 @@
 #include "game_state.h"
 
 
-GameState::GameState(string filename, Field** user_field, Field** opponent_field, shipManager** user_manager, shipManager** opponent_manager, AbilityManager** ability_manager){
+GameState::GameState(string filename, Field** userField, Field** enemyField, shipManager** userManager, shipManager** enemyManager, AbilityManager** abilityManager) {
     this -> filename = filename;
-    this -> user_field = user_field;
-    this->opponent_field = opponent_field;
-    this->user_manager = user_manager;
-    this->opponent_manager = opponent_manager;
-    this->ability_manager = ability_manager;
+    this -> userField = userField;
+    this->enemyField = enemyField;
+    this->userManager = userManager;
+    this->enemyManager = enemyManager;
+    this->abilityManager = abilityManager;
 }
 
-
-void GameState::save_to_file(){
-    WorkFile workfile("state.json");
-    ofstream& output = workfile.open_for_write();
-    output << *this;
-    //workfile.closeWrite();
-}
-
-void GameState::load_from_file(){
-    WorkFile workfile("state.json");
-    ifstream& input = workfile.open_for_read();
-    input >> *this;
-    //workfile.closeRead();
-}
-
-json GameState::save(){
+json GameState::save() {
     json j;
-    j["user_field"] = (*user_field)->write_json();
-    j["opponent_field"] = (*opponent_field)->write_json();
-    j["user_manager"] = (*user_manager)->write_json();
-    j["opponent_manager"] = (*opponent_manager) -> write_json();
-    j["abilities"] = (*ability_manager) ->write_json();
+    j["userField"] = (*userField)->write_json();
+    j["enemyField"] = (*enemyField)->write_json();
+    j["userManager"] = (*userManager)->write_json();
+    j["enemyManager"] = (*enemyManager) -> write_json();
+    j["abilities"] = (*abilityManager) ->write_json();
     return j;
 }
 
-ofstream& operator<<(ofstream& os, GameState& state){
+void GameState::load(json& j) {
+    int size = (*userField)->load_json_size(j["userField"]);
+    *userManager = (*userManager) ->load_json(j["userManager"]);
+    (*userManager) -> load_from_json_ship(j["userManager"]["ships"]);
+    *enemyManager = (*enemyManager) ->load_json(j["enemyManager"]);
+    (*enemyManager) -> load_from_json_ship(j["enemyManager"]["ships"]);
+    *userField = new Field(size, *userManager);
+    *enemyField = new Field(size, *enemyManager);
+    (*userField) ->load_json_field(j["userField"]);
+    (*enemyField) ->load_json_field(j["enemyField"]);
+    *abilityManager = new AbilityManager(*enemyField, *enemyManager);
+    (*abilityManager) ->load_json_ability(j["abilities"]);
+}
+
+void GameState::save_to_file() {
+    WorkFile workfile("state.json");
+    ofstream& output = workfile.open_for_write();
+    output << *this;
+}
+
+void GameState::load_from_file() {
+    WorkFile workfile("state.json");
+    ifstream& input = workfile.open_for_read();
+    input >> *this;
+}
+
+ofstream& operator<<(ofstream& os, GameState& state) {
     json j = state.save();
     os << j.dump(4);
     return os;
 }
 
-
-void GameState::load(json& j){
-    int size = (*user_field)->load_json_size(j["user_field"]);
-    *user_manager = (*user_manager) ->load_json(j["user_manager"]);
-    (*user_manager) -> load_from_json_ship(j["user_manager"]["ships"]);
-    *opponent_manager = (*opponent_manager) ->load_json(j["opponent_manager"]);
-    (*opponent_manager) -> load_from_json_ship(j["opponent_manager"]["ships"]);
-    *user_field = new Field(size, *user_manager);
-    *opponent_field = new Field(size, *opponent_manager);
-    (*user_field) ->load_json_field(j["user_field"]);
-    (*opponent_field) ->load_json_field(j["opponent_field"]);
-    *ability_manager = new AbilityManager(*opponent_field, *opponent_manager);
-    (*ability_manager) ->load_json_ability(j["abilities"]);
-}
-
-
-
-ifstream& operator>>(ifstream& is, GameState& state){
+ifstream& operator>>(ifstream& is, GameState& state) {
     string json_string((istreambuf_iterator<char>(is)), istreambuf_iterator<char>());
     json j = json::parse(json_string);
     state.load(j);
