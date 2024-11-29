@@ -42,7 +42,7 @@ int Ship::destroyedShip() {
     for (int i = 0; i < this -> lenght; i++) {
         segments  += this -> boat[i];
     }
-    if (segments  == 0){
+    if (segments  == 0) {
         return 1; 
     }
     else {

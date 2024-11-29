@@ -13,13 +13,13 @@ public:
 };
 
 
-class IncorrectCoordinatesException: public Exception{
+class IncorrectCoordinatesException: public Exception {
 public:
     explicit IncorrectCoordinatesException(const char* msg): Exception(msg){}
 };
 
 
-class PlaceShipException: public Exception{
+class PlaceShipException: public Exception {
 private:
     int x_error;
     int y_error;
@@ -35,18 +35,18 @@ public:
 };
 
 
-class IncorrectFieldSize: public Exception{
+class IncorrectFieldSize: public Exception {
 public:
     explicit IncorrectFieldSize(const char* msg): Exception(msg){}
 };
 
 
-class IncorrectQuantity: public Exception{
+class IncorrectQuantity: public Exception {
 public:
     explicit IncorrectQuantity(const char* msg): Exception(msg){}
 };
 
-class WorkFileError: public Exception{
+class WorkFileError: public Exception {
 public:
     explicit WorkFileError(const char* msg): Exception(msg){}
 };

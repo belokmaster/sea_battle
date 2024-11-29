@@ -1,10 +1,12 @@
 #include <iostream>
 #include <vector>
-using namespace std;
+
 #include "field.h"
 #include "ship.h"
 #include "manager.h"
-#include "ability_manager.h"
+#include "abilityManager.h"
+
+using namespace std;
 
 int main() {
     int size;
@@ -42,8 +44,8 @@ int main() {
         }
     }
 
-    int qantity_ship = ships[0] + ships[1] + ships[2] + ships[3];
-    Manager managers(qantity_ship, ships);
+    int countShip = ships[0] + ships[1] + ships[2] + ships[3];
+    shipManager managers(countShip, ships);
     Field userfield(size, &managers);
     userfield.create_field();
 

@@ -5,6 +5,6 @@ using namespace std;
 
 
 int main(){
-    Game gamesession;
-    gamesession.downloading_previous_game();
+    Game game;
+    game.downloading_previous_game();
 }

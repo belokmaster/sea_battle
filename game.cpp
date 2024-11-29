@@ -165,7 +165,7 @@ void Game::attack_enemy() {
     while(1) {
         try {
             if (userField -> getCell(x, y) == Field::DEAD) {
-                throw IncorrectCoordinatesException("Бот уже стрялял сюда.");
+                throw IncorrectCoordinatesException("туд уже стрелял бот");
             }
             userField -> attackSegment(x, y);
             break;
@@ -175,7 +175,6 @@ void Game::attack_enemy() {
         }
     }
 }
-
 
 void Game::make_move() {
     string flag_save;
@@ -187,10 +186,10 @@ void Game::make_move() {
         output.printString("\n");
         output.printFieldUser(enemyField, size); // поменять на enemy field для тумана 
         if (abilitymanager->isEmpty() == false) {
-            output.printString( "Чтобы активировать спобность введите Y\n");
+            output.printString( "Чтобы активировать спобность введите A\n");
             flag_ability = input.inputFlag();
-            if (flag_ability == "Y") {
-                output.printString("Активирована способность.\n");
+            if (flag_ability == "A") {
+                output.printString("Способность активирована!\n");
                 abilitymanager->applyAbility();
                 if (enemyManager->getNumberShip() == 0) {
                     reload_game();
@@ -222,12 +221,13 @@ void Game::make_move() {
             abilitymanager->addAbility();
             number_ships = enemyManager->getNumberShip();
         }
-        output.printString("Если хотите сохранить игру на данном моменте введите Y\n");
-        flag_save = input.inputFlag();
-        if (flag_save == "Y") {
-            save();
+        output.printString("Если хотите сохранить игру на данном моменте введите S, если хотите загрузить игру, введите Z\n");
+        string flag = input.inputFlag();
+        if (flag == "S") {
+            save(); 
+        } else if (flag == "Z") {
+            load();
         }
-        // ЗДЕСЬ ДОЛЖНА БЫТЬ ЕЩЕ ЗАГРУЗКА 
     }
     reload_game();
 }

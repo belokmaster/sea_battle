@@ -21,11 +21,9 @@ public:
     WorkFile(string filename);
 
     ifstream& open_for_read();
-
     ofstream& open_for_write();
 
     void close_read();
-
     void close_write();
 
     ~WorkFile();

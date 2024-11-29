@@ -2,14 +2,13 @@
 #define GAME_STATE_H
 
 #include "field.h"
-#include "ability_manager.h"
+#include "abilityManager.h"
 #include "work_with_file.h"
 #include <nlohmann/json.hpp>
-using namespace std;
 using json = nlohmann::json;
 
 
-class GameState{
+class GameState {
 private:
     string filename;
     json saved_game;

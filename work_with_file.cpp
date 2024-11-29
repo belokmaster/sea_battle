@@ -6,24 +6,24 @@ WorkFile::WorkFile(string filename){
 }
 
 ifstream& WorkFile::open_for_read() {
-    try{
+    try {
         input_file.open(filename);
     if (!input_file.is_open()) {
         throw WorkFileError("Невозможно открыть файл для чтения.\n");
     }
-    }catch(WorkFileError& e){
+    } catch(WorkFileError& e){
         cout << e.what();
     }
     return input_file;
 }
 
 ofstream& WorkFile::open_for_write() {
-    try{
+    try {
         output_file.open(filename);
     if (!output_file.is_open()) {
         throw WorkFileError("Невозможно открыть файл для записи.\n");
     }
-    }catch(WorkFileError& e){
+    } catch(WorkFileError& e){
         cout << e.what();
     }
     return output_file;

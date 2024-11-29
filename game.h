@@ -8,7 +8,7 @@ using namespace std;
 #include "field.h"
 #include "ship.h"
 #include "shipManager.h"
-#include "game_state.h"
+#include "gameState.h"
 
 
 class Game {

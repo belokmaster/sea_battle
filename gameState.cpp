@@ -1,4 +1,4 @@
-#include "game_state.h"
+#include "gameState.h"
 
 
 GameState::GameState(string filename, Field** userField, Field** enemyField, shipManager** userManager, shipManager** enemyManager, AbilityManager** abilityManager) {
