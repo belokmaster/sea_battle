@@ -1,4 +1,4 @@
-#include "work_with_file.h"
+#include "workFile.h"
 
 
 WorkFile::WorkFile(string filename){

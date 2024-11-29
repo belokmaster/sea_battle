@@ -1,6 +1,6 @@
 #include "field.h"
 
-// Функция для вывода строки
+
 void Output::printString(std::string message) {
     std::cout << message;
 }

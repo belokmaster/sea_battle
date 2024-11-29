@@ -4,12 +4,13 @@
 #include <iostream>
 #include <vector>
 #include <tuple>
-using namespace std;
+
 #include "field.h"
 #include "ship.h"
 #include "shipManager.h"
 #include "gameState.h"
 
+using namespace std;
 
 class Game {
 private:
