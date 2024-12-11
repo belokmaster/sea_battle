@@ -11,20 +11,32 @@
 #include "abilities/doubleDamage.h"
 #include "abilities/bombard.h"
 #include "abilities/scanner.h"
+#include "nlohmann/json.hpp"
 
-class BattleField;
+using json = nlohmann::json;
+
+class GameField;
 class ShipManager;
 
 class AbilityManager {
 private:
     std::queue<std::unique_ptr<Ability>> abilities;
+    int len_queue = 3;
 
 public:
     AbilityManager();
 
-    void applyAbility(BattleField& field, int x, int y, ShipManager& manager);
-    std::string nextAbility(bool flag = false);
-    void getRandomAbility();
+    void apply_ability(GameField& field, int x, int y, ShipManager& manager);
+
+    std::string next_abilities();
+
+    void gain_random_ability();
+
+    int get_len_queue();
+    void set_len_queue(int value);
+
+    void from_json(const json& j);
+    json to_json();
 };
 
 #endif

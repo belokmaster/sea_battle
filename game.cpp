@@ -1,117 +1,237 @@
 #include "game.h"
-#include <iostream>
-#include <string>
-#include <cstdlib>
 
-Game::Game(int size) 
-    : field(size), 
-      enemyField(size),        // Инициализация поля врага
-      manager(field.normalShipsCount()) {}
 
-void Game::run() {
-    placeShips();
-    gameLoop();
+void Game::main_menu() {
+    output.main_menu_message();
+
+    bool input_flag = input.input_flag();
+    if (input_flag) {
+        load_game();
+        round();
+    } else{
+        start_game();
+        generate_enemy_ships();
+        round();
+    }
 }
 
-void Game::placeShips() {
-    int shipsCount = field.shipsCount;
+void Game::start_game() {
+    int width_field, height_field;
+    output.width_and_height_message();
+    std::pair<int, int> size = input.input_two_ints();
 
-    for (int i = 0; i < shipsCount; ++i) {
-        Ship& ship = manager.getShip(i);
+    std::tie(width_field, height_field) = size;
+    
+    user_field = GameField(width_field, height_field);
+    enemy_field = GameField(width_field, height_field);
+
+    user_field.gain_ability = false;
+    enemy_field.gain_ability = true;
+
+    enemy_manager = enemy_field.ship_quantity_preset();
+    user_manager = user_field.ship_quantity_preset();
+    int ships_count = user_field.ships_count;
+
+    for (int i = 0; i < ships_count; ++i) {
+        Ship& ship = user_manager.get_ship(i);
         int x, y;
         std::string orientation;
 
-        field.drawField(manager, false);
-        enemyField.drawField(manager, false);  // Отображаем поле врага
-        std::cout << "Enter ship coordinates and orientation: ";
-        std::cin >> x >> y >> orientation;
+        output.print_user_field(user_field);
 
-        // Размещаем корабль на поле игрока
-        field.placeShip(ship, x, y, orientation);
+        output.ship_coordinates_message();
+        std::pair<int, int> coordinates = input.input_two_ints();
+
+        std::tie(x, y) = coordinates;
+
+        output.ship_orientation_message();
+        orientation = input.input_orientation();
+
+        user_field.place_ship(ship, x, y, orientation);
+    }
+
+    output.print_user_field(user_field);
+}
+
+
+void Game::generate_enemy_ships() {
+    srand(static_cast<unsigned int>(time(NULL)));
+    int width = enemy_field.get_width();
+    int height = enemy_field.get_height();
+    std::vector<std::vector<int>> cell_status(height, std::vector<int>(width, 0)); 
+    
+    for (int i = 0; i < enemy_manager.get_ships_count(); i++) {
+        Ship& ship = enemy_manager.get_ship(i);
+        int length = ship.get_length();
+        bool placed = false;
         
-        // Также размещаем корабль на поле врага
-        enemyField.placeShip(ship, x, y, orientation);
-    }
+        while (!placed) {
+            int x = rand() % width;
+            int y = rand() % height;
+            std::string orientation = (rand() % 2 == 0) ? "h" : "v"; 
+            bool can_place = true;
 
-    field.drawField(manager, false);
-    enemyField.drawField(manager, false);  // Отображаем поле врага после расставления кораблей
+            if (x > width || y > height || x < 0 || y < 0 || x + length > width || y + length > height) {
+                continue; 
+            }
+
+            for (int j = 0; j < length; j++) {
+                int check_x = (orientation == "h") ? x + j : x;
+                int check_y = (orientation == "h") ? y : y + j;
+
+                if (check_x >= 0 && check_x < width && check_y >= 0 && check_y < height) {
+                    if (cell_status[check_y][check_x] != 0) {
+                        can_place = false;
+                        break; 
+                    }
+                } else {
+                    can_place = false;
+                    break;
+                }
+            }
+
+            if (can_place) {
+                for (int j = 0; j < length; j++) {
+                    int place_x = (orientation == "h") ? x + j : x;
+                    int place_y = (orientation == "h") ? y : y + j;
+                    cell_status[place_y][place_x] = 1;
+                }
+
+                for (int j = -1; j <= length; j++) {
+                    for (int k = -1; k <= 1; k++) {
+                        int startX = (orientation == "v") ? x + k : x + j;
+                        int startY = (orientation == "v") ? y + j : y + k;
+
+                        if (startX >= 0 && startX < width && startY >= 0 && startY < height) {
+                            cell_status[startY][startX] = 1;
+                        }
+                    }
+                }  
+
+                enemy_field.place_ship(ship, x, y, orientation); 
+                placed = true; 
+            }
+        }
+    }
+    output.print_user_field(enemy_field);
 }
 
-void Game::processCommand(Command command) {
-    switch (command) {
-    case HELP:
-        std::cout << "Commands:\n"
-            << "[    attack / a     ] - attack a cell\n" 
-            << "[  stateShips / ss  ] - show ships status\n" 
-            << "[     quit / q      ] - quit the game\n"
-            << "[  printField / pf  ] - show game field\n"
-            << "[   abilities / ab  ] - view current ability\n"
-            << "[ applyAbility / aa ] - cast the next ability in the queue" 
-            << std::endl;
-        break;
-    case PRINT_FIELD:
-        field.drawField(manager, false);  // Игровое поле игрока
-        enemyField.drawField(manager, false);  // Игровое поле врага
-        break;
-    case ATTACK: {
-        int x, y;
-        std::cout << "Enter coordinates to attack: ";
-        std::cin >> x >> y;
-        // Здесь поле для атаки будет выбором между полем врага и игрока
-        enemyField.attackShip(x, y, manager, abilityManager);  // Атакуем поле игрока или врага
-        break;
-    }
-    case STATE_SHIPS:
-        manager.printStates();
-        break;
-    case ABILITIES:
-        abilityManager.nextAbility();
-        break;
-    case APPLY_ABILITY: {
-        std::string ability = abilityManager.nextAbility(1);
+void Game::round() {
+    bool save_flag;
+    bool load_flag;
+    bool ability_flag;
 
-        if (ability == "DoubleDamage") {
-            abilityManager.applyAbility(field, 0, 0, manager);
+    int x = 0, y = 0;
+
+
+    while(!enemy_manager.all_ships_destroy() && !user_manager.all_ships_destroy()) {
+        std::string ability = ability_manager.next_abilities();
+        output.print_user_field(user_field);
+        output.print_states(user_manager);
+        output.print_enemy_field(enemy_field, enemy_manager);
+        output.ability_message(ability);
+        ability_flag = false;
+
+        if (ability != ""){
+            ability_flag = input.input_flag();
         }
-        else if (ability == "Scanner") {
-            int x, y;
-            std::cout << "Coordinate for ability Scanner: ";
-            std::cin >> x >> y;
-            abilityManager.applyAbility(field, x, y, manager);
+        if (ability_flag) {
+            if (ability == "Scanner") {
+                output.scanner_coordinates_message();
+                std::pair<int, int> coordinates = input.input_two_ints();
+                
+                std::tie(x, y) = coordinates;
+            }
+            ability_manager.apply_ability(enemy_field, x, y, enemy_manager);
+            if (enemy_manager.all_ships_destroy()) {
+                new_game();
+            }
+        } else {
+            output.attack_message();
+            std::pair<int, int> coordinates = input.input_two_ints();
+
+            std::tie(x, y) = coordinates;
+            
+            output.your_attack_message();
+            enemy_field.attack(x, y, enemy_manager, ability_manager);
+
+            if (enemy_manager.all_ships_destroy()) { 
+                new_game();
+            }
         }
-        else if (ability == "Bombard") {
-            abilityManager.applyAbility(field, 0, 0, manager);
+
+        output.enemy_attack_message();
+        enemy_attack();
+
+        save_flag = false;
+        output.save_message();
+        save_flag = input.input_flag();
+        if (save_flag) {
+            save_game();
         }
-        else {
-            std::cout << "No valid ability to apply." << std::endl;
+
+        load_flag = false;
+        output.load_message();
+        load_flag = input.input_flag();
+        if (load_flag) {
+            load_game();
         }
-        break;
+
     }
-    case QUIT:
-        std::exit(0);
-    case INVALID:
-    default:
-        std::cout << "Invalid command. Type \"help\" or \"h\" for a list of commands." << std::endl;
-        break;
+    new_game();
+}
+
+void Game::enemy_attack() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> dist_x(0, user_field.get_width() - 1);
+    std::uniform_int_distribution<int> dist_y(0, user_field.get_height() - 1);
+
+    int x, y;
+
+    do {
+        x = dist_x(gen);
+        y = dist_y(gen);
+    } while (user_field.get_cell_status(x, y) == 1);
+
+    user_field.attack(x, y, user_manager, ability_manager);
+}
+
+void Game::new_game() {
+    bool new_game_flag;
+    if (enemy_manager.all_ships_destroy()) {
+        output.win_message();
+        new_game_flag = input.input_flag();
+        if (new_game_flag) {
+            output.new_round_message();
+            enemy_manager.new_ships();
+            enemy_field.clean(); 
+            generate_enemy_ships();
+            round();
+        } else {
+            output.exit_message();
+            exit(0);
+        }
+
+    } else if (user_manager.all_ships_destroy()) {
+        output.defeat_message();
+        new_game_flag = input.input_flag();
+        if (new_game_flag) {
+            output.new_game_message();
+            start_game();
+            generate_enemy_ships();
+            round();
+        } else{
+            output.exit_message();
+            exit(0);
+        }
     }
 }
 
-Command Game::getCommand(const std::string& command) {
-    if (command == "help" || command == "h") return HELP;
-    if (command == "printField" || command == "pf") return PRINT_FIELD;
-    if (command == "attack" || command == "a") return ATTACK;
-    if (command == "stateShips" || command == "ss") return STATE_SHIPS;
-    if (command == "abilities" || command == "ab") return ABILITIES;
-    if (command == "applyAbility" || command == "aa") return APPLY_ABILITY;
-    if (command == "quit" || command == "q") return QUIT;
-    return INVALID;
+void Game::save_game() {
+    game_state.save(user_field, enemy_field, user_manager, enemy_manager, ability_manager);
 }
 
-void Game::gameLoop() {
-    while (true) {
-        std::string command;
-        std::cout << "Enter command: ";
-        std::cin >> command;
-        processCommand(getCommand(command));
-    }
+void Game::load_game() {
+    game_state.load(user_field, enemy_field, user_manager, enemy_manager, ability_manager);
 }

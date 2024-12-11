@@ -1,40 +1,69 @@
+# Указываем компилятор и компиляцию
 CXX = g++
 CPP = g++ -c
 
+# Директория с исходниками (поскольку Makefile лежит в src, используем эту директорию)
+SRC_DIR = .
+
+# Директория для include (json.hpp)
+INCLUDE_DIR = $(SRC_DIR)/nlohmann
+
+# Подкаталог с файлами abilities
+ABILITIES_DIR = $(SRC_DIR)/abilities
+
+# Главный исходный файл
+MAIN_SRC = main.cpp
+
+# Цель по умолчанию (сборка всего проекта)
 all: linking clean
 
-linking: main.o game.o battleField.o shipManager.o ship.o exception.o abilityManager.o abilities/doubleDamage.o abilities/scanner.o abilities/bombard.o
-	$(CXX) main.o game.o battleField.o shipManager.o ship.o exception.o abilityManager.o abilities/doubleDamage.o abilities/scanner.o abilities/bombard.o -o Battleship
+# Линковка: объединяем все объектные файлы в один исполнимый файл
+linking: $(SRC_DIR)/main.o $(SRC_DIR)/gameField.o $(SRC_DIR)/shipManager.o $(SRC_DIR)/ship.o $(SRC_DIR)/exception.o $(SRC_DIR)/abilityManager.o $(ABILITIES_DIR)/doubleDamage.o $(ABILITIES_DIR)/scanner.o $(ABILITIES_DIR)/bombard.o $(SRC_DIR)/input.o $(SRC_DIR)/output.o $(SRC_DIR)/game.o $(SRC_DIR)/gameState.o $(SRC_DIR)/fileHandler.o
+	$(CXX) -o Battleship $^
 
-battleField.o: battleField.cpp shipManager.h ship.h
-	$(CPP) battleField.cpp
+# Правила для компиляции каждого исходного файла .cpp в объектный файл .o
+$(SRC_DIR)/gameField.o: $(SRC_DIR)/gameField.cpp $(SRC_DIR)/shipManager.h $(SRC_DIR)/ship.h
+	$(CPP) -I$(INCLUDE_DIR) -o $@ $<
 
-shipManager.o: shipManager.cpp battleField.h ship.h exception.h
-	$(CPP) shipManager.cpp
+$(SRC_DIR)/shipManager.o: $(SRC_DIR)/shipManager.cpp $(SRC_DIR)/gameField.h $(SRC_DIR)/ship.h $(SRC_DIR)/exception.h
+	$(CPP) -I$(INCLUDE_DIR) -o $@ $<
 
-ship.o: ship.cpp battleField.h shipManager.h
-	$(CPP) ship.cpp
+$(SRC_DIR)/ship.o: $(SRC_DIR)/ship.cpp $(SRC_DIR)/gameField.h $(SRC_DIR)/shipManager.h
+	$(CPP) -I$(INCLUDE_DIR) -o $@ $<
 
-exception.o: exception.cpp exception.h
-	$(CPP) exception.cpp
+$(SRC_DIR)/exception.o: $(SRC_DIR)/exception.cpp $(SRC_DIR)/exception.h
+	$(CPP) -I$(INCLUDE_DIR) -o $@ $<
 
-abilityManager.o: abilityManager.cpp abilityManager.h abilities/ability.h
-	$(CPP) abilityManager.cpp
+$(SRC_DIR)/abilityManager.o: $(SRC_DIR)/abilityManager.cpp $(SRC_DIR)/abilityManager.h
+	$(CPP) -I$(INCLUDE_DIR) -o $@ $<
 
-abilities/doubleDamage.o: abilities/doubleDamage.cpp abilities/doubleDamage.h abilities/ability.h
-	$(CPP) abilities/doubleDamage.cpp -o abilities/doubleDamage.o
+$(ABILITIES_DIR)/doubleDamage.o: $(ABILITIES_DIR)/doubleDamage.cpp $(ABILITIES_DIR)/doubleDamage.h $(ABILITIES_DIR)/ability.h
+	$(CPP) -I$(INCLUDE_DIR) -o $@ $<
 
-abilities/scanner.o: abilities/scanner.cpp abilities/scanner.h abilities/ability.h
-	$(CPP) abilities/scanner.cpp -o abilities/scanner.o
+$(ABILITIES_DIR)/scanner.o: $(ABILITIES_DIR)/scanner.cpp $(ABILITIES_DIR)/scanner.h $(ABILITIES_DIR)/ability.h
+	$(CPP) -I$(INCLUDE_DIR) -o $@ $<
 
-abilities/bombard.o: abilities/bombard.cpp abilities/bombard.h abilities/ability.h
-	$(CPP) abilities/bombard.cpp -o abilities/bombard.o
+$(ABILITIES_DIR)/bombard.o: $(ABILITIES_DIR)/bombard.cpp $(ABILITIES_DIR)/bombard.h $(ABILITIES_DIR)/ability.h
+	$(CPP) -I$(INCLUDE_DIR) -o $@ $<
 
-main.o: main.cpp game.h
-	$(CPP) main.cpp
+$(SRC_DIR)/input.o: $(SRC_DIR)/input.cpp $(SRC_DIR)/input.h
+	$(CPP) -I$(INCLUDE_DIR) -o $@ $<
 
-game.o: game.cpp game.h battleField.h shipManager.h abilityManager.h
-	$(CPP) game.cpp
+$(SRC_DIR)/output.o: $(SRC_DIR)/output.cpp $(SRC_DIR)/output.h
+	$(CPP) -I$(INCLUDE_DIR) -o $@ $<
 
+$(SRC_DIR)/game.o: $(SRC_DIR)/game.cpp $(SRC_DIR)/game.h
+	$(CPP) -I$(INCLUDE_DIR) -o $@ $<
+
+$(SRC_DIR)/gameState.o: $(SRC_DIR)/gameState.cpp $(SRC_DIR)/gameState.h
+	$(CPP) -I$(INCLUDE_DIR) -o $@ $<
+
+$(SRC_DIR)/fileHandler.o: $(SRC_DIR)/fileHandler.cpp $(SRC_DIR)/fileHandler.h
+	$(CPP) -I$(INCLUDE_DIR) -o $@ $<
+
+$(SRC_DIR)/main.o: $(SRC_DIR)/main.cpp
+	$(CPP) -I$(INCLUDE_DIR) -o $@ $<
+
+# Удаление объектных файлов
 clean:
-	rm ./*.o abilities/*.o
+	rm -f $(SRC_DIR)/*.o $(ABILITIES_DIR)/*.o

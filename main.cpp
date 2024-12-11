@@ -1,20 +1,11 @@
-﻿#include <iostream>
+#include <iostream>
+#include <vector>
 #include "game.h"
 
+class Game;
+
 int main() {
-    try {
-        int size;
-        std::cout << "Enter the size of the field: ";
-        std::cin >> size;
-
-        // Создание объекта игры с размером поля
-        Game game(size);
-        
-        // Запуск игры
-        game.run();
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-    }
-
+    Game game;
+    game.main_menu();
     return 0;
 }
