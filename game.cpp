@@ -8,7 +8,7 @@ void Game::downloading_previous_game() {
     string flag_load = input.inputFlag();
     if (flag_load == "L") {
         game_state = new GameState("state.json", &userField, &enemyField, &userManager, &enemyManager, &abilitymanager);
-        load();
+        load(); // снчала загрузка потом гейм стейт
         size = userField ->getSize();
         ships.resize(4);
         countShip = 0;

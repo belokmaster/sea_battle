@@ -5,17 +5,14 @@ void Output::printString(std::string message) {
     std::cout << message;
 }
 
-// Функция для вывода запроса на ввод количества кораблей определенной длины
 void Output::printCountShips(int i) {
     std::cout << "Введите количество кораблей длиной " << i << ": ";
 }
 
-// Функция для вывода строки ошибки
 void Output::printErrorString(std::string message) {
     std::cerr << message << '\n';
 }
 
-// Функция для вывода результата сканирования на наличие корабля в заданном квадрате
 void Output::printScanner(int x, int y, bool flag) {
     if (flag) {
         std::cout << "В квадрате (" << x << ", " << y << ") (" << x + 1 << ", " << y + 1 << ") находится корабль." << '\n';
@@ -24,16 +21,13 @@ void Output::printScanner(int x, int y, bool flag) {
     }
 }
 
-// Функция для вывода сообщения об ошибке с координатами
 void Output::printErrorWithXy(std::string msg, int x, int y) {
     std::cerr << msg << x << ' ' << y << '\n';
 }
 
-// Функция для вывода поля пользователя
 void Output::printFieldUser(Field* field, int size) {
     std::cout << "\nField looks like this: \n\n";
 
-    // Вывод номеров столбцов
     std::cout << "   ";
     for (int x = 0; x < size; x++) {
         if (x < 10) {
@@ -57,7 +51,7 @@ void Output::printFieldUser(Field* field, int size) {
             if (field->getCell(x, y) == Field::UNKNOWN) {
                 std::cout << " ~ ";
             } else if (field->getCell(x, y) == Field::FOGWAR) {
-                std::cout << " 1 ";
+                std::cout << " f ";
             } else {
                 std::cout << " " << field->getCell(x, y) << " ";
             }
@@ -67,11 +61,9 @@ void Output::printFieldUser(Field* field, int size) {
     std::cout << std::endl;
 }
 
-// Функция для вывода поля врага
 void Output::printFieldEnemy(Field* field, int size) {
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
-            // Проверка состояния ячейки поля врага
             if (field->getCell(j, i) == Field::UNKNOWN || field->getCell(j, i) == Field::ALIVE || field->getCell(j, i) == Field::FOGWAR) {
                 std::cout << "~" << " ";
             } else {

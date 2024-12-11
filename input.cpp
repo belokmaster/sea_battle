@@ -17,10 +17,9 @@ int Input::inputSingleNumber() {
             output.printErrorString(e.what()); // Выводим сообщение об ошибке
         }
     }
-    return one; // Возвращаем введённое число
+    return one; 
 }
 
-// Функция для ввода координат корабля и ориентации
 std::vector<int> Input::inputShipPlace() {
     int x, y, orientation;
     std::string inputString;
@@ -28,7 +27,6 @@ std::vector<int> Input::inputShipPlace() {
         try {
             getline(std::cin, inputString); // Считываем строку из входного потока
             std::stringstream ss(inputString);
-            // Проверяем, можно ли преобразовать строку в три числа (координаты и ориентация)
             if (!(ss >> x >> y >> orientation) || !ss.eof()) {
                 throw IncorrectCoordinatesException("Некорректные данные, введите ещё раз!"); // Бросаем исключение при ошибке
             }
@@ -37,10 +35,9 @@ std::vector<int> Input::inputShipPlace() {
             output.printErrorString(e.what()); // Выводим сообщение об ошибке
         }
     }
-    return {x, y, orientation}; // Возвращаем координаты и ориентацию
+    return {x, y, orientation};
 }
 
-// Функция для ввода флага
 std::string Input::inputFlag() {
     std::string flag;
     std::string inputString;
@@ -54,28 +51,26 @@ std::string Input::inputFlag() {
             }
             break; // Выход из цикла при успешном вводе
         } catch (IncorrectFieldSize& e) {
-            output.printErrorString(e.what()); // Выводим сообщение об ошибке
+            output.printErrorString(e.what()); 
         }
     }
-    return flag; // Возвращаем введённый флаг
+    return flag;
 }
 
-// Функция для ввода координат
 std::pair<int, int> Input::inputCoordinates() {
     int x, y;
     std::string inputString;
     while (true) {
         try {
-            getline(std::cin, inputString); // Считываем строку из входного потока
+            getline(std::cin, inputString); 
             std::stringstream ss(inputString);
-            // Проверяем, можно ли преобразовать строку в два числа (координаты)
             if (!(ss >> x >> y) || ss.fail() || !ss.eof()) {
-                throw IncorrectFieldSize("Некорректные данные, введите ещё раз!"); // Бросаем исключение при ошибке
+                throw IncorrectFieldSize("Некорректные данные, введите ещё раз!"); 
             }
-            break; // Выход из цикла при успешном вводе
+            break; 
         } catch (IncorrectFieldSize& e) {
-            output.printErrorString(e.what()); // Выводим сообщение об ошибке
+            output.printErrorString(e.what());
         }
     }
-    return std::make_pair(x, y); // Возвращаем координаты
+    return std::make_pair(x, y); 
 }

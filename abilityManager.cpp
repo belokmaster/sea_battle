@@ -33,7 +33,6 @@ void AbilityManager::addAbility() {
             queue_abilities.push_back(new Bombard(this->manager, this->field));
             break;
         default:
-            // Этот блок не должен срабатывать, так как random всегда будет в пределах [0, 2]
             break;
     }
 }
@@ -65,7 +64,7 @@ json AbilityManager::write_json() {
 void AbilityManager::load_json_ability(json j){
     queue_abilities.clear();
     auto queue_json = j["queue_abilities"];
-    for(auto abilities: queue_json){
+    for (auto abilities: queue_json){
         string type = abilities["type"];
         if(type == "DoubleDamage"){
             queue_abilities.push_back(new DoubleDamage(this->field));
