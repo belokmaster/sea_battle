@@ -1,11 +1,11 @@
-#include "gameField.h"
+#include "battleField.h"
 #include "ship.h"
 #include "shipManager.h"
 #include "exception.h"
 #include "abilityManager.h"
 
 
-GameField::GameField(int width_f, int height_f) : width(width_f), height(height_f) {
+BattleField::BattleField(int width_f, int height_f) : width(width_f), height(height_f) {
     while (true) {
         try {
             if (width_f > 20 || height_f > 20) {
@@ -34,7 +34,7 @@ GameField::GameField(int width_f, int height_f) : width(width_f), height(height_
     }
 }
 
-GameField::GameField(const GameField& other) 
+BattleField::BattleField(const BattleField& other) 
     : width(other.width), height(other.height), ships_count(other.ships_count) {
     field = new cell*[height];
     
@@ -44,11 +44,11 @@ GameField::GameField(const GameField& other)
     }
 }
 
-GameField::GameField(GameField&& other) noexcept : width(other.width), height(other.height), field(other.field), ships_count(other.ships_count) {
+BattleField::BattleField(BattleField&& other) noexcept : width(other.width), height(other.height), field(other.field), ships_count(other.ships_count) {
     other.field = nullptr;
 }
 
-void GameField::attack(int x, int y, ShipManager& manager, AbilityManager& ability_manager) {
+void BattleField::attack(int x, int y, ShipManager& manager, AbilityManager& ability_manager) {
     while (true) {
         try {
             if (x < 0 || x >= width || y < 0 || y >= height) {
@@ -105,23 +105,23 @@ void GameField::attack(int x, int y, ShipManager& manager, AbilityManager& abili
 }
 
 
-int GameField::get_height() const {
+int BattleField::get_height() const {
     return height;
 }
 
-int GameField::get_width() const {
+int BattleField::get_width() const {
     return width;
 }
 
-bool GameField::get_double_damage() {
+bool BattleField::get_double_damage() {
     return double_damage;
 }
 
-void GameField::set_double_damage(bool value) {
+void BattleField::set_double_damage(bool value) {
     double_damage = value;
 }
 
-ShipManager GameField::ship_quantity_preset() {
+ShipManager BattleField::ship_quantity_preset() {
     int count_cell = width * height;
     int count_ships_cell = count_cell / 5;
     std::vector<int> ship_sizes;
@@ -142,7 +142,7 @@ ShipManager GameField::ship_quantity_preset() {
     return ShipManager(ship_sizes.size(), ship_sizes);
 }
 
-void GameField::place_ship(Ship& ship, int x, int y, std::string orientation) {
+void BattleField::place_ship(Ship& ship, int x, int y, std::string orientation) {
     while (true) {
         try {
             if (orientation == "h" || orientation == "") {
@@ -225,11 +225,11 @@ void GameField::place_ship(Ship& ship, int x, int y, std::string orientation) {
     }
 }
 
-int GameField::get_cell_status(int x, int y) {
+int BattleField::get_cell_status(int x, int y) {
     return field[x][y];
 }
 
-void GameField::clean() {
+void BattleField::clean() {
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) { 
             field[y][x] = unknown_state;
@@ -237,7 +237,7 @@ void GameField::clean() {
     }
 }
 
-GameField& GameField::operator=(GameField&& other) noexcept {
+BattleField& BattleField::operator=(BattleField&& other) noexcept {
     if (this != &other) {
 
         for (int i = 0; i < height; ++i) {
@@ -258,7 +258,7 @@ GameField& GameField::operator=(GameField&& other) noexcept {
     return *this;
 }
 
-GameField& GameField::operator=(const GameField& other) {
+BattleField& BattleField::operator=(const BattleField& other) {
     if (this == &other) return *this;
 
     for (int i = 0; i < height; ++i) {
@@ -279,7 +279,7 @@ GameField& GameField::operator=(const GameField& other) {
     return *this;
 }
 
-json GameField::to_json() const {
+json BattleField::to_json() const {
     json j;
     j["width"] = width;
     j["height"] = height;
@@ -296,13 +296,13 @@ json GameField::to_json() const {
     return j;
 }
 
-GameField GameField::from_json_size(const json& j) {
-    GameField field(j["width"], j["height"]);
+BattleField BattleField::from_json_size(const json& j) {
+    BattleField field(j["width"], j["height"]);
     field.gain_ability = (j["gain_ability"]);
     return field;
 }
 
-void GameField::from_json_coord(const json& j) {
+void BattleField::from_json_coord(const json& j) {
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) { 
             field[y][x] = j["field"][y][x];
@@ -310,7 +310,7 @@ void GameField::from_json_coord(const json& j) {
     }
 }
 
-GameField::~GameField() {
+BattleField::~BattleField() {
     for (int i = 0; i < height; ++i) {
         delete[] field[i];
     }

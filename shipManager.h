@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "ship.h"
-#include "gameField.h"
+#include "battleField.h"
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
@@ -30,7 +30,7 @@ public:
 
     json to_json() const;
 
-    void from_json(const json& j, GameField& field);
+    void from_json(const json& j, BattleField& field);
 };
 
 #endif

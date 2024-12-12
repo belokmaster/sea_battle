@@ -18,17 +18,17 @@ MAIN_SRC = main.cpp
 all: linking clean
 
 # Линковка: объединяем все объектные файлы в один исполнимый файл
-linking: $(SRC_DIR)/main.o $(SRC_DIR)/gameField.o $(SRC_DIR)/shipManager.o $(SRC_DIR)/ship.o $(SRC_DIR)/exception.o $(SRC_DIR)/abilityManager.o $(ABILITIES_DIR)/doubleDamage.o $(ABILITIES_DIR)/scanner.o $(ABILITIES_DIR)/bombard.o $(SRC_DIR)/input.o $(SRC_DIR)/output.o $(SRC_DIR)/game.o $(SRC_DIR)/gameState.o $(SRC_DIR)/fileHandler.o
+linking: $(SRC_DIR)/main.o $(SRC_DIR)/battleField.o $(SRC_DIR)/shipManager.o $(SRC_DIR)/ship.o $(SRC_DIR)/exception.o $(SRC_DIR)/abilityManager.o $(ABILITIES_DIR)/doubleDamage.o $(ABILITIES_DIR)/scanner.o $(ABILITIES_DIR)/bombard.o $(SRC_DIR)/input.o $(SRC_DIR)/output.o $(SRC_DIR)/game.o $(SRC_DIR)/gameState.o $(SRC_DIR)/fileHandler.o
 	$(CXX) -o Battleship $^
 
 # Правила для компиляции каждого исходного файла .cpp в объектный файл .o
-$(SRC_DIR)/gameField.o: $(SRC_DIR)/gameField.cpp $(SRC_DIR)/shipManager.h $(SRC_DIR)/ship.h
+$(SRC_DIR)/battleField.o: $(SRC_DIR)/battleField.cpp $(SRC_DIR)/shipManager.h $(SRC_DIR)/ship.h
 	$(CPP) -I$(INCLUDE_DIR) -o $@ $<
 
-$(SRC_DIR)/shipManager.o: $(SRC_DIR)/shipManager.cpp $(SRC_DIR)/gameField.h $(SRC_DIR)/ship.h $(SRC_DIR)/exception.h
+$(SRC_DIR)/shipManager.o: $(SRC_DIR)/shipManager.cpp $(SRC_DIR)/battleField.h $(SRC_DIR)/ship.h $(SRC_DIR)/exception.h
 	$(CPP) -I$(INCLUDE_DIR) -o $@ $<
 
-$(SRC_DIR)/ship.o: $(SRC_DIR)/ship.cpp $(SRC_DIR)/gameField.h $(SRC_DIR)/shipManager.h
+$(SRC_DIR)/ship.o: $(SRC_DIR)/ship.cpp $(SRC_DIR)/battleField.h $(SRC_DIR)/shipManager.h
 	$(CPP) -I$(INCLUDE_DIR) -o $@ $<
 
 $(SRC_DIR)/exception.o: $(SRC_DIR)/exception.cpp $(SRC_DIR)/exception.h

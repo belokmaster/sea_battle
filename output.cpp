@@ -73,7 +73,7 @@ void Output::error_message() {
     std::cout << "Incorrect input! Enter again: ";
 }
 
-void Output::print_user_field(GameField user_field) {
+void Output::print_user_field(BattleField user_field) {
     std::cout << "Your field: " << std::endl;
 
     std::cout << "   ";
@@ -97,7 +97,7 @@ void Output::print_user_field(GameField user_field) {
     }
 }
 
-void Output::print_enemy_field(GameField enemy_field, ShipManager& enemy_manager) {
+void Output::print_enemy_field(BattleField enemy_field, ShipManager& enemy_manager) {
     std::cout << "Enemy field: " << std::endl;
 
     std::cout << "   ";

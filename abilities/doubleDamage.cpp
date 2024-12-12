@@ -1,8 +1,8 @@
 #include "doubleDamage.h"
-#include "../gameField.h"
+#include "../battleField.h"
 #include "../shipManager.h"
 
-void DoubleDamage::apply(GameField& field, int x, int y, ShipManager& manager) {
+void DoubleDamage::apply(BattleField& field, int x, int y, ShipManager& manager) {
     field.set_double_damage(true);
     std::cout << "Next hit deals double damage" << std::endl;
 

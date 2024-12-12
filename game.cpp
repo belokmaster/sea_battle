@@ -22,8 +22,8 @@ void Game::start_game() {
 
     std::tie(width_field, height_field) = size;
     
-    user_field = GameField(width_field, height_field);
-    enemy_field = GameField(width_field, height_field);
+    user_field = BattleField(width_field, height_field);
+    enemy_field = BattleField(width_field, height_field);
 
     user_field.gain_ability = false;
     enemy_field.gain_ability = true;

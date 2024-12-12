@@ -15,7 +15,7 @@
 #include "shipManager.h"
 #include "abilityManager.h"
 #include "fileHandler.h"
-#include "gameField.h"
+#include "battleField.h"
 
 using json = nlohmann::json;
 
@@ -27,11 +27,11 @@ private:
 public:
     GameState(const std::string& fname) : filename(fname) { }
 
-    void save( GameField& user_field, GameField& enemy_field, 
+    void save( BattleField& user_field, BattleField& enemy_field, 
     ShipManager& user_manager, ShipManager& enemy_manager,
     AbilityManager& ability_manager);
 
-    void load(GameField& user_field, GameField& enemy_field, 
+    void load(BattleField& user_field, BattleField& enemy_field, 
     ShipManager& user_manager, ShipManager& enemy_manager,
     AbilityManager& ability_manager);
 

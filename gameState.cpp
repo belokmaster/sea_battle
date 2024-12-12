@@ -1,7 +1,7 @@
 #include "gameState.h"
 
 
-void GameState::save(GameField& user_field, GameField& enemy_field, 
+void GameState::save(BattleField& user_field, BattleField& enemy_field, 
             ShipManager& user_manager, ShipManager& enemy_manager,
             AbilityManager& ability_manager) {
     json j;
@@ -17,7 +17,7 @@ void GameState::save(GameField& user_field, GameField& enemy_field,
     file_handler.write(j);
 }
 
-void GameState::load(GameField& user_field, GameField& enemy_field, 
+void GameState::load(BattleField& user_field, BattleField& enemy_field, 
             ShipManager& user_manager, ShipManager& enemy_manager,
             AbilityManager& ability_manager) {
     FileHandler file_handler(filename);

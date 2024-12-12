@@ -7,7 +7,7 @@
 #include <string>
 #include <utility>
 #include "ship.h"
-#include "gameField.h"
+#include "battleField.h"
 #include "shipManager.h"
 
 
@@ -33,8 +33,8 @@ public:
     void exit_message();
     void error_message();
 
-    void print_user_field(GameField user_field);
-    void print_enemy_field(GameField enemy_field, ShipManager& enemy_manager);
+    void print_user_field(BattleField user_field);
+    void print_enemy_field(BattleField enemy_field, ShipManager& enemy_manager);
     void print_states(ShipManager& user_manager);
 };
 

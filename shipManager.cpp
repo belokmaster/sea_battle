@@ -88,7 +88,7 @@ json ShipManager::to_json() const {
     return j;
 }
 
-void ShipManager::from_json(const json& j, GameField& field) {
+void ShipManager::from_json(const json& j, BattleField& field) {
     count = j["count"];
     const auto& ships_array = j["ships"];
     const auto& coord_ships = j["coordinate_ships"];

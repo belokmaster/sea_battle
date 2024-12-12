@@ -4,12 +4,12 @@
 #include <string>
 #include <iostream>
 
-class GameField;
+class BattleField;
 class ShipManager;
 
 class Ability {
 public:
-    virtual void apply(GameField& field, int x, int y, ShipManager& manager) = 0;
+    virtual void apply(BattleField& field, int x, int y, ShipManager& manager) = 0;
 
     virtual ~Ability() = default;
 };

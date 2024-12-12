@@ -6,7 +6,7 @@
 #include <tuple>
 #include <random>
 #include "exception.h"
-#include "gameField.h"
+#include "battleField.h"
 #include "ship.h"
 #include "abilityManager.h"
 #include "shipManager.h"
@@ -17,8 +17,8 @@
 
 class Game{
 private:
-    GameField user_field;
-    GameField enemy_field;
+    BattleField user_field;
+    BattleField enemy_field;
 
     ShipManager user_manager;
     ShipManager enemy_manager;

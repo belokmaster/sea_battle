@@ -23,7 +23,7 @@ AbilityManager::AbilityManager() {
     }
 }
 
-void AbilityManager::apply_ability(GameField& field, int x, int y, ShipManager& manager) {
+void AbilityManager::apply_ability(BattleField& field, int x, int y, ShipManager& manager) {
     try {
         if (!abilities.empty()) {
             abilities.front()->apply(field, x, y, manager);

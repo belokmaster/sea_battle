@@ -1,8 +1,8 @@
 #include "scanner.h"
-#include "../gameField.h"
+#include "../battleField.h"
 #include "../shipManager.h"
 
-void Scanner::apply(GameField& field, int x, int y, ShipManager& manager) {
+void Scanner::apply(BattleField& field, int x, int y, ShipManager& manager) {
     bool found = false;
 
     for(int i = x; i < x + 2; ++i) {

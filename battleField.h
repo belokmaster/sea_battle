@@ -1,5 +1,5 @@
-#ifndef GAME_FIELD_H
-#define GAME_FIELD_H
+#ifndef BATTLE_FIELD_H
+#define BATTLE_FIELD_H
 
 #include <iostream>
 #include <vector>
@@ -12,7 +12,7 @@ class Ship;
 class ShipManager;
 class AbilityManager;
 
-class GameField {
+class BattleField {
 private:
 enum cell {
     unknown_state,
@@ -28,14 +28,14 @@ public:
     int ships_count;
     bool gain_ability;
     
-    GameField(int width, int height);
+    BattleField(int width, int height);
 
-    GameField(const GameField& other);
-    GameField(GameField&& other) noexcept;
+    BattleField(const BattleField& other);
+    BattleField(BattleField&& other) noexcept;
 
-    GameField& operator=(const GameField& other);
+    BattleField& operator=(const BattleField& other);
 
-    GameField& operator=(GameField&& other) noexcept;
+    BattleField& operator=(BattleField&& other) noexcept;
 
     void place_ship(Ship& ship, int x, int y, std::string orientation);
 
@@ -56,11 +56,11 @@ public:
 
     json to_json() const;
 
-    GameField from_json_size(const json& j);
+    BattleField from_json_size(const json& j);
 
     void from_json_coord(const json& j);
 
-    ~GameField();
+    ~BattleField();
 };
 
 #endif

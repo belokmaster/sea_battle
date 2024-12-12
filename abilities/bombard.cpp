@@ -1,8 +1,8 @@
 #include "bombard.h"
-#include "../gameField.h"
+#include "../battleField.h"
 #include "../shipManager.h"
 
-void Bombard::apply(GameField& filed, int x, int y, ShipManager& manager) {
+void Bombard::apply(BattleField& filed, int x, int y, ShipManager& manager) {
     srand(time(NULL));
 
     if(manager.get_ships_count() > 0) {
