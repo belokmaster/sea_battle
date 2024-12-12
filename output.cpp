@@ -77,19 +77,19 @@ void Output::print_user_field(BattleField user_field) {
     std::cout << "Your field: " << std::endl;
 
     std::cout << "   ";
-    for (int x = 0; x < user_field.get_width(); ++x) {
+    for (int x = 0; x < user_field.getWidth(); ++x) {
         std::cout << x << " ";
     }
     std::cout << std::endl;
 
-    for (int y = 0; y < user_field.get_height(); y++) {
+    for (int y = 0; y < user_field.getHeight(); y++) {
         std::cout << y << "  ";
 
-        for (int x = 0; x < user_field.get_width(); x++) {
-            if (user_field.get_cell_status(y, x) == 2) {
+        for (int x = 0; x < user_field.getWidth(); x++) {
+            if (user_field.getCell(y, x) == 2) {
                 std::cout << "S ";
             
-            } else if (user_field.get_cell_status(y, x) == 0 || user_field.get_cell_status(y, x) == 1) {
+            } else if (user_field.getCell(y, x) == 0 || user_field.getCell(y, x) == 1) {
                 std::cout << "~ ";
             }
         }
@@ -101,15 +101,15 @@ void Output::print_enemy_field(BattleField enemy_field, ShipManager& enemy_manag
     std::cout << "Enemy field: " << std::endl;
 
     std::cout << "   ";
-    for (int x = 0; x < enemy_field.get_width(); ++x) {
+    for (int x = 0; x < enemy_field.getWidth(); ++x) {
         std::cout << x << " ";
     }
     std::cout << std::endl;
 
-    for (int y = 0; y < enemy_field.get_height(); ++y) {
+    for (int y = 0; y < enemy_field.getHeight(); ++y) {
         std::cout << y << "  ";
 
-        for (int x = 0; x < enemy_field.get_width(); ++x) {
+        for (int x = 0; x < enemy_field.getWidth(); ++x) {
             bool is_damaged = false;
             bool is_hit = false;
 
@@ -148,9 +148,9 @@ void Output::print_enemy_field(BattleField enemy_field, ShipManager& enemy_manag
                 if (is_damaged || is_hit) break;
             }
 
-            if (enemy_field.get_cell_status(y, x) == 0) {
+            if (enemy_field.getCell(y, x) == 0) {
                 std::cout << ". ";
-            } else if (enemy_field.get_cell_status(y, x) == 1) {
+            } else if (enemy_field.getCell(y, x) == 1) {
                 std::cout << "~ ";
             } else if (is_damaged) {
                 std::cout << "D ";

@@ -56,8 +56,8 @@ void Game::start_game() {
 
 void Game::generate_enemy_ships() {
     srand(static_cast<unsigned int>(time(NULL)));
-    int width = enemy_field.get_width();
-    int height = enemy_field.get_height();
+    int width = enemy_field.getWidth();
+    int height = enemy_field.getHeight();
     std::vector<std::vector<int>> cell_status(height, std::vector<int>(width, 0)); 
     
     for (int i = 0; i < enemy_manager.getShipsCount(); i++) {
@@ -184,15 +184,15 @@ void Game::round() {
 void Game::enemy_attack() {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<int> dist_x(0, user_field.get_width() - 1);
-    std::uniform_int_distribution<int> dist_y(0, user_field.get_height() - 1);
+    std::uniform_int_distribution<int> dist_x(0, user_field.getWidth() - 1);
+    std::uniform_int_distribution<int> dist_y(0, user_field.getHeight() - 1);
 
     int x, y;
 
     do {
         x = dist_x(gen);
         y = dist_y(gen);
-    } while (user_field.get_cell_status(x, y) == 1);
+    } while (user_field.getCell(x, y) == 1);
 
     user_field.attack(x, y, user_manager, ability_manager);
 }

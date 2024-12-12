@@ -43,21 +43,18 @@ public:
 
     void draw_all_field();
     void draw_enemy_field(ShipManager& manager);
-    int get_cell_status(int x, int y);
+    int getCell(int x, int y);
     void clean();
 
     void attack(int x, int y, ShipManager& manager, AbilityManager& ability_manager);
+    bool getDoubleDamage();
+    void setDoubleDamage(bool value);
 
-    int get_height() const;
-    int get_width() const;
-
-    bool get_double_damage();
-    void set_double_damage(bool value);
+    int getHeight() const;
+    int getWidth() const;
 
     json to_json() const;
-
     BattleField from_json_size(const json& j);
-
     void from_json_coord(const json& j);
 
     ~BattleField();

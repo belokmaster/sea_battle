@@ -73,8 +73,8 @@ void BattleField::attack(int x, int y, ShipManager& manager, AbilityManager& abi
                         if(double_damage) {
                             ship.attackSegment(j);
                         }
-                        if (get_double_damage()) {
-                            set_double_damage(false);
+                        if (getDoubleDamage()) {
+                            setDoubleDamage(false);
                         }
                         if(ship.isDestroyed() && gain_ability) {
                             ability_manager.getRandomAbility();
@@ -86,8 +86,8 @@ void BattleField::attack(int x, int y, ShipManager& manager, AbilityManager& abi
             }
 
             field[y][x] = empty_state;
-            if (get_double_damage()) {
-                set_double_damage(false);
+            if (getDoubleDamage()) {
+                setDoubleDamage(false);
             }
             std::cout << "Miss!" << std::endl;
             return;
@@ -105,19 +105,19 @@ void BattleField::attack(int x, int y, ShipManager& manager, AbilityManager& abi
 }
 
 
-int BattleField::get_height() const {
+int BattleField::getHeight() const {
     return height;
 }
 
-int BattleField::get_width() const {
+int BattleField::getWidth() const {
     return width;
 }
 
-bool BattleField::get_double_damage() {
+bool BattleField::getDoubleDamage() {
     return double_damage;
 }
 
-void BattleField::set_double_damage(bool value) {
+void BattleField::setDoubleDamage(bool value) {
     double_damage = value;
 }
 
@@ -225,7 +225,7 @@ void BattleField::place_ship(Ship& ship, int x, int y, std::string orientation) 
     }
 }
 
-int BattleField::get_cell_status(int x, int y) {
+int BattleField::getCell(int x, int y) {
     return field[x][y];
 }
 

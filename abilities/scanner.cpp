@@ -7,8 +7,8 @@ void Scanner::apply(BattleField& field, int x, int y, ShipManager& manager) {
 
     for(int i = x; i < x + 2; ++i) {
         for(int j = y; j < y + 2; ++j) {
-            if(i < field.get_height() && j < field.get_width()) {
-                if(field.get_cell_status(j, i) == 2) {
+            if(i < field.getHeight() && j < field.getWidth()) {
+                if(field.getCell(j, i) == 2) {
                     found = true;
                     break;
                 }

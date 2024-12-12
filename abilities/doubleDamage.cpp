@@ -3,7 +3,7 @@
 #include "../shipManager.h"
 
 void DoubleDamage::apply(BattleField& field, int x, int y, ShipManager& manager) {
-    field.set_double_damage(true);
+    field.setDoubleDamage(true);
     std::cout << "Next hit deals double damage" << std::endl;
 
 }
