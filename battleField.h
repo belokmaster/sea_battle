@@ -15,15 +15,16 @@ class AbilityManager;
 class BattleField {
 private:
 enum cell {
-    unknown_state,
-    empty_state,
-    ship_state
+        UNKNOW_CELL,
+        EMPTY_CELL,
+        SHIP_CELL
     };
 
     int width, height;
     cell** field;
 
     bool double_damage = false;
+
 public:
     int ships_count;
     bool gain_ability;
@@ -34,15 +35,12 @@ public:
     BattleField(BattleField&& other) noexcept;
 
     BattleField& operator=(const BattleField& other);
-
     BattleField& operator=(BattleField&& other) noexcept;
 
     void place_ship(Ship& ship, int x, int y, std::string orientation);
 
-    ShipManager ship_quantity_preset();
+    ShipManager normalCountShips();
 
-    void draw_all_field();
-    void draw_enemy_field(ShipManager& manager);
     int getCell(int x, int y);
     void clean();
 

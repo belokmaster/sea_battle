@@ -28,8 +28,8 @@ void Game::start_game() {
     user_field.gain_ability = false;
     enemy_field.gain_ability = true;
 
-    enemy_manager = enemy_field.ship_quantity_preset();
-    user_manager = user_field.ship_quantity_preset();
+    enemy_manager = enemy_field.normalCountShips();
+    user_manager = user_field.normalCountShips();
     int ships_count = user_field.ships_count;
 
     for (int i = 0; i < ships_count; ++i) {
@@ -220,7 +220,8 @@ void Game::new_game() {
             start_game();
             generate_enemy_ships();
             round();
-        } else{
+        } 
+        else {
             output.messageExit();
             exit(0);
         }

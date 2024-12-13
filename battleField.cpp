@@ -20,7 +20,7 @@ BattleField::BattleField(int width_f, int height_f) : width(width_f), height(hei
             field = new cell*[height_f];
             for (int i = 0; i < height_f; ++i) {
                 field[i] = new cell[width_f];
-                std::fill(field[i], field[i] + width_f, unknown_state);
+                std::fill(field[i], field[i] + width_f, UNKNOW_CELL);
             }
             break;
 
@@ -85,7 +85,7 @@ void BattleField::attack(int x, int y, ShipManager& manager, AbilityManager& abi
                 }
             }
 
-            field[y][x] = empty_state;
+            field[y][x] = EMPTY_CELL;
             if (getDoubleDamage()) {
                 setDoubleDamage(false);
             }
@@ -121,7 +121,7 @@ void BattleField::setDoubleDamage(bool value) {
     double_damage = value;
 }
 
-ShipManager BattleField::ship_quantity_preset() {
+ShipManager BattleField::normalCountShips() {
     int count_cell = width * height;
     int count_ships_cell = count_cell / 5;
     std::vector<int> ship_sizes;
@@ -168,7 +168,7 @@ void BattleField::place_ship(Ship& ship, int x, int y, std::string orientation) 
                     int check_y = ship.isVertical() ? y + i : y + j;
 
                     if (check_y >= 0 && check_y < height && check_x >= 0 && check_x < width) {
-                        if (field[check_y][check_x] != unknown_state) {
+                        if (field[check_y][check_x] != UNKNOW_CELL) {
                             throw InvalidShipPlacementException("The place is occupied or too close to another ship.", check_x, check_y);
                         }
                     }
@@ -177,11 +177,11 @@ void BattleField::place_ship(Ship& ship, int x, int y, std::string orientation) 
 
             if (ship.isVertical()) {
                 for (int i = 0; i < length; ++i) {
-                    field[y + i][x] = ship_state;
+                    field[y + i][x] = SHIP_CELL;
                 }
             } else {
                 for (int i = 0; i < length; ++i) {
-                    field[y][x + i] = ship_state;
+                    field[y][x + i] = SHIP_CELL;
                 }
             }
 
@@ -232,7 +232,7 @@ int BattleField::getCell(int x, int y) {
 void BattleField::clean() {
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) { 
-            field[y][x] = unknown_state;
+            field[y][x] = UNKNOW_CELL;
         }
     }
 }

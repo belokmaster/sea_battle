@@ -34,8 +34,8 @@ public:
     Game() 
         : user_field(5, 5), 
           enemy_field(5, 5),
-          enemy_manager(enemy_field.ship_quantity_preset()),
-          user_manager(user_field.ship_quantity_preset()), 
+          enemy_manager(enemy_field.normalCountShips()),
+          user_manager(user_field.normalCountShips()), 
           game_state("data_game.json") {}
 
     void main_menu();

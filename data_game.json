@@ -10,7 +10,7 @@
                 "Bombard"
             ]
         ],
-        "len_queue": 2
+        "abilities_count": 2
     },
     "enemy_field": {
         "field": [

@@ -28,8 +28,8 @@ void GameState::load(BattleField& user_field, BattleField& enemy_field,
 
     user_field = user_field.from_json_size(j["user_field"]);
     enemy_field = enemy_field.from_json_size(j["enemy_field"]);
-    enemy_manager = enemy_field.ship_quantity_preset();
-    user_manager = user_field.ship_quantity_preset();
+    enemy_manager = enemy_field.normalCountShips();
+    user_manager = user_field.normalCountShips();
     user_manager.from_json(j["user_manager"], user_field);
     enemy_manager.from_json(j["enemy_manager"], enemy_field);
     user_field.from_json_coord(j["user_field"]); 
