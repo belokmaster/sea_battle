@@ -12,7 +12,7 @@ std::pair<int, int> Input::inputCoords() {
             break;
         } 
         else {
-            output.error_message();
+            output.messageError();
         }
     }
 
@@ -27,7 +27,7 @@ std::string Input::inputOrientation(){
         std::getline(std::cin, input_s);
         std::stringstream ss(input_s);
         if (!(ss >> orientation) || !ss.eof()) {
-            output.error_message();
+            output.messageError();
         }
 
         break;
@@ -53,10 +53,10 @@ bool Input::inputBool() {
                 flag = false;
                 break;  
             } else {
-                output.error_message();
+                output.messageError();
             }   
         } else {
-            output.error_message();
+            output.messageError();
         }
     }
 

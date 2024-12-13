@@ -30,7 +30,8 @@ void AbilityManager::applyAbility(BattleField& field, int x, int y, ShipManager&
             abilities.front()->apply(field, x, y, manager);
             abilities.pop();
             countAbilities--;
-        } else {
+        } 
+        else {
             throw NoAbilitiesException("No abilities available.");
         }
     } catch (NoAbilitiesException& e) {

@@ -2,7 +2,7 @@
 
 
 void Game::main_menu() {
-    output.main_menu_message();
+    output.messageLoad();
 
     bool input_flag = input.inputBool();
     if (input_flag) {
@@ -17,7 +17,7 @@ void Game::main_menu() {
 
 void Game::start_game() {
     int width_field, height_field;
-    output.width_and_height_message();
+    output.enterSize();
     std::pair<int, int> size = input.inputCoords();
 
     std::tie(width_field, height_field) = size;
@@ -37,20 +37,20 @@ void Game::start_game() {
         int x, y;
         std::string orientation;
 
-        output.print_user_field(user_field);
+        output.printPlayerField(user_field);
 
-        output.ship_coordinates_message();
+        output.messageShipCoords();
         std::pair<int, int> coordinates = input.inputCoords();
 
         std::tie(x, y) = coordinates;
 
-        output.ship_orientation_message();
+        output.messageShipOrientation();
         orientation = input.inputOrientation();
 
         user_field.place_ship(ship, x, y, orientation);
     }
 
-    output.print_user_field(user_field);
+    output.printPlayerField(user_field);
 }
 
 
@@ -113,7 +113,7 @@ void Game::generate_enemy_ships() {
             }
         }
     }
-    output.print_user_field(enemy_field);
+    output.printPlayerField(enemy_field);
 }
 
 void Game::round() {
@@ -126,10 +126,9 @@ void Game::round() {
 
     while(!enemy_manager.allDestroyed() && !user_manager.allDestroyed()) {
         std::string ability = ability_manager.nextAbility();
-        output.print_user_field(user_field);
-        output.print_states(user_manager);
-        output.print_enemy_field(enemy_field, enemy_manager);
-        output.ability_message(ability);
+        output.printPlayerField(user_field);
+        output.printEnemyField(enemy_field, enemy_manager);
+        output.messageAbility(ability);
         ability_flag = false;
 
         if (ability != ""){
@@ -137,7 +136,7 @@ void Game::round() {
         }
         if (ability_flag) {
             if (ability == "Scanner") {
-                output.scanner_coordinates_message();
+                output.messageScanner();
                 std::pair<int, int> coordinates = input.inputCoords();
                 
                 std::tie(x, y) = coordinates;
@@ -147,12 +146,12 @@ void Game::round() {
                 new_game();
             }
         } else {
-            output.attack_message();
+            output.messageAttackCoords();
             std::pair<int, int> coordinates = input.inputCoords();
 
             std::tie(x, y) = coordinates;
             
-            output.your_attack_message();
+            output.messagePlayerAttack();
             enemy_field.attack(x, y, enemy_manager, ability_manager);
 
             if (enemy_manager.allDestroyed()) { 
@@ -160,18 +159,18 @@ void Game::round() {
             }
         }
 
-        output.enemy_attack_message();
+        output.messageEnemyAttack();
         enemy_attack();
 
         save_flag = false;
-        output.save_message();
+        output.mesageSaveGame();
         save_flag = input.inputBool();
         if (save_flag) {
             save_game();
         }
 
         load_flag = false;
-        output.load_message();
+        output.mesageLoadGame();
         load_flag = input.inputBool();
         if (load_flag) {
             load_game();
@@ -200,29 +199,29 @@ void Game::enemy_attack() {
 void Game::new_game() {
     bool new_game_flag;
     if (enemy_manager.allDestroyed()) {
-        output.win_message();
+        output.messageWin();
         new_game_flag = input.inputBool();
         if (new_game_flag) {
-            output.new_round_message();
+            output.messageNewRound();
             enemy_manager.newShips();
             enemy_field.clean(); 
             generate_enemy_ships();
             round();
         } else {
-            output.exit_message();
+            output.messageExit();
             exit(0);
         }
 
     } else if (user_manager.allDestroyed()) {
-        output.defeat_message();
+        output.messageLose();
         new_game_flag = input.inputBool();
         if (new_game_flag) {
-            output.new_game_message();
+            output.messageNewGame();
             start_game();
             generate_enemy_ships();
             round();
         } else{
-            output.exit_message();
+            output.messageExit();
             exit(0);
         }
     }

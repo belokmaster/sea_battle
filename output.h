@@ -14,28 +14,29 @@
 class Output{
 public:
     Output() = default;
+    
+    void printPlayerField(BattleField user_field);
+    void printEnemyField(BattleField enemy_field, ShipManager& enemy_manager);
+    void printCells(ShipManager& user_manager);
 
-    void main_menu_message();
-    void width_and_height_message();
-    void ship_coordinates_message();
-    void ship_orientation_message();
-    void ability_message(std::string ability);
-    void scanner_coordinates_message();
-    void attack_message();
-    void your_attack_message();
-    void enemy_attack_message();
-    void save_message();
-    void load_message();
-    void win_message();
-    void new_round_message();
-    void defeat_message();
-    void new_game_message();
-    void exit_message();
-    void error_message();
+    void messageLoad();
+    void enterSize();
+    void messageShipCoords();
+    void messageShipOrientation();
+    void messageAbility(std::string ability);
+    void messageScanner();
+    void messageAttackCoords();
+    void messagePlayerAttack();
+    void messageEnemyAttack();
 
-    void print_user_field(BattleField user_field);
-    void print_enemy_field(BattleField enemy_field, ShipManager& enemy_manager);
-    void print_states(ShipManager& user_manager);
+    void mesageSaveGame();
+    void mesageLoadGame();
+    void messageWin();
+    void messageNewRound();
+    void messageLose();
+    void messageNewGame();
+    void messageExit();
+    void messageError();
 };
 
 #endif
