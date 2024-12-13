@@ -139,7 +139,7 @@ ShipManager BattleField::ship_quantity_preset() {
         ships_count = 4;
     }
     
-    return ShipManager(ship_sizes.size(), ship_sizes);
+    return ShipManager(ships_count, ship_sizes);
 }
 
 void BattleField::place_ship(Ship& ship, int x, int y, std::string orientation) {

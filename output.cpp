@@ -177,13 +177,13 @@ void Output::print_states(ShipManager& manager) {
             int state = ship.getSegmentState(i);
             
             if(state == 0) {
-                std::cout << "i";
+                std::cout << "I";
             
             } else if (state == 1) {
-                std::cout << "h";
+                std::cout << "H";
             
             } else if (state == 2) {
-                std::cout << "d";
+                std::cout << "D";
                 count_destroy++;
             }
             

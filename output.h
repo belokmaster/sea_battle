@@ -1,14 +1,14 @@
 #ifndef OUTPUT_H
 #define OUTPUT_H
 
+#include "ship.h"
+#include "battleField.h"
+#include "shipManager.h"
 
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <utility>
-#include "ship.h"
-#include "battleField.h"
-#include "shipManager.h"
 
 
 class Output{

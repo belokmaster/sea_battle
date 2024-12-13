@@ -1,11 +1,13 @@
 #ifndef SHIP_MANAGER_H
 #define SHIP_MANAGER_H
 
-#include <iostream>
-#include <vector>
 #include "ship.h"
 #include "battleField.h"
 #include "nlohmann/json.hpp"
+
+#include <iostream>
+#include <vector>
+
 
 using json = nlohmann::json;
 
