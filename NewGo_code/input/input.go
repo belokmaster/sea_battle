@@ -5,21 +5,21 @@ import (
 	"fmt"
 )
 
-func checkSize(height, width int) error {
-	if height < 5 || width < 5 {
-		return errors.New("height and width must be at least 5")
+func checkSize(size int) error {
+	if size < 5 {
+		return errors.New("Size of the field must be at least 5")
 	}
-	if height > 15 || width > 15 {
-		return errors.New("height and width must be at most 15")
+	if size > 15 {
+		return errors.New("Size of the field must be at most 15")
 	}
 	return nil
 }
 
-func GetInput() (int, int, error) {
-	var height, width int
+func GetInput() (int, error) {
+	var size int
 	for {
-		fmt.Print("Enter height and width: ")
-		_, err := fmt.Scan(&height, &width)
+		fmt.Print("Enter size of the field: ")
+		_, err := fmt.Scan(&size)
 		if err != nil {
 			fmt.Println("Invalid input. Please enter two integers.")
 			var discard string
@@ -27,11 +27,11 @@ func GetInput() (int, int, error) {
 			continue
 		}
 
-		if err := checkSize(height, width); err != nil {
+		if err := checkSize(size); err != nil {
 			fmt.Println("Error:", err)
 			continue
 		}
 
-		return height, width, nil
+		return size, nil
 	}
 }
